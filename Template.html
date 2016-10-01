@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ARQSI - SmartCity: Página Hospedeira</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="description" content="ARQSI - SmartCity: Página Hospedeira" />
+    <meta name="keywords" content="ARQUITETURA DE SISTEMAS;SmartCity" />
+    <style type="text/css">
+        div {
+            border: 1px solid black;
+            width: 100%;
+            overflow: scroll;
+        }
+
+        .styleborder {
+            border: 1px solid black;
+            height: 100%;
+        }
+
+        .header {
+            clear: both;
+            width: 100%;
+        }
+
+        .left {
+            float: left;
+            width: 25%;
+            /*height: 100%; /* 100% Full-height */
+            /*width: 200px; /* 0 width - change this with JavaScript */
+            /* position: fixed; /* Stay in place */
+            z-index: 1; /* Stay on top */
+            background-color: #ffffff;
+            overflow: hidden; /* Disable horizontal scroll */
+        }
+
+        .right {
+            float: right;
+            width: 72%;
+        }
+
+        .footer {
+            clear: both; 
+            width: 100%;
+        }
+
+        .header2 {
+            clear: both;
+            width: 100%;
+            min-height: 50px;
+            max-height: 200px;
+        }
+
+        .left2 {
+            float: left;
+            max-width: 150px;
+            max-height: 400px;
+        }
+
+        .right2 {
+            float: right;
+            max-width: 400px;
+            max-height: 150px;
+        }
+
+        .left3 {
+            float: left;
+            max-width: 45%;
+        }
+
+        .right3 {
+            float: right;
+            max-width: 52%;
+        }
+
+        .sidebarnav {
+            padding: 0px 0px 0px 20px;
+            text-decoration: none;
+            color: black;
+            display: block;
+            font: 10px;
+            /*transition: 2s;*/
+        }
+            /* Mudar cor on hover */
+            .sidebarnav:hover, offcanvas .sidebarnav:focus {
+                color: #808080;
+            }
+
+        .sidebarleftside {
+            float: left;
+            display: inline-block;
+            width: 50px;
+            overflow: hidden;
+            border-top: 0px solid black;
+            border-left: 0px solid black;
+        }
+
+        .sidebarrightside {
+            float: right;
+            width: 320px;
+            overflow:hidden;
+        }
+        /*Limpa default ul tag configs*/
+        .sidebarmenu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 50px;
+            /*height:330px;*/
+            background-color: #dae7ff;
+            border-right: 1px solid black;
+        }
+
+        .sidebarmenulink {
+            /*margin-top: 0px;
+            margin-bottom: 0px;*/
+            /*width: 70px;*/
+            border-bottom: 1px solid black;
+            transition: all 0.4s ease;
+        }
+            /* No bottom border no ultimo filho*/
+            .sidebarmenulink:last-child {
+                border-bottom: none;
+                /*padding-top:45px;*/
+            }
+
+            .sidebarmenulink a {
+                padding-top: 40px;
+                padding-bottom: 40px;
+                display: block;
+                font-size: 14px;
+                text-align: center;
+                display: block;
+                color: black;
+                text-decoration: none;
+                transform: rotate(270deg) translate(0px,0px); /*rotate*/
+            }
+            /*Focado no link completo*/
+            .sidebarmenulink:hover, offcanvas .sidebarmenulink:focus {
+                background: #78a5f9;
+            }
+        /* .sidebarmenulink:active {
+                    background-color: #ff0000;
+                    color: #ff0000;
+                }
+
+                .sidebarmenulink a:hover:not(.active) {
+                    background-color: #ff0000;
+                    color: white;
+                }*/
+    </style>
+    <script type="text/javascript" src="javascript.js">
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h2>ARQSI - SmartCity</h2>
+    </div>
+    <div>
+        <div class="header2" id="widget_horizontal">
+            <p>
+                widget horizontal 1
+            </p>
+            <p>
+                class header2
+            </p>
+            <p>
+
+            </p>
+            <p>
+
+            </p>
+        </div>
+        <div class="styleborder">
+            <!--Este é o widget vertical - a sidebar esquerda da página hospedeira-->
+            <div class="left" id="widget_vertical">
+                <div class="sidebarleftside">
+                    <ul class="sidebarmenu">
+                        <li class="sidebarmenulink"><a href="#actividade_cardiaca">Actividade Cardíaca</a></li>
+                        <li class="sidebarmenulink"><a href="#transito">Trânsito</a></li>
+                        <li class="sidebarmenulink"><a href="#temperatura">Tempe- ratura</a></li>
+                        <li class="sidebarmenulink"><a href="#qualidade_do_ar">Qualidade do Ar</a></li>
+                    </ul>
+                </div>
+                <div class="sidebarrightside">
+                   <a name="actividade_cardiaca" onload="methodA();"></a>
+                   <a name="transito" onclick="methodB();"></a>
+                   <a name="temperatura"></a>
+                   <a name="qualidade_do_ar"></a>
+                </div>
+            </div>
+            <div class="right">
+                <div class="header">
+                    <div class="left2">
+                        <h4>Widget Vertical 2</h4>
+                        <p>
+                            widget vertical 2
+                        </p>
+                        <p>
+                            class left2
+                        </p>
+                        <p>
+
+                        </p>
+                        <p>
+
+                        </p>
+                    </div>
+                    <div class="right2">
+                        <h4>Widget Horizontal 2</h4>
+                        <p>
+                            widget horizontal 2
+                        </p>
+                        <p>
+                            class right2
+                        </p>
+                        <p>
+
+                        </p>
+                        <p>
+
+                        </p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <div class="left3">
+                        <p>
+                            class footer - left3
+                        </p>
+                    </div>
+                    <div class="right3">
+                        <p>
+                            class footer - right3
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Arquitetura de Sistemas 2015-16</p>
+    </div>
+</body>
+</html>
