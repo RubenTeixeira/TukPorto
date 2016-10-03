@@ -85,10 +85,11 @@
 }
 
 .sidebarrightside {
+    border:none;
     float: right;
     width: 65%;
     border: none;
-    overflow: hidden;
+   overflow:hidden;
 }
 
 .sidebarmenu {

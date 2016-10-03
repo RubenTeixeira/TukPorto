@@ -6,9 +6,9 @@
     <meta name="description" content="ARQSI - SmartCity: Página Hospedeira" />
     <meta name="keywords" content="ARQUITETURA DE SISTEMAS;SmartCity" />
     <script type="text/javascript" src="SmartCity.js"></script>
-    <link rel="stylesheet" type="text/css" href="Estilos.css">
+    <link rel="stylesheet" type="text/css" href="Estilos.css" />
 </head>
-<body onload="listSensors()">
+<body onload="listSensors(); setFacetsMenu();">
     <div class="header">
         <h2>ARQSI - Imobiliária</h2>
     </div>
@@ -19,7 +19,19 @@
         </div>
         <div class="styleborder">
             <div class="left" id="widget_vertical">
-                <div class="sidebarleftside" id="sidebarleftside">           
+                <div class="sidebarleftside" id="sidebarleftside">
+                </div>
+                <div class="sidebarrightside" id="sidebarrightside">
+                    <div overflow="hidden" border="none" id="facetsdivision">
+                        <p >Pesquisa por Facetas</p>
+                        <button type="button" id="facetsbutton"  onclick="showFacets();">&#8597</button>
+                        <ul id="facetsmenu">
+                            <li>-1</li>
+                            <li>-2</li>
+                            <li>-3</li>
+                            <li>-4</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="right">

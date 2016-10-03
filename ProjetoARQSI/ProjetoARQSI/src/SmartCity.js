@@ -11,7 +11,6 @@ function listSensors() {
     }
 }
 
-
 function stateHandler() {
     if (xmlHttpObj.readyState == 4 && xmlHttpObj.status == 200) {
         var xmlDoc = xmlHttpObj.responseXML;
@@ -46,6 +45,18 @@ function createTabs(xmlDoc) {
             //do nothing.
         }
     }
-    createFirstSensorTab();
-    createSecondSensorTab();
+}
+
+function setFacetsMenu() {
+    var facetsmenu = document.getElementById("facetsmenu");
+    facetsmenu.style.display = "block";
+}
+
+function showFacets() {
+    var facetsmenu = document.getElementById("facetsmenu");
+    if (facetsmenu.style.display == "block") {
+        facetsmenu.style.display = "none";
+    } else {
+        facetsmenu.style.display = "block";
+    }
 }
