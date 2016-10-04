@@ -59,9 +59,22 @@
     max-width: 45%;
 }
 
+.left4 {
+    border:none;
+    float: left;
+    max-width: 70%;
+    overflow:hidden;
+}
+
 .right3 {
     float: right;
     max-width: 52%;
+}
+.right4 {
+    border:none;
+    float: right;
+    max-width: 20%;
+    overflow:hidden;
 }
 
 .sidebarnav {
@@ -89,7 +102,7 @@
     float: right;
     width: 65%;
     border: none;
-   overflow:hidden;
+    overflow: inherit;
 }
 
 .sidebarmenu {
@@ -139,6 +152,16 @@
         background: #41a9ff;
     }
 
+.facets{
+    border-radius:20px;
+    font: 13px tahoma;
+    padding:3px;
+    text-align:center;
+    background-color: #f1e8e8;
+}
+.buttonfacets{
+    margin-top:13px; 
+}
 /*Focado no link completo*/
 /*/.sidebarmenulink:hover, offcanvas .sidebarmenulink:focus {
     background: #fe5757;
