@@ -1,12 +1,12 @@
 ﻿div {
     border: 1px solid black;
     width: 100%;
-    overflow: scroll;
+    overflow: hidden;
 }
 
 .styleborder {
     border: 0px solid black;
-    height: 100%;
+    /*height: 100%;*/
 }
 
 .header {
@@ -152,15 +152,21 @@
         background: #41a9ff;
     }
 
-.facets{
-    border-radius:20px;
+.header3{
+    border-radius:15px;
     font: 13px tahoma;
     padding:3px;
     text-align:center;
-    background-color: #f1e8e8;
+    background-color: #e1e0e0;
+    box-shadow:0 0px 0px 0 rgba(0,0,0,0.2), 0 3px 5px 0 rgba(0,0,0,0.19);
 }
+
 .buttonfacets{
-    margin-top:13px; 
+    /*box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);*/
+    cursor: pointer;
+    margin-top:10px; 
+    padding: 0px 0px 0px 0px;
+    border:none;
 }
 /*Focado no link completo*/
 /*/.sidebarmenulink:hover, offcanvas .sidebarmenulink:focus {
