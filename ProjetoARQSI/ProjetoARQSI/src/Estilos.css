@@ -60,21 +60,22 @@
 }
 
 .left4 {
-    border:none;
+    border: none;
     float: left;
     max-width: 70%;
-    overflow:hidden;
+    overflow: hidden;
 }
 
 .right3 {
     float: right;
     max-width: 52%;
 }
+
 .right4 {
-    border:none;
+    border: none;
     float: right;
     max-width: 20%;
-    overflow:hidden;
+    overflow: hidden;
 }
 
 .sidebarnav {
@@ -98,7 +99,7 @@
 }
 
 .sidebarrightside {
-    border:none;
+    border: none;
     float: right;
     width: 65%;
     border: none;
@@ -130,7 +131,7 @@
     }
 
 .sidebarbutton {
-    background-color: #e1e0e0;
+    background-color: #ffffff;
     border-bottom: 1px solid black;
     border-top: none;
     border-left: none;
@@ -149,24 +150,62 @@
 
     .sidebarbutton:hover {
         transition: all 1s ease;
-        background: #41a9ff;
+        background: #68b8fb;
     }
 
-.header3{
-    border-radius:15px;
+.header3 {
+    border-radius: 15px;
     font: 13px tahoma;
-    padding:3px;
-    text-align:center;
+    padding: 3px;
+    text-align: center;
     background-color: #e1e0e0;
-    box-shadow:0 0px 0px 0 rgba(0,0,0,0.2), 0 3px 5px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,0.2), 0 3px 5px 0 rgba(0,0,0,0.19);
 }
 
-.buttonfacets{
+.buttonfacets {
     /*box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);*/
     cursor: pointer;
-    margin-top:10px; 
-    padding: 0px 0px 0px 0px;
+    margin-top: 5px;
+    padding: 4px 4px 4px 4px;
+    border-radius: 10px;
     border:none;
+    outline: 0; /*disable focus on-click*/
+    text-align: center;
+    transition: all 0.5s;
+}
+
+    .buttonfacets span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+        .buttonfacets span:after {
+            content: ' ▼';
+            position: absolute;
+            opacity: 0.5;
+            top: 0;
+            right: -20px;
+            transition: 0.5s;
+        }
+
+    .buttonfacets:hover span {
+        padding-right: 20px;
+    }
+
+        .buttonfacets:hover span:after {
+            opacity: 1;
+            right: 0;
+        }
+
+.facetdivision {
+    border: none;
+    font: 12px tahoma;
+}
+
+.transition{
+    transition: 0.5s;
 }
 /*Focado no link completo*/
 /*/.sidebarmenulink:hover, offcanvas .sidebarmenulink:focus {

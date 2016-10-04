@@ -49,14 +49,21 @@ function createTabs(xmlDoc) {
 
 function setFacetsMenu() {
     var facetsmenu = document.getElementById("facetsmenu");
-    facetsmenu.style.display = "block";
+    facetsmenu.style.visibility = "hidden";
+    facetsmenu.style.height = "0";
+    facetsmenu.style.opacity = "0"; 
 }
 
 function showFacets() {
     var facetsmenu = document.getElementById("facetsmenu");
-    if (facetsmenu.style.display == "block") {
-        facetsmenu.style.display = "none";
-    } else {
-        facetsmenu.style.display = "block";
+    if (facetsmenu.style.visibility == "visible") {  
+        facetsmenu.style.opacity = "0";
+        facetsmenu.style.visibility = "hidden";
+        facetsmenu.style.height = "0";    
+    } else { 
+        facetsmenu.style.transition = "opacity 0.7s ease-out";
+        facetsmenu.style.height = "auto";
+        facetsmenu.style.visibility = "visible";
+        facetsmenu.style.opacity = "1";   
     }
 }
