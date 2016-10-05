@@ -8,12 +8,12 @@ var facets_values_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valore
 
 function listSensors() {
     var xmlHttpObj = createXmlHttpRequestObject();
-
     if (xmlHttpObj) {
 
         xmlHttpObj.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                createTabs(xmlHttpObj.responseXML);
+                var cont = createTabs(xmlHttpObj.responseXML);
+                /*createFacetsForAllSensors(cont);*/
             }
         };
         xmlHttpObj.open("GET", sensors, true);
@@ -21,11 +21,11 @@ function listSensors() {
     }
 }
 
-
 function createXmlHttpRequestObject() {
     return new XMLHttpRequest();
 }
 
+/*Builds Sidebar's left side from Sensor description*/
 function createTabs(xmlDoc) {   
     var sensor = xmlDoc.getElementsByTagName("sensores")[0];
     var sensorsList = sensor.childNodes;
@@ -35,7 +35,6 @@ function createTabs(xmlDoc) {
     for (i = 0; i < sensorsList.length; i++) {
         if (sensorsList[i].nodeType === 1) { //only Elements Nodes
             var button = document.createElement("button");
-
             button.type = "button";
             description[p] = sensorsList[i].childNodes[1].childNodes[0].nodeValue;
             var text = document.createTextNode(description[p]);
@@ -50,17 +49,18 @@ function createTabs(xmlDoc) {
             //do nothing.
         }
     }
+    return p;
 }
 
 function setFacetsMenu() {
-    var facetsmenu = document.getElementById("facetsmenu");
+    var facetsmenu = document.getElementById("facetsmenuid");
     facetsmenu.style.visibility = "hidden";
     facetsmenu.style.height = "0";
     facetsmenu.style.opacity = "0"; 
 }
 
 function showFacets() {
-    var facetsmenu = document.getElementById("facetsmenu");
+    var facetsmenu = document.getElementById("facetsmenuid");
     if (facetsmenu.style.visibility == "visible") {  
         facetsmenu.style.opacity = "0";
         facetsmenu.style.visibility = "hidden";
@@ -76,10 +76,10 @@ function showFacets() {
 function getFacetsFromSensor(sensor_id) {
     var link = facets_ID_link;
     if (typeof sensor_id == "string") {
-        link = facets_name_link;
+       link = facets_name_link;
+       //link += sensor_id;
     }
     link += sensor_id;
-
     return getFacetsFromSensorXML(link);
 }
 
@@ -96,4 +96,40 @@ function getFacetsFromSensorXML(link) {
         xmlHttpObj.open("GET", link, true);
         xmlHttpObj.send();
     }
+}
+
+
+/*Retrieves all facets name from all Sensors*/
+/*This method is not being called anywhere atm*/
+function createFacetsForAllSensors(/*cont*/) {
+    var t = 1;
+    for (var i = 0; i < cont; i++) {
+        var sensor_id = t.toString();
+        var xmldoc = getFacetsFromSensor(sensor_id); //retrieves document as xml from each sensor.
+        var facetsnames = xmldoc.getElementsByTagName("Nome");
+
+        createFacets(facetsname);
+        t++;
+    }
+}
+/*Create into the html document all facets from one specific sensor*/
+/*This method is not being used anywhere atm, its an extension from the method above*/
+function createFacets(facetsname) {
+    var maindivison = document.getElementById("facetsmenuid");
+    for (var i = 0; i < facetsname.length; i++) {
+        var facetname = facetsname[i].childNodes[0].nodeValue;
+        var div = document.createElement("div");
+        div.className = "facetsdivision";
+        var label = document.createElement("label");
+        label.for = facetname + "id";
+        var input = document.createElement("input");
+        input.id = facetname + "id";
+        input.name = facetname;
+        input.type = "checkbox";
+        var text = document.createTextNode(facetname);
+        input.appendChild(text);
+        label.appendChild(input);
+        div.appendChild(label);
+        maindivison.appendChild(div);
+    }  
 }

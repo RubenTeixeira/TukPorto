@@ -8,7 +8,7 @@
     <script type="text/javascript" src="SmartCity.js"></script>
     <link rel="stylesheet" type="text/css" href="Estilos.css" />
 </head>
-<body onload="listSensors(); setFacetsMenu();">
+<body onload="listSensors();setFacetsMenu();">
     <div class="header">
         <h2>ARQSI - Imobiliária</h2>
     </div>
@@ -22,51 +22,17 @@
                 <div class="sidebarleftside" id="sidebarleftside">
                 </div>
                 <div class="sidebarrightside" id="sidebarrightside">
-                    
-                    
                     <div overflow="hidden" style="border:none" id="facetsdivision">
 
-                      
                         <div class="left4">
                             <button class="buttonfacets" id="facetsbutton" onclick="showFacets();"><span>Pesquisa por Facetas</span></button>
                         </div>
-                     
-                        <div style="border:none" id="facetsmenu">
-                            <div class="facetdivision">
-                                <label for="periodoid">
-                                    <input id="periodoid" name="periodo" type="checkbox" />
-                                    Período
-                                </label>
-                            </div>
-                            <div class="facetdivision">
-                                <label for="fonteid">
-                                    <input id="fonteid" name="fonte" type="checkbox" />
-                                    Fonte
-                                </label>
-                            </div>
-                            <div class="facetdivision">
-                                <label for="localid">
-                                    <input id="localid" name="local" type="checkbox" />
-                                    Local
-                                </label>
-                            </div>
-                            <div class="facetdivision">
-                                <label for="indicadorid">
-                                    <input id="indicadorid" name="indicador" type="checkbox" />
-                                    Indicador
-                                </label>
-                            </div>
-                            <div class="facetdivision">
-                                <label for="valorid">
-                                    <input id="valorid" name="valor" type="checkbox" />
-                                    Valor
-                                </label>
-                            </div>
+
+                        <div style="border:none" id="facetsmenuid">
+
 
                         </div>
                     </div>
-
-
                     <div overflow="hidden" style="border:none; border-top:1px solid black" id="resultsdivison">
                         <p class="header3">Resultados</p>
                     </div>
