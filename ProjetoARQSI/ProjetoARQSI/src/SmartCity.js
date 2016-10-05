@@ -26,58 +26,55 @@ function createXmlHttpRequestObject() {
 }
 
 /*Builds Sidebar's left side from Sensor description*/
-function createTabs(xmlDoc) {   
-    var sensor = xmlDoc.getElementsByTagName("sensores")[0];
-    var sensorsList = sensor.childNodes;
+function createTabs(xmlDoc) {
+    var description = xmlDoc.getElementsByTagName("descricao");
     var p = 0;
     var div = document.getElementById("sidebarleftside"); //retrieve sidebars left side
-    var description = [];
-    for (i = 0; i < sensorsList.length; i++) {
-        if (sensorsList[i].nodeType === 1) { //only Elements Nodes
-            var button = document.createElement("button");
-            button.type = "button";
-            description[p] = sensorsList[i].childNodes[1].childNodes[0].nodeValue;
-            var text = document.createTextNode(description[p]);
-            var ref = (p + 1).toString();
-            var textref = "#" + ref + "sensor";
-            button.id = textref; //append reference
-            button.className = "sidebarbutton";
-            button.appendChild(text);
-            p++;
-            div.appendChild(button);
-        } else {
-            //do nothing.
-        }
+    var ul = document.createElement("ul");
+    for (i = 0; i < description.length; i++) {
+        var text = document.createTextNode(description[i].childNodes[0].nodeValue);
+        var a = document.createElement("a");
+        a.href = "#";
+        //a.onclick
+        a.appendChild(text);
+        var li = document.createElement("li");
+        li.className = "sidebarmenulink";
+        li.appendChild(a);
+        ul.appendChild(li);
+        ul.className = "sidebarmenu";
+        p++;
+        div.appendChild(ul);
     }
     return p;
 }
+
 
 function setFacetsMenu() {
     var facetsmenu = document.getElementById("facetsmenuid");
     facetsmenu.style.visibility = "hidden";
     facetsmenu.style.height = "0";
-    facetsmenu.style.opacity = "0"; 
+    facetsmenu.style.opacity = "0";
 }
 
 function showFacets() {
     var facetsmenu = document.getElementById("facetsmenuid");
-    if (facetsmenu.style.visibility == "visible") {  
+    if (facetsmenu.style.visibility == "visible") {
         facetsmenu.style.opacity = "0";
         facetsmenu.style.visibility = "hidden";
-        facetsmenu.style.height = "0";    
-    } else { 
+        facetsmenu.style.height = "0";
+    } else {
         facetsmenu.style.transition = "opacity 0.7s ease-out";
         facetsmenu.style.height = "auto";
         facetsmenu.style.visibility = "visible";
-        facetsmenu.style.opacity = "1";   
+        facetsmenu.style.opacity = "1";
     }
 }
 
 function getFacetsFromSensor(sensor_id) {
     var link = facets_ID_link;
     if (typeof sensor_id == "string") {
-       link = facets_name_link;
-       //link += sensor_id;
+        link = facets_name_link;
+        //link += sensor_id;
     }
     link += sensor_id;
     return getFacetsFromSensorXML(link);
@@ -131,5 +128,5 @@ function createFacets(facetsname) {
         label.appendChild(input);
         div.appendChild(label);
         maindivison.appendChild(div);
-    }  
+    }
 }

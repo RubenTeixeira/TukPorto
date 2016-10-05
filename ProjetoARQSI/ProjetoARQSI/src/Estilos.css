@@ -93,15 +93,17 @@
 
 .sidebarleftside {
     float: left;
-    width: 35%;
+    width: 25%;
     overflow: hidden;
     border: none;
+    margin: 0;
+    padding: 0;
 }
 
 .sidebarrightside {
     border: none;
     float: right;
-    width: 65%;
+    width: 70%;
     border: none;
     overflow: inherit;
 }
@@ -120,38 +122,29 @@
     }
 
     .sidebarmenulink a {
-        /*padding-top: 60px;
-        padding-bottom: 60px;*/
-        display: block;
-        font: 12px tahoma;
-        text-align: initial;
-        color: white;
         text-decoration: none;
-        /*transform: rotate(270deg) translate(0px,0px); /*rotate*/
+        text-align: center;
+        background-color: #ffffff;
+        border-bottom: 1px solid black;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        padding: 2px 2px 2px 2px;
+        margin: 0px 0px 0px 0px;
+        width: 80px;
+        height: 80px;
+        display: inline-block;
+        cursor: pointer;
+        font: 12px tahoma;
+        color: black;
+        transform: rotate(270deg) translate(0px,0px);
+        box-shadow: 0 0px 0px 0 rgba(0,0,0,0.2), 0 3px 5px 0 rgba(0,0,0,0.19);
     }
 
-.sidebarbutton {
-    background-color: #ffffff;
-    border-bottom: 1px solid black;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    padding: 2px 2px 2px 2px;
-    margin: 0px 0px 0px 0px;
-    width: 100px;
-    height: 100px;
-    display: inline-block;
-    cursor: pointer;
-    font: 12px tahoma;
-    color: black;
-    transform: rotate(270deg) translate(0px,0px);
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-}
-
-    .sidebarbutton:hover {
-        transition: all 1s ease;
-        background: #68b8fb;
-    }
+        .sidebarmenulink a:hover {
+            transition: all 1s ease;
+            background: #68b8fb;
+        }
 
 .header3 {
     border-radius: 15px;
@@ -168,7 +161,7 @@
     margin-top: 5px;
     padding: 4px 4px 4px 4px;
     border-radius: 10px;
-    border:none;
+    border: none;
     outline: 0; /*disable focus on-click*/
     text-align: center;
     transition: all 0.5s;
@@ -204,7 +197,7 @@
     font: 12px tahoma;
 }
 
-.transition{
+.transition {
     transition: 0.5s;
 }
 /*Focado no link completo*/
