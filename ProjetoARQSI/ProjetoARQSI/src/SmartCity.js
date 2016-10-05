@@ -25,6 +25,9 @@ function createXmlHttpRequestObject() {
     return new XMLHttpRequest();
 }
 
+
+
+
 /*Builds Sidebar's left side from Sensor description*/
 function createTabs(xmlDoc) {
     var description = xmlDoc.getElementsByTagName("descricao");
@@ -129,4 +132,42 @@ function createFacets(facetsname) {
         div.appendChild(label);
         maindivison.appendChild(div);
     }
+}
+
+function results() {
+    var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura&Data_de_leitura=[2016-09-03,2016-09-05]";
+    getResults(link);
+}
+
+function getResults(link) {
+    var httpObj = createXmlHttpRequestObject();
+
+    if (httpObj) {
+        httpObj.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                //alert(httpObj.responseText);
+                return showResults(httpObj.responseText);
+            }
+        };
+        httpObj.open("GET", link, true);
+        httpObj.send();
+    }
+}
+
+function showResults(txtDocument) {
+    
+    
+    //var obj = JSON.parse(txtDocument);
+    //alert(obj);
+    var div = document.createElement("div");
+    var table = document.createElement("table");
+    var tr = document.createElement("tr");
+    //for(var i=0;i<obj.length;i++) {
+    
+    //}
+    
+    
+
+   
+
 }
