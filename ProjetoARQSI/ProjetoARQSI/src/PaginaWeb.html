@@ -22,22 +22,53 @@
                 <div class="sidebarleftside" id="sidebarleftside">
                 </div>
                 <div class="sidebarrightside" id="sidebarrightside">
-                    <div overflow="hidden" border="none" id="facetsdivision">
+                    
+                    
+                    <div overflow="hidden" style="border:none" id="facetsdivision">
+
+                      
                         <div class="left4">
-                            <p class="facets">Pesquisa por Facetas</p>
+                            <button class="buttonfacets" id="facetsbutton" onclick="showFacets();"><span>Pesquisa por Facetas</span></button>
                         </div>
-                         <div class="right4">
-                             <button class="buttonfacets" type="button" id="facetsbutton" onclick="showFacets();">&#8597</button>
-                         </div>
-                        <div>
-                            <ul id="facetsmenu">
-                                <li>-1</li>
-                                <li>-2</li>
-                                <li>-3</li>
-                                <li>-4</li>
-                            </ul>
+                     
+                        <div style="border:none" id="facetsmenu">
+                            <div class="facetdivision">
+                                <label for="periodoid">
+                                    <input id="periodoid" name="periodo" type="checkbox" />
+                                    Período
+                                </label>
+                            </div>
+                            <div class="facetdivision">
+                                <label for="fonteid">
+                                    <input id="fonteid" name="fonte" type="checkbox" />
+                                    Fonte
+                                </label>
+                            </div>
+                            <div class="facetdivision">
+                                <label for="localid">
+                                    <input id="localid" name="local" type="checkbox" />
+                                    Local
+                                </label>
+                            </div>
+                            <div class="facetdivision">
+                                <label for="indicadorid">
+                                    <input id="indicadorid" name="indicador" type="checkbox" />
+                                    Indicador
+                                </label>
+                            </div>
+                            <div class="facetdivision">
+                                <label for="valorid">
+                                    <input id="valorid" name="valor" type="checkbox" />
+                                    Valor
+                                </label>
+                            </div>
+
                         </div>
-                       
+                    </div>
+
+
+                    <div overflow="hidden" style="border:none; border-top:1px solid black" id="resultsdivison">
+                        <p class="header3">Resultados</p>
                     </div>
                 </div>
             </div>
