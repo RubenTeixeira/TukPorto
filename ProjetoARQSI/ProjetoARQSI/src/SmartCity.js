@@ -1,22 +1,26 @@
-﻿var sensors = "http://phpdev2.dei.isep.ipp.pt/~nsilva/smartcity/sensores.php";
-var xmlHttpObj;
+﻿var SENSOR_DESIGNATION = "sensor";
+var FACET_DESIGNATION = "faceta";
+var sensors = "http://phpdev2.dei.isep.ipp.pt/~nsilva/smartcity/sensores.php";
+var facets_ID_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/facetas.php?" + SENSOR_DESIGNATION + "=";
+var facets_name_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/facetasByNomeSensor.php?" + SENSOR_DESIGNATION + "=";
+var facets_values_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?";
+
 
 function listSensors() {
-    xmlHttpObj = createXmlHttpRequestObject();
+    var xmlHttpObj = createXmlHttpRequestObject();
 
     if (xmlHttpObj) {
+
+        xmlHttpObj.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                createTabs(xmlHttpObj.responseXML);
+            }
+        };
         xmlHttpObj.open("GET", sensors, true);
-        xmlHttpObj.onreadystatechange = stateHandler;
-        xmlHttpObj.send(null);
+        xmlHttpObj.send();
     }
 }
 
-function stateHandler() {
-    if (xmlHttpObj.readyState == 4 && xmlHttpObj.status == 200) {
-        var xmlDoc = xmlHttpObj.responseXML;
-        createTabs(xmlDoc);
-    }
-}
 
 function createXmlHttpRequestObject() {
     return new XMLHttpRequest();
@@ -31,6 +35,7 @@ function createTabs(xmlDoc) {
     for (i = 0; i < sensorsList.length; i++) {
         if (sensorsList[i].nodeType === 1) { //only Elements Nodes
             var button = document.createElement("button");
+
             button.type = "button";
             description[p] = sensorsList[i].childNodes[1].childNodes[0].nodeValue;
             var text = document.createTextNode(description[p]);
@@ -58,5 +63,30 @@ function showFacets() {
         facetsmenu.style.display = "none";
     } else {
         facetsmenu.style.display = "block";
+    }
+}
+
+function getFacetsFromSensor(sensor_id) {
+    var link = facets_ID_link;
+    if (typeof sensor_id == "string") {
+        link = facets_name_link;
+    }
+    link += sensor_id;
+
+    return getFacetsFromSensorXML(link);
+}
+
+function getFacetsFromSensorXML(link) {
+    var xmlHttpObj = createXmlHttpRequestObject();
+
+    if (xmlHttpObj) {
+
+        xmlHttpObj.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                return xmlHttpObj.responseXML;
+            }
+        };
+        xmlHttpObj.open("GET", link, true);
+        xmlHttpObj.send();
     }
 }
