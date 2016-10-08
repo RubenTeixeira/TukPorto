@@ -93,7 +93,7 @@
 
 .sidebarleftside {
     float: left;
-    width: 25%;
+    width: 17%;
     overflow: hidden;
     border: none;
     margin: 0;
@@ -103,8 +103,7 @@
 .sidebarrightside {
     border: none;
     float: right;
-    width: 70%;
-    /*border: none;*/
+    width: 81%;
     overflow: inherit;
 }
 
@@ -114,59 +113,56 @@
 }
 
 .sidebarmenulink {
+    float: left;
+    display: block;
     /*transition: all 0.4s ease;*/
 }
-    /* No bottom border no ultimo filho*/
-    .sidebarmenulink:last-child {
-        /*border-bottom: none;*/
-    }
 
-    .sidebarmenulink a {
-        /*text-decoration: none;
-        text-align: center;
-        background-color: #ffffff;
-        border-bottom: 1px solid black;
-        border-top: none;
-        border-left: none;
-        border-right: none;
-        padding: 2px 2px 2px 2px;
-        margin: 0px 0px 0px 0px;
-        width: auto;
-        height: auto;
-        display: inline-block;
-        cursor: pointer;
-        font: 12px tahoma;
-        color: black;
-        transform: rotate(270deg) translate(0px,0px);*/
+.sidebarmenulink a {
+    background-color: #ffffff;
+    display: inline-block;
+    color: black;
+        
+    padding: 14px 10px;
+    text-decoration: none;
+    transition: 0.3s;
+    font: 12px arial, sans-serif;
+        
+    writing-mode: vertical-lr;   
+    -ms-writing-mode:bt-lr; /* IE */
+    transform: rotate(-180deg);
+    margin-left: 5px;
+    margin-top: 0px;
+    text-align: center;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+}
 
-        background-color: #ffffff;
-        display: inline-block;
-        color: black;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        transition: 0.3s;
-        font: 12px arial, sans-serif;
-        writing-mode: vertical-lr;
-        -ms-writing-mode:bt-lr;
-        -ms-transform: rotate(-180deg); /* IE 9 */
-        -moz-transform:rotate(270deg); /* Firefox */
-        -webkit-transform:rotate(-180deg); /* Safari and Chrome */
-        -o-transform:rotate(-180deg); /* Opera */
-        border-bottom: 1px solid black;
-        border-top: 1px solid black;
-        border-left: 1px solid black;
-        border-right: 1px solid black;
-        border-radius: 3px;
-    }
+    
+.sidebarmenulink a.active {
+    background-color: #558ca1;
+    color: white;
+}
 
-        .sidebarmenulink a:hover {
-            transition: all 1s ease;
-            background: #68b8fb;
-        }
+.sidebarmenulink a:hover:not(.active) {
+    background-color: #808080;
+    color: white;
+}
 
-        /* Create an active/current tablink class */
-        .sidebarmenulink a:focus, .active {background-color: #ccc;}
+/*.sidebarmenulink a:hover {
+    transition: all 1s ease;
+    background: #68b8fb;
+}
+
+
+.sidebarmenulink a:focus ,active {
+    background-color: #ccc;
+}*/
+
 
 /* Style the tab content */
 .tabcontent {

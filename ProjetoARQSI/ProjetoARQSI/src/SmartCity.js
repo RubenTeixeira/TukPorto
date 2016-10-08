@@ -79,8 +79,8 @@ function showFacetsFromSensor(evt, sensorName) {
         tabcontent[i].style.display = "none";
     }
 
-    // Get all elements with class="sidebarmenulink" and remove the class "active"
-    tablinks = document.getElementsByClassName("sidebarmenulink");
+    // Get all elements with class="link" and remove the class "active"
+    tablinks = document.getElementsByClassName("link");
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
