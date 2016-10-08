@@ -52,7 +52,7 @@ function createTabs(xmlDoc) {
     for (i = 0; i < allSensors.length; i++) {
         sensor = allSensors[i];
         var sensorName = sensor.childNodes[0].nodeValue;
-        var sensorNameNode = document.createTextNode(sensorName);
+        var sensorNameNode = document.createTextNode(sensorName.replace (/_/g," "));
         var a = document.createElement("a");
         a.appendChild(sensorNameNode);
         a.href = "#";
@@ -119,28 +119,6 @@ function showFacets() {
     }
 }
 
-
-///*Create into the html document all facets from one specific sensor*/
-///*This method is not being used anywhere atm, its an extension from the method above*/
-//function createFacets(facetsname) {
-//    var maindivison = document.getElementById("facetsmenuid");
-//    for (var i = 0; i < facetsname.length; i++) {
-//        var facetname = facetsname[i].childNodes[0].nodeValue;
-//        var div = document.createElement("div");
-//        div.className = "facetsdivision";
-//        var label = document.createElement("label");
-//        label.for = facetname + "id";
-//        var input = document.createElement("input");
-//        input.id = facetname + "id";
-//        input.name = facetname;
-//        input.type = "checkbox";
-//        var text = document.createTextNode(facetname);
-//        input.appendChild(text);
-//        label.appendChild(input);
-//        div.appendChild(label);
-//        maindivison.appendChild(div);
-//    }
-//}
 
 function requestFacets(sensorName) {
     var uri = facets_name_link;

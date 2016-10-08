@@ -16,7 +16,7 @@
 
 .left {
     float: left;
-    width: 25%;
+    width: 30%;
     /*height: 100%; /* 100% Full-height */
     /*width: 200px; /* 0 width - change this with JavaScript */
     /* position: fixed; /* Stay in place */
@@ -27,7 +27,7 @@
 
 .right {
     float: right;
-    width: 72%;
+    width: 68%;
 }
 
 .footer {
@@ -139,6 +139,7 @@
         color: black;
         transform: rotate(270deg) translate(0px,0px);*/
 
+        background-color: #ffffff;
         display: inline-block;
         color: black;
         text-align: center;
@@ -147,12 +148,16 @@
         transition: 0.3s;
         font: 12px arial, sans-serif;
         writing-mode: vertical-lr;
-        transform: rotate(-180deg);
+        -ms-writing-mode:bt-lr;
+        -ms-transform: rotate(-180deg); /* IE 9 */
+        -moz-transform:rotate(270deg); /* Firefox */
+        -webkit-transform:rotate(-180deg); /* Safari and Chrome */
+        -o-transform:rotate(-180deg); /* Opera */
         border-bottom: 1px solid black;
         border-top: 1px solid black;
         border-left: 1px solid black;
         border-right: 1px solid black;
-        -webkit-border-radius: 3px;
+        border-radius: 3px;
     }
 
         .sidebarmenulink a:hover {
@@ -217,9 +222,10 @@
             right: 0;
         }
 
-.facetdivision {
+.facetsdivision {
     border: none;
     font: 12px tahoma;
+    padding: 7px;
 }
 
 .transition {
