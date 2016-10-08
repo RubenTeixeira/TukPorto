@@ -162,14 +162,15 @@ function createFacets(facetsXML, sensorName) {
         div.className = "facetsdivision";
         div.id = facetname;
         var label = document.createElement("label");
-        label.for = facetname + "id";
+        label.htmlFor = facetname + "_input_ID_"+sensorName;
+        label.nodeValue = facetname;
         var input = document.createElement("input");
-        input.id = facetname + "id";
-        input.name = facetname;
+        input.id = facetname + "_input_ID_"+sensorName;
+        //input.name = facetname;
         input.type = "checkbox";
         var text = document.createTextNode(facetname);
-        input.appendChild(text);
         label.appendChild(input);
+        label.appendChild(text);
         div.appendChild(label);
         sensorFacetsDiv.appendChild(div);
     }
