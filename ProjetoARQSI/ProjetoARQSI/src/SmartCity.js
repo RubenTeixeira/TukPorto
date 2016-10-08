@@ -1,23 +1,26 @@
 ﻿var SENSOR_DESIGNATION = "sensor";
 var FACET_DESIGNATION = "faceta";
-var sensors = "http://phpdev2.dei.isep.ipp.pt/~nsilva/smartcity/sensores.php";
+var sensors = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/sensores.php";
 var facets_ID_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/facetas.php?" + SENSOR_DESIGNATION + "=";
 var facets_name_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/facetasByNomeSensor.php?" + SENSOR_DESIGNATION + "=";
 var facets_values_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?";
 
 
 function listSensors() {
-    var xmlHttpObj = createXmlHttpRequestObject();
-    if (xmlHttpObj) {
+    requestAJAX(sensors, createTabs);
+}
 
+function requestAJAX(uri, handler) {
+    var xmlHttpObj = createXmlHttpRequestObject();
+
+    if (xmlHttpObj) {
         xmlHttpObj.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                var cont = createTabs(xmlHttpObj.responseXML);
-                /*createFacetsForAllSensors(cont);*/
+                handler(xmlHttpObj.responseXML);
             }
         };
-        xmlHttpObj.open("GET", sensors, true);
-        xmlHttpObj.send();
+        xmlHttpObj.open("GET", uri, true);
+        xmlHttpObj.send(null);
     }
 }
 
@@ -80,22 +83,8 @@ function getFacetsFromSensor(sensor_id) {
         //link += sensor_id;
     }
     link += sensor_id;
+    alert(link);
     return getFacetsFromSensorXML(link);
-}
-
-function getFacetsFromSensorXML(link) {
-    var xmlHttpObj = createXmlHttpRequestObject();
-
-    if (xmlHttpObj) {
-
-        xmlHttpObj.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                return xmlHttpObj.responseXML;
-            }
-        };
-        xmlHttpObj.open("GET", link, true);
-        xmlHttpObj.send();
-    }
 }
 
 
