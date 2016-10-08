@@ -4,19 +4,26 @@ var sensors = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/sensores.php";
 var facets_ID_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/facetas.php?" + SENSOR_DESIGNATION + "=";
 var facets_name_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/facetasByNomeSensor.php?" + SENSOR_DESIGNATION + "=";
 var facets_values_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?";
+var RESPONSE_XML = 1;
+var RESPONSE_TEXT = 2;
 
 
 function listSensors() {
-    requestAJAX(sensors, createTabs);
+    requestAJAX(sensors, createTabs, RESPONSE_XML);
 }
 
-function requestAJAX(uri, handler) {
+function requestAJAX(uri, handler, responseType) {
     var xmlHttpObj = createXmlHttpRequestObject();
 
     if (xmlHttpObj) {
         xmlHttpObj.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                handler(xmlHttpObj.responseXML);
+
+                if (responseType == RESPONSE_XML) {
+                    handler(xmlHttpObj.responseXML);
+                } else if (responseType == RESPONSE_TEXT) {
+                    handler(xmlHttpObj.responseText);
+                }
             }
         };
         xmlHttpObj.open("GET", uri, true);
