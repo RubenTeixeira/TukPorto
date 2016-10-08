@@ -1,6 +1,6 @@
 ﻿var SENSOR_DESIGNATION = "sensor";
 var FACET_DESIGNATION = "faceta";
-var sensors = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/sensores.php";
+var sensorsAPI = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/sensores.php";
 var facets_ID_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/facetas.php?" + SENSOR_DESIGNATION + "=";
 var facets_name_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/facetasByNomeSensor.php?" + SENSOR_DESIGNATION + "=";
 var facets_values_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?";
@@ -9,10 +9,10 @@ var RESPONSE_TEXT = 2;
 
 
 function listSensors() {
-    requestAJAX(sensors, createTabs, RESPONSE_XML);
+    requestAJAX(sensorsAPI, createTabs, RESPONSE_XML, null);
 }
 
-function requestAJAX(uri, handler, responseType) {
+function requestAJAX(uri, handler, responseType, extraParam) {
     var xmlHttpObj = createXmlHttpRequestObject();
 
     if (xmlHttpObj) {
@@ -20,9 +20,16 @@ function requestAJAX(uri, handler, responseType) {
             if (this.readyState == 4 && this.status == 200) {
 
                 if (responseType == RESPONSE_XML) {
-                    handler(xmlHttpObj.responseXML);
+                    if (extraParam == null) {
+                        handler(xmlHttpObj.responseXML);
+                    } else {
+                        handler(xmlHttpObj.responseXML, extraParam);
+                    }
                 } else if (responseType == RESPONSE_TEXT) {
-                    handler(xmlHttpObj.responseText);
+                    if (extraParam == null)
+                        handler(xmlHttpObj.responseText);
+                    else
+                        handler(xmlHttpObj.responseText, extraParam);
                 }
             }
         };
@@ -36,31 +43,60 @@ function createXmlHttpRequestObject() {
 }
 
 
-
-
-/*Builds Sidebar's left side from Sensor description*/
 function createTabs(xmlDoc) {
-    var description = xmlDoc.getElementsByTagName("descricao");
-    var p = 0;
+    var allSensors = xmlDoc.getElementsByTagName("nome");
     var div = document.getElementById("sidebarleftside"); //retrieve sidebars left side
     var ul = document.createElement("ul");
-    for (i = 0; i < description.length; i++) {
-        var text = document.createTextNode(description[i].childNodes[0].nodeValue);
+    ul.className = "sidebarmenu";
+    var sensor;
+    for (i = 0; i < allSensors.length; i++) {
+        sensor = allSensors[i];
+        var sensorName = sensor.childNodes[0].nodeValue;
+        var sensorNameNode = document.createTextNode(sensorName);
         var a = document.createElement("a");
+        a.appendChild(sensorNameNode);
         a.href = "#";
-        //a.onclick
-        a.appendChild(text);
+        a.className = "link";
+        a.setAttribute("onclick", "showFacetsFromSensor(event, \"" + sensorName + "\")");
         var li = document.createElement("li");
         li.className = "sidebarmenulink";
         li.appendChild(a);
         ul.appendChild(li);
-        ul.className = "sidebarmenu";
-        p++;
         div.appendChild(ul);
+        // For each sensor we're adding as a tab, we need to
+        // create a tabcontent DIV on the webpage which will be hidden by default
+        requestFacets(sensorName);
     }
-    return p;
+    return allSensors.length;
 }
 
+function showFacetsFromSensor(evt, sensorName) {
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="sidebarmenulink" and remove the class "active"
+    tablinks = document.getElementsByClassName("sidebarmenulink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    document.getElementById(sensorName+"_facets").style.display = "block";
+    evt.currentTarget.className += " active";
+
+    var facetsmenu = document.getElementById("facetsmenuid");
+    if (facetsmenu.style.visibility == "hidden") {
+        facetsmenu.style.transition = "opacity 0.7s ease-out";
+        facetsmenu.style.height = "auto";
+        facetsmenu.style.visibility = "visible";
+        facetsmenu.style.opacity = "1";
+    }
+}
 
 function setFacetsMenu() {
     var facetsmenu = document.getElementById("facetsmenuid");
@@ -83,39 +119,48 @@ function showFacets() {
     }
 }
 
-function getFacetsFromSensor(sensor_id) {
-    var link = facets_ID_link;
-    if (typeof sensor_id == "string") {
-        link = facets_name_link;
-        //link += sensor_id;
-    }
-    link += sensor_id;
-    alert(link);
-    return getFacetsFromSensorXML(link);
+
+///*Create into the html document all facets from one specific sensor*/
+///*This method is not being used anywhere atm, its an extension from the method above*/
+//function createFacets(facetsname) {
+//    var maindivison = document.getElementById("facetsmenuid");
+//    for (var i = 0; i < facetsname.length; i++) {
+//        var facetname = facetsname[i].childNodes[0].nodeValue;
+//        var div = document.createElement("div");
+//        div.className = "facetsdivision";
+//        var label = document.createElement("label");
+//        label.for = facetname + "id";
+//        var input = document.createElement("input");
+//        input.id = facetname + "id";
+//        input.name = facetname;
+//        input.type = "checkbox";
+//        var text = document.createTextNode(facetname);
+//        input.appendChild(text);
+//        label.appendChild(input);
+//        div.appendChild(label);
+//        maindivison.appendChild(div);
+//    }
+//}
+
+function requestFacets(sensorName) {
+    var uri = facets_name_link;
+    uri += sensorName;
+    requestAJAX(uri, createFacets, RESPONSE_XML, sensorName);
 }
 
-
-/*Retrieves all facets name from all Sensors*/
-/*This method is not being called anywhere atm*/
-function createFacetsForAllSensors(/*cont*/) {
-    var t = 1;
-    for (var i = 0; i < cont; i++) {
-        var sensor_id = t.toString();
-        var xmldoc = getFacetsFromSensor(sensor_id); //retrieves document as xml from each sensor.
-        var facetsnames = xmldoc.getElementsByTagName("Nome");
-
-        createFacets(facetsname);
-        t++;
-    }
-}
-/*Create into the html document all facets from one specific sensor*/
-/*This method is not being used anywhere atm, its an extension from the method above*/
-function createFacets(facetsname) {
+function createFacets(facetsXML, sensorName) {
     var maindivison = document.getElementById("facetsmenuid");
-    for (var i = 0; i < facetsname.length; i++) {
-        var facetname = facetsname[i].childNodes[0].nodeValue;
+    var facets = facetsXML.getElementsByTagName("Nome");
+    var sensorFacetsDiv = document.createElement("div");
+    sensorFacetsDiv.className = "tabcontent";
+    sensorFacetsDiv.id = sensorName+"_facets";
+    sensorFacetsDiv.style.display = "none";
+
+    for (var i = 0; i < facets.length; i++) {
+        var facetname = facets[i].childNodes[0].nodeValue;
         var div = document.createElement("div");
         div.className = "facetsdivision";
+        div.id = facetname;
         var label = document.createElement("label");
         label.for = facetname + "id";
         var input = document.createElement("input");
@@ -126,8 +171,9 @@ function createFacets(facetsname) {
         input.appendChild(text);
         label.appendChild(input);
         div.appendChild(label);
-        maindivison.appendChild(div);
+        sensorFacetsDiv.appendChild(div);
     }
+    maindivison.appendChild(sensorFacetsDiv);
 }
 
 function results() {

@@ -104,7 +104,7 @@
     border: none;
     float: right;
     width: 70%;
-    border: none;
+    /*border: none;*/
     overflow: inherit;
 }
 
@@ -118,11 +118,11 @@
 }
     /* No bottom border no ultimo filho*/
     .sidebarmenulink:last-child {
-        border-bottom: none;
+        /*border-bottom: none;*/
     }
 
     .sidebarmenulink a {
-        text-decoration: none;
+        /*text-decoration: none;
         text-align: center;
         background-color: #ffffff;
         border-bottom: 1px solid black;
@@ -131,20 +131,45 @@
         border-right: none;
         padding: 2px 2px 2px 2px;
         margin: 0px 0px 0px 0px;
-        width: 80px;
-        height: 80px;
+        width: auto;
+        height: auto;
         display: inline-block;
         cursor: pointer;
         font: 12px tahoma;
         color: black;
-        transform: rotate(270deg) translate(0px,0px);
-        box-shadow: 0 0px 0px 0 rgba(0,0,0,0.2), 0 3px 5px 0 rgba(0,0,0,0.19);
+        transform: rotate(270deg) translate(0px,0px);*/
+
+        display: inline-block;
+        color: black;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        transition: 0.3s;
+        font: 12px arial, sans-serif;
+        writing-mode: vertical-lr;
+        transform: rotate(-180deg);
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        -webkit-border-radius: 3px;
     }
 
         .sidebarmenulink a:hover {
             transition: all 1s ease;
             background: #68b8fb;
         }
+
+        /* Create an active/current tablink class */
+        .sidebarmenulink a:focus, .active {background-color: #ccc;}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
 
 .header3 {
     border-radius: 15px;
