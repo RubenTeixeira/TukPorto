@@ -131,8 +131,9 @@ function createFacets(facetsname) {
 }
 
 function results() {
-    var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura&Data_de_leitura=[2016-09-03,2016-09-05]";
-    getResults(link);
+    var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?sensor=Temperatura&faceta=Temp";
+    //getResults(link);
+
 }
 
 function getResults(link) {
@@ -141,7 +142,6 @@ function getResults(link) {
     if (httpObj) {
         httpObj.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                //alert(httpObj.responseText);
                 return showResults(httpObj.responseText);
             }
         };
@@ -152,18 +152,26 @@ function getResults(link) {
 
 function showResults(txtDocument) {
     
-    
-    //var obj = JSON.parse(txtDocument);
-    //alert(obj);
+    var divLocation = document.getElementById("widget_horizontal");
+    var resultObj = JSON.parse(txtDocument);
     var div = document.createElement("div");
     var table = document.createElement("table");
-    var tr = document.createElement("tr");
-    //for(var i=0;i<obj.length;i++) {
+    table.style.border = "1px solid black";
     
-    //}
-    
-    
-
+    for (var j = 0; j < 4; j++) {
+        var tr = document.createElement("tr");
+        //tr.style.border = "1px solid black";
+        for (var i = 0; i < resultObj.length; i++) {
+            var td = document.createElement("td");
+            td.style.border = "1px solid black";
+            var text = document.createTextNode(resultObj[i]);
+            td.appendChild(text);
+            tr.appendChild(td);
+        }
+        table.appendChild(tr);
+    }
    
-
+    div.appendChild(table);
+    divLocation.appendChild(div);
+    
 }
