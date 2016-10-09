@@ -229,7 +229,8 @@ function createReadDate() {
     input.value = current;
     form.appendChild(input);
     div.appendChild(form);
-    div.style.visibility = "visible";
+    div.style.visibility = "hidden";
+    div.style.height = "0";
     return div;
 }
 
@@ -255,7 +256,8 @@ function createReadHour() {
     input.value = current;
     form.appendChild(input);
     div.appendChild(form);
-    div.style.visibility = "visible";
+    div.style.visibility = "hidden";
+    div.style.height = "0";
     return div;
 }
 
@@ -292,7 +294,8 @@ function createTemp() {
     div_.appendChild(output);
     div.appendChild(form);
     div.appendChild(div_);
-    div.style.visibility = "visible";
+    div.style.visibility = "hidden";
+    div.style.height = "0";
     return div;
 }
 
@@ -313,7 +316,8 @@ function createLocal() {
     }
     select1.name = "readLocal";
     div.appendChild(select1);
-    div.style.visibility = "visible";
+    div.style.visibility = "hidden";
+    div.style.height = "0";
     return div;
 }
 
