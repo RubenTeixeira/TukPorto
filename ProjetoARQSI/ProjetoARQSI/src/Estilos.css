@@ -16,7 +16,7 @@
 
 .left {
     float: left;
-    width: 30%;
+    width: 22%;
     /*height: 100%; /* 100% Full-height */
     /*width: 200px; /* 0 width - change this with JavaScript */
     /* position: fixed; /* Stay in place */
@@ -80,7 +80,7 @@
 
 .sidebarleftside {
     float: left;
-    width: 11.5%;
+    width: 12%;
     overflow: hidden;
     border: none;
     margin: 0;
@@ -91,7 +91,7 @@
 .sidebarrightside {
     border: none;
     float: right;
-    width: 85%;
+    width: 86%;
     overflow: hidden;
 }
 
@@ -112,14 +112,14 @@
         text-align: center;
         text-decoration: none;
         transition: 0.5s;
-        font: 13px tahoma, arial, sans-serif;
+        font: 12px arial, sans-serif;
         writing-mode: vertical-lr;
         -ms-writing-mode: bt-lr; /* IE */
         transform: rotate(-180deg);
-        padding: 20px 15px;
-        margin-left: 5px;
+        padding: 20px 8px;
+        margin-left: 3px;
         margin-top: 0px;
-        margin-right: 10px;
+        margin-right: 0px;
         margin-bottom: 0px;
         border-bottom: 1px solid black;
         border-top: 1px solid black;
@@ -128,6 +128,7 @@
         border-bottom-right-radius: 15px;
         border-top-right-radius: 15px;
         outline: 0; /*disable focus on-click*/
+        
     }
 
         .sidebarmenulink a.active {
@@ -210,7 +211,7 @@ table, th, td {
 }
 
 .facetscontent {
-    font: 12px tahoma;
+    font: 10px tahoma;
     border: none;
     margin: auto;
     width: 80%; /*to align content*/

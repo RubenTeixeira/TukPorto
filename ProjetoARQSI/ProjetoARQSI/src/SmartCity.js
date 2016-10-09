@@ -240,41 +240,38 @@ function createReadHour() {
 
 // TEMPERATURA facet
 function createTemp() {
-    var maindiv = document.createElement("div");
     var div = document.createElement("div");
-    //var div_ = document.createElement("div");
     div.className = "facetscontent";
-    //div_.className = "facetscontent";
-    maindiv.className = "facetscontent";
-    maindiv.id = "tempdivid";
+    div.id = "tempdivid";
+    var div_ = document.createElement("div");
+    div_.className = "facetscontent";
     var input = document.createElement("input");
     input.type = "range";
+    input.style.width = "59%";
     input.name = "readTemp";
     input.id = "tempid";
     input.max = "100";
     input.min = "-100";
-    input.value = "10";
+    input.value = "0";
     var text = document.createTextNode("-100ºC");
     var text_ = document.createTextNode("100ºC");
-    var a = document.createElement("a");
-    a.style.alignSelf = "right";
-    var text_fill = document.createTextNode("  :");
     var output = document.createElement("output");
     output.name = "out";
     output.htmlFor = "tempid";
+    output.value = "0";
+    output.style.position = "relative";
+    output.style.left = "41.5%";
     var form = document.createElement("form");
     form.oninput = function () {
         output.value = parseInt(input.value);
     };
-    a.appendChild(text_fill);
     form.appendChild(text);
     form.appendChild(input);
     form.appendChild(text_);
-    form.appendChild(a);
-    form.appendChild(output);
+    div_.appendChild(output); 
     div.appendChild(form);
-    maindiv.appendChild(div);
-    return maindiv;
+    div.appendChild(div_);
+    return div;
 }
 
 // LOCAL facet
