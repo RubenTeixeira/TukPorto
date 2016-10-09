@@ -42,16 +42,21 @@ function createXmlHttpRequestObject() {
     return new XMLHttpRequest();
 }
 
+function requestFacets(sensorName) {
+    var uri = facets_name_link;
+    uri += sensorName;
+    requestAJAX(uri, createFacets, RESPONSE_XML, sensorName);
+}
 
 function createTabs(xmlDoc) {
     var allSensors = xmlDoc.getElementsByTagName("nome");
-    var div = document.getElementById("sidebarleftside"); //retrieve sidebars left side
+    var div = document.getElementById("sidebarleftside");
     var ul = document.createElement("ul");
     ul.className = "sidebarmenu";
     var sensor;
     for (i = 0; i < allSensors.length; i++) {
         sensor = allSensors[i];
-        var sensorName = sensor.childNodes[0].nodeValue; //text node
+        var sensorName = sensor.childNodes[0].nodeValue;
         var sensorNameNode = document.createTextNode(sensorName.replace(/_/g, " "));
         var a = document.createElement("a");
         a.appendChild(sensorNameNode);
@@ -100,31 +105,13 @@ function showFacetsFromSensor(evt, sensorName) {
 
 function setFacetsMenu() {
     var facetsmenu = document.getElementById("facetsmenuid");
-    facetsmenu.style.visibility = "visible";
-    facetsmenu.style.height = "1";
-    facetsmenu.style.opacity = "1";
+    startDisplaySetting(facetsmenu, true);
 
 }
 
-function showFacets() {
+function showFacetsMenu() {
     var facetsmenu = document.getElementById("facetsmenuid");
-    if (facetsmenu.style.visibility == "visible") {
-        facetsmenu.style.opacity = "0";
-        facetsmenu.style.visibility = "hidden";
-        facetsmenu.style.height = "0";
-    } else {
-        facetsmenu.style.transition = "opacity 0.7s ease-out";
-        facetsmenu.style.height = "auto";
-        facetsmenu.style.visibility = "visible";
-        facetsmenu.style.opacity = "1";
-    }
-}
-
-
-function requestFacets(sensorName) {
-    var uri = facets_name_link;
-    uri += sensorName;
-    requestAJAX(uri, createFacets, RESPONSE_XML, sensorName);
+    changeDisplaySetting(facetsmenu);
 }
 
 function createFacets(facetsXML, sensorName) {
@@ -150,7 +137,7 @@ function createFacets(facetsXML, sensorName) {
         //input.name = facetname;
         input.type = "checkbox";
         input.onchange = function () {
-            showComponent(this); //param div father
+            showComponent(this);
         }
         var text = document.createTextNode(facetname);
         label.appendChild(input);
@@ -160,22 +147,6 @@ function createFacets(facetsXML, sensorName) {
         sensorFacetsDiv.appendChild(div);
     }
     maindivison.appendChild(sensorFacetsDiv);
-}
-
-function showComponent(input) {
-    var label = input.parentElement;
-    var div = label.parentElement;
-    var insidediv = div.childNodes[1];
-    if (insidediv.style.visibility == "visible") {
-        insidediv.style.opacity = "0";
-        insidediv.style.visibility = "hidden";
-        insidediv.style.height = "0";
-    } else {
-        insidediv.style.transition = "opacity 0.7s ease-out";
-        insidediv.style.height = "auto";
-        insidediv.style.visibility = "visible";
-        insidediv.style.opacity = "1";
-    }
 }
 
 function checkFacetName(facetname) {
@@ -190,17 +161,17 @@ function checkFacetName(facetname) {
     } else if (string.includes("Local")) {
         return createLocal();
     } else if (string.includes("GPS")) {
-        return emptydiv; //TODO
+        return emptydiv; //TODO - method signature created below.
     } else if (string.includes("Preço")) {
-        return emptydiv; //TODO
+        return emptydiv; //TODO - method signature created below.
     } else if (string.includes("Fonte")) {
-        return emptydiv; //TODO
+        return emptydiv; //TODO - method signature created below.
     } else if (string.includes("Indicador")) {
-        return emptydiv; //TODO
+        return emptydiv; //TODO - method signature created below.
     } else if (string.includes("Foto")) {
-        return emptydiv; //TODO
+        return emptydiv; //TODO - method signature created below.
     } else if (string.includes("Valor")) {
-        return emptydiv; //TODO
+        return emptydiv; //TODO - method signature created below.
     } else {
         return emptydiv;
     }
@@ -229,8 +200,7 @@ function createReadDate() {
     input.value = current;
     form.appendChild(input);
     div.appendChild(form);
-    div.style.visibility = "hidden";
-    div.style.height = "0";
+    startDisplaySetting(div, false);
     return div;
 }
 
@@ -256,8 +226,7 @@ function createReadHour() {
     input.value = current;
     form.appendChild(input);
     div.appendChild(form);
-    div.style.visibility = "hidden";
-    div.style.height = "0";
+    startDisplaySetting(div, false);
     return div;
 }
 
@@ -294,15 +263,15 @@ function createTemp() {
     div_.appendChild(output);
     div.appendChild(form);
     div.appendChild(div_);
-    div.style.visibility = "hidden";
-    div.style.height = "0";
+    startDisplaySetting(div, false);;
     return div;
 }
 
 // LOCAL facet
 function createLocal() {
     var distritos = ["Porto", "Braga"];
-    //var distrito["Porto"] = "Amarante,Baião,Felgueiras,Gondomar,Lousada,Maia,Marco de Canaveses,Matosinhos,Paços de Ferreira,Paredes,Penafiel,Porto,Póvoa de Varzim,Santo Tirso,Trofa,Valongo,Vila do Conde,Vila Nova de Gaia";
+    //TODO - improper use of the object Array?
+    //var distrito["Porto"] = "Amarante,Baião,Felgueiras";
     //var distrito["Braga"] = "Amares,Barcelos,Braga,Cabeceiras de Basto,Celorico de Basto,Esposende,Fafe,Guimarães,Póvoa de Lanhoso,Terras de Bouro,Vieira do Minho,Vila Nova de Famalicão,Vila Verde,Vizela";
     var div = document.createElement("div");
     div.className = "facetscontent";
@@ -316,17 +285,46 @@ function createLocal() {
     }
     select1.name = "readLocal";
     div.appendChild(select1);
-    div.style.visibility = "hidden";
-    div.style.height = "0";
+    startDisplaySetting(div, false);
     return div;
 }
 
+//GPS facet
+function createGPS() {
+    //TODO
+
+}
+
+//FONTE facet
+function createFonte() {
+    //TODO
+}
+
+//VALOR facet
+function createValor() {
+    //TODO
+}
+
+//FOTO facet
+function createFoto() {
+    //TODO
+}
+
+//INDICATOR facet
+function createIndicator() {
+    //TODO
+}
+
+//PRICE facet
+function createPrice() {
+
+}
 
 
+//RESULTS CODE
 function results() {
     var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?sensor=Temperatura&faceta=Temp";
     //getResults(link);
-
 }
 
 function getResults(link) {
@@ -366,6 +364,42 @@ function showResults(txtDocument) {
 
     div.appendChild(table);
     divLocation.appendChild(div);
-
 }
 
+
+//AUX
+//Auxiliary Function
+function startDisplaySetting(div, flag) {
+    if (flag == true) {
+        div.style.transition = "opacity 0.7s ease-out";
+        div.style.visibility = "visible";
+        div.style.height = "auto";
+        div.style.opacity = "1";
+    } else {
+        div.style.visibility = "hidden";
+        div.style.height = "0";
+        div.style.opacity = "0";
+    }
+}
+
+//Auxiliary Function
+function changeDisplaySetting(div) {
+    if (div.style.visibility == "visible") {
+        div.style.opacity = "0";
+        div.style.visibility = "hidden";
+        div.style.height = "0";
+    } else {
+        div.style.transition = "opacity 0.7s ease-out";
+        div.style.height = "auto";
+        div.style.visibility = "visible";
+        div.style.opacity = "1";
+    }
+}
+
+//Auxiliary Function
+function showComponent(input) {
+    var label = input.parentElement;
+    var div = label.parentElement;
+    var insidediv = div.childNodes[1];
+    changeDisplaySetting(insidediv);
+}
