@@ -149,14 +149,33 @@ function createFacets(facetsXML, sensorName) {
         input.id = facetname + "_input_ID_" + sensorName;
         //input.name = facetname;
         input.type = "checkbox";
+        input.onchange = function () {
+            showComponent(this); //param div father
+        }
         var text = document.createTextNode(facetname);
         label.appendChild(input);
         label.appendChild(text);
         div.appendChild(label);
-        div.appendChild(checkFacetName(facetname));
+        div.appendChild(checkFacetName(facetname)); //APPENDS DIV WITH CONTENT
         sensorFacetsDiv.appendChild(div);
     }
     maindivison.appendChild(sensorFacetsDiv);
+}
+
+function showComponent(input) {
+    var label = input.parentElement;
+    var div = label.parentElement;
+    var insidediv = div.childNodes[1];
+    if (insidediv.style.visibility == "visible") {
+        insidediv.style.opacity = "0";
+        insidediv.style.visibility = "hidden";
+        insidediv.style.height = "0";
+    } else {
+        insidediv.style.transition = "opacity 0.7s ease-out";
+        insidediv.style.height = "auto";
+        insidediv.style.visibility = "visible";
+        insidediv.style.opacity = "1";
+    }
 }
 
 function checkFacetName(facetname) {
@@ -202,7 +221,7 @@ function createReadDate() {
     current = y + '-' + m + '-' + d;
     var div = document.createElement("div");
     div.className = "facetscontent";
-    div.id = "datedivid";
+    div.id = "datedivid";//DIV ID
     var form = document.createElement("form");
     var input = document.createElement("input");
     input.type = "date";
@@ -210,6 +229,7 @@ function createReadDate() {
     input.value = current;
     form.appendChild(input);
     div.appendChild(form);
+    div.style.visibility = "visible";
     return div;
 }
 
@@ -227,7 +247,7 @@ function createReadHour() {
     current = h + ':' + m;
     var div = document.createElement("div");
     div.className = "facetscontent";
-    div.id = "timedivid";
+    div.id = "timedivid"; //DIV ID
     var form = document.createElement("form");
     var input = document.createElement("input");
     input.type = "time";
@@ -235,6 +255,7 @@ function createReadHour() {
     input.value = current;
     form.appendChild(input);
     div.appendChild(form);
+    div.style.visibility = "visible";
     return div;
 }
 
@@ -242,7 +263,7 @@ function createReadHour() {
 function createTemp() {
     var div = document.createElement("div");
     div.className = "facetscontent";
-    div.id = "tempdivid";
+    div.id = "tempdivid"; //DIV ID
     var div_ = document.createElement("div");
     div_.className = "facetscontent";
     var input = document.createElement("input");
@@ -268,9 +289,10 @@ function createTemp() {
     form.appendChild(text);
     form.appendChild(input);
     form.appendChild(text_);
-    div_.appendChild(output); 
+    div_.appendChild(output);
     div.appendChild(form);
     div.appendChild(div_);
+    div.style.visibility = "visible";
     return div;
 }
 
@@ -281,7 +303,7 @@ function createLocal() {
     //var distrito["Braga"] = "Amares,Barcelos,Braga,Cabeceiras de Basto,Celorico de Basto,Esposende,Fafe,Guimarães,Póvoa de Lanhoso,Terras de Bouro,Vieira do Minho,Vila Nova de Famalicão,Vila Verde,Vizela";
     var div = document.createElement("div");
     div.className = "facetscontent";
-    div.id = "localdivid";
+    div.id = "localdivid"; //DIV ID
     var select1 = document.createElement("select");
     for (var i = 0; i < distritos.length; i++) {
         var string = distritos[i];
@@ -291,9 +313,9 @@ function createLocal() {
     }
     select1.name = "readLocal";
     div.appendChild(select1);
+    div.style.visibility = "visible";
     return div;
 }
-
 
 
 
