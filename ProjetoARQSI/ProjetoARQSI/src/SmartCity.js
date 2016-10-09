@@ -52,7 +52,7 @@ function createTabs(xmlDoc) {
     for (i = 0; i < allSensors.length; i++) {
         sensor = allSensors[i];
         var sensorName = sensor.childNodes[0].nodeValue;
-        var sensorNameNode = document.createTextNode(sensorName.replace (/_/g," "));
+        var sensorNameNode = document.createTextNode(sensorName.replace(/_/g, " "));
         var a = document.createElement("a");
         a.appendChild(sensorNameNode);
         a.href = "#";
@@ -157,27 +157,29 @@ function createFacets(facetsXML, sensorName) {
 
 function results() {
     var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?sensor=Temperatura&faceta=Temp";
-    //getResults(link);
+    getResults(link);
 
 }
 
 function getResults(link) {
-    var httpObj = createXmlHttpRequestObject();
+    requestAJAX(link, showResults, RESPONSE_TEXT, null);
+    //var httpObj = createXmlHttpRequestObject();
 
-    if (httpObj) {
-        httpObj.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                return showResults(httpObj.responseText);
-            }
-        };
-        httpObj.open("GET", link, true);
-        httpObj.send();
-    }
+    //if (httpObj) {
+    //    httpObj.onreadystatechange = function () {
+    //        if (this.readyState == 4 && this.status == 200) {
+    //            return showResults(httpObj.responseText);
+    //        }
+    //    };
+    //    httpObj.open("GET", link, true);
+    //    httpObj.send();
+    //}
 }
 
 function showResults(txtDocument) {
     
-    var divLocation = document.getElementById("widget_horizontal");
+    var divLocation = document.getElementById("widget_temp");
+    divLocation.innerHTML = "";
     var resultObj = JSON.parse(txtDocument);
     var div = document.createElement("div");
     var table = document.createElement("table");
