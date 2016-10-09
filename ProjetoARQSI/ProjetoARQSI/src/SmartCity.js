@@ -321,10 +321,12 @@ function createPrice() {
 }
 
 
-//RESULTS CODE
 function results() {
     var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?sensor=Temperatura&faceta=Temp";
-    //getResults(link);
+    var link2 = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura&Data_de_leitura=[2016-09-03,2016-09-05]";
+    var link3 = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura&Data_de_leitura=2016-09-03&Local=Porto-Campanhã";
+   // getResults(link2);
+
 }
 
 function getResults(link) {
@@ -344,18 +346,29 @@ function getResults(link) {
 function showResults(txtDocument) {
 
     var divLocation = document.getElementById("widget_horizontal");
+    divLocation.style.overflow = 'auto';
     var resultObj = JSON.parse(txtDocument);
+
+
     var div = document.createElement("div");
     var table = document.createElement("table");
-    table.style.border = "1px solid black";
+    var tableHeaderRow = document.createElement("tr");
 
-    for (var j = 0; j < 4; j++) {
+    var names = Object.getOwnPropertyNames(resultObj[0]);
+    for (var i = 0; i < names.length; i++) {
+        var th = document.createElement("th");
+        var text = document.createTextNode(names[i]);
+        th.appendChild(text);
+        tableHeaderRow.appendChild(th);
+    }
+
+    table.appendChild(tableHeaderRow);
+    for (var i = 0; i < resultObj.length; i++) {
+        var singleObj = resultObj[i];
         var tr = document.createElement("tr");
-        //tr.style.border = "1px solid black";
-        for (var i = 0; i < resultObj.length; i++) {
+        for (var j in singleObj) {
             var td = document.createElement("td");
-            td.style.border = "1px solid black";
-            var text = document.createTextNode(resultObj[i]);
+            var text = document.createTextNode(singleObj[j]);
             td.appendChild(text);
             tr.appendChild(td);
         }
@@ -363,9 +376,42 @@ function showResults(txtDocument) {
     }
 
     div.appendChild(table);
+    styleTable(div);
     divLocation.appendChild(div);
+
+
 }
 
+function styleTable(div) {
+    var table = div.getElementsByTagName('table');
+    table[0].style.borderCollapse = 'collapse';
+    table[0].style.border = '1px solid #ddd';
+
+    var tds = div.getElementsByTagName('td');
+    for (var i = 0; i < tds.length; i++) {
+        var td = tds[i];
+        td.style.padding = '15px';
+        td.style.border = '1px solid #ddd';
+
+    }
+
+    var trs = div.getElementsByTagName('tr');
+    for (var i = 0; i < trs.length; i++) {
+        var tr = trs[i];
+
+        tr.style.border = '1px solid #ddd';
+    }
+
+    var ths = div.getElementsByTagName('th');
+    for (var i = 0; i < ths.length; i++) {
+        var th = ths[i];
+        th.style.padding = '15px';
+        th.style.background = '#1F75ff';
+        th.style.color = 'white';
+        th.style.border = '1px solid #ddd';
+    }
+
+}
 
 //AUX
 //Auxiliary Function
