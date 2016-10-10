@@ -215,3 +215,10 @@ table, th, td {
     margin: auto;
     width: 80%; /*to align content*/
 }
+
+    .facetscontent div {
+        font: inherit;
+        border: inherit;
+        margin: inherit;
+        width: inherit;
+    }

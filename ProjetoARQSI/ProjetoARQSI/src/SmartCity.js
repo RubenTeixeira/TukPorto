@@ -161,17 +161,17 @@ function checkFacetName(facetname) {
     } else if (string.includes("Local")) {
         return createLocal();
     } else if (string.includes("GPS")) {
-        return emptydiv; //TODO - method signature created below.
+        return createGPS();
     } else if (string.includes("Preço")) {
-        return emptydiv; //TODO - method signature created below.
+        return createPrice();
     } else if (string.includes("Fonte")) {
-        return emptydiv; //TODO - method signature created below.
+        return createFonte();
     } else if (string.includes("Indicador")) {
-        return emptydiv; //TODO - method signature created below.
+        return createIndicator();
     } else if (string.includes("Foto")) {
-        return emptydiv; //TODO - method signature created below.
+        return createFoto();
     } else if (string.includes("Valor")) {
-        return emptydiv; //TODO - method signature created below.
+        return createValor();
     } else {
         return emptydiv;
     }
@@ -179,53 +179,31 @@ function checkFacetName(facetname) {
 
 // DATA facet
 function createReadDate() {
-    var current = new Date();
-    var d = current.getDate();
-    var m = current.getMonth() + 1;
-    var y = current.getFullYear();
-    if (d < 10) {
-        d = '0' + d
-    }
-    if (m < 10) {
-        m = '0' + m
-    }
-    current = y + '-' + m + '-' + d;
+    var maindiv = document.createElement("div");
+    maindiv.className = "facetscontent";
+    maindiv.id = "datedivid";//DIV ID
     var div = document.createElement("div");
-    div.className = "facetscontent";
-    div.id = "datedivid";//DIV ID
-    var form = document.createElement("form");
-    var input = document.createElement("input");
-    input.type = "date";
-    input.name = "readDate";
-    input.value = current;
-    form.appendChild(input);
-    div.appendChild(form);
-    startDisplaySetting(div, false);
-    return div;
+    var till = document.createElement("div");
+    var a = document.createElement("a");
+    var text = document.createTextNode("até");
+    a.appendChild(text);
+    var div2 = document.createElement("div");
+    till.appendChild(a);
+    div.appendChild(getCurrentDateForm());
+    div2.appendChild(getCurrentDateForm());
+    maindiv.appendChild(div);
+    maindiv.appendChild(till);
+    maindiv.appendChild(div2);
+    startDisplaySetting(maindiv, false);
+    return maindiv;
 }
 
 // HORA facet
 function createReadHour() {
-    var current = new Date();
-    var h = current.getHours();
-    var m = current.getMinutes();
-    if (h < 10) {
-        h = '0' + h;
-    }
-    if (m < 10) {
-        m = '0' + m;
-    }
-    current = h + ':' + m;
     var div = document.createElement("div");
     div.className = "facetscontent";
     div.id = "timedivid"; //DIV ID
-    var form = document.createElement("form");
-    var input = document.createElement("input");
-    input.type = "time";
-    input.name = "readTime";
-    input.value = current;
-    form.appendChild(input);
-    div.appendChild(form);
+    div.appendChild(getCurrentHourForm());
     startDisplaySetting(div, false);
     return div;
 }
@@ -269,16 +247,17 @@ function createTemp() {
 
 // LOCAL facet
 function createLocal() {
-    var distritos = ["Porto", "Braga"];
-    //TODO - improper use of the object Array?
-    //var distrito["Porto"] = "Amarante,Baião,Felgueiras";
-    //var distrito["Braga"] = "Amares,Barcelos,Braga,Cabeceiras de Basto,Celorico de Basto,Esposende,Fafe,Guimarães,Póvoa de Lanhoso,Terras de Bouro,Vieira do Minho,Vila Nova de Famalicão,Vila Verde,Vizela";
+    var local = ["select", "Porto", "VCI"];
     var div = document.createElement("div");
     div.className = "facetscontent";
     div.id = "localdivid"; //DIV ID
     var select1 = document.createElement("select");
-    for (var i = 0; i < distritos.length; i++) {
-        var string = distritos[i];
+    //select1.multiple = true; //Select multiple elements
+    select1.onchange = function () {
+        createSubLocal(this);
+    }
+    for (var i = 0; i < local.length; i++) {
+        var string = local[i];
         var option = document.createElement("option");
         option.text = string;
         select1.add(option);
@@ -289,35 +268,83 @@ function createLocal() {
     return div;
 }
 
+function createSubLocal(element) {
+    //STATIC VALUES - to change.
+    var str = element.options[element.selectedIndex].text;
+    var sublocal = ["Porto"];
+    sublocal["Porto"] = "Campanhã,Isep,Aliados";
+    var sublocal2 = ["VCI"];
+    sublocal2["VCI"] = "Antas,Francos,Amial,A3,Devesas";
+    var array;
+    var div = document.createElement("div");
+    div.className = "facetscontent";
+    var select = document.createElement("select");
+    if (str.includes("Porto")) {
+        array = sublocal["Porto"].split(",");
+    } else {
+        array = sublocal2["VCI"].split(",");
+    }
+    for (var i = 0; i < array.length; i++) {
+        var option = document.createElement("option");
+        option.text = array[i];
+        select.add(option);
+    }
+    select.name = "readSublocal";
+    div.appendChild(select);
+    startDisplaySetting(div, true);
+    var parentDiv = element.parentElement;
+    if (parentDiv.childNodes[1] != null) parentDiv.removeChild(parentDiv.childNodes[1]);
+    div.style.paddingTop = "10px";
+    div.style.position = "relative";
+    div.style.left = "-10%";
+    parentDiv.appendChild(div);
+}
 //GPS facet
 function createGPS() {
-    //TODO
-
+    var emptydiv = document.createElement("div");
+    emptydiv.className = "facetscontent";
+    startDisplaySetting(emptydiv, false);
+    return emptydiv;
 }
 
 //FONTE facet
 function createFonte() {
-    //TODO
+    var emptydiv = document.createElement("div");
+    emptydiv.className = "facetscontent";
+    startDisplaySetting(emptydiv, false);
+    return emptydiv;
 }
 
 //VALOR facet
 function createValor() {
-    //TODO
+    var emptydiv = document.createElement("div");
+    emptydiv.className = "facetscontent";
+    startDisplaySetting(emptydiv, false);
+    return emptydiv;
 }
 
 //FOTO facet
 function createFoto() {
-    //TODO
+    var emptydiv = document.createElement("div");
+    emptydiv.className = "facetscontent";
+    startDisplaySetting(emptydiv, false);
+    return emptydiv;
 }
 
 //INDICATOR facet
 function createIndicator() {
-    //TODO
+    var emptydiv = document.createElement("div");
+    emptydiv.className = "facetscontent";
+    startDisplaySetting(emptydiv, false);
+    return emptydiv;
 }
 
 //PRICE facet
 function createPrice() {
-
+    var emptydiv = document.createElement("div");
+    emptydiv.className = "facetscontent";
+    startDisplaySetting(emptydiv, false);
+    return emptydiv;
 }
 
 
@@ -325,7 +352,7 @@ function results() {
     var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?sensor=Temperatura&faceta=Temp";
     var link2 = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura&Data_de_leitura=[2016-09-03,2016-09-05]";
     var link3 = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura&Data_de_leitura=2016-09-03&Local=Porto-Campanhã";
-   // getResults(link2);
+    // getResults(link2);
 
 }
 
@@ -448,4 +475,46 @@ function showComponent(input) {
     var div = label.parentElement;
     var insidediv = div.childNodes[1];
     changeDisplaySetting(insidediv);
+}
+
+//Auxiliary Function
+function getCurrentDateForm() {
+    var current = new Date();
+    var d = current.getDate();
+    var m = current.getMonth() + 1;
+    var y = current.getFullYear();
+    if (d < 10) {
+        d = '0' + d
+    }
+    if (m < 10) {
+        m = '0' + m
+    }
+    current = y + '-' + m + '-' + d;
+    var form = document.createElement("form");
+    var input = document.createElement("input");
+    input.type = "date";
+    input.value = current;
+    form.appendChild(input);
+    return form;
+}
+
+//Auxiliary Function
+function getCurrentHourForm() {
+    var current = new Date();
+    var h = current.getHours();
+    var m = current.getMinutes();
+    if (h < 10) {
+        h = '0' + h;
+    }
+    if (m < 10) {
+        m = '0' + m;
+    }
+    current = h + ':' + m;
+    var form = document.createElement("form");
+    var input = document.createElement("input");
+    input.type = "time";
+    input.name = "readTime";
+    input.value = current;
+    form.appendChild(input);
+    return form;
 }
