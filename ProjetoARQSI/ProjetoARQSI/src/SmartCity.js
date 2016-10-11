@@ -1,9 +1,14 @@
 ﻿var SENSOR_DESIGNATION = "sensor";
 var FACET_DESIGNATION = "faceta";
-var sensorsAPI = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/sensores.php";
-var facets_ID_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/facetas.php?" + SENSOR_DESIGNATION + "=";
-var facets_name_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/facetasByNomeSensor.php?" + SENSOR_DESIGNATION + "=";
-var facets_values_link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?";
+var APP_URL = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/";
+var sensorsAPI = APP_URL + "sensores.php";
+var facets_ID_link = APP_URL + "facetas.php?" + SENSOR_DESIGNATION + "=";
+var facets_name_link = APP_URL + "facetasByNomeSensor.php?" + SENSOR_DESIGNATION + "=";
+var facets_values_link = APP_URL + "valoresFacetadoSensor.php?";
+
+var FACET_MIN_VALUE = APP_URL + "minFaceta.php?";
+var FACET_MAX_VALUE = APP_URL + "maxFaceta.php?";
+
 var RESPONSE_XML = 1;
 var RESPONSE_TEXT = 2;
 
@@ -115,24 +120,33 @@ function showFacetsMenu() {
 
 function createFacets(facetsXML, sensorName) {
     var maindivison = document.getElementById("facetsmenuid");
-    var facets = facetsXML.getElementsByTagName("Nome");
+    var facets = facetsXML.getElementsByTagName("Faceta");
     var sensorFacetsDiv = document.createElement("div");
     sensorFacetsDiv.className = "tabcontent";
     sensorFacetsDiv.id = sensorName + "_facets";
     sensorFacetsDiv.style.display = "none";
 
     for (var i = 0; i < facets.length; i++) {
-        var facetname = facets[i].childNodes[0].nodeValue;
+
+        var facetObj = new Object();
+        facetObj.id = facets[i].id;
+        facetObj.DBfield = facets[i].childNodes[0].childNodes[0].nodeValue;
+        facetObj.name = facets[i].childNodes[1].childNodes[0].nodeValue;
+        facetObj.measure = facets[i].childNodes[2].childNodes[0].nodeValue;
+        facetObj.type = facets[i].childNodes[3].childNodes[0].nodeValue;
+        facetObj.semantic = facets[i].childNodes[4].childNodes[0].nodeValue;
+        facetObj.sensor = sensorName;
+
         var div = document.createElement("div");
         div.className = "facetsdivision";
-        div.id = facetname;
+        div.id = facetObj.DBfield;
         var label = document.createElement("label");
-        label.htmlFor = facetname + "_input_ID_" + sensorName;
-        label.nodeValue = facetname;
+        label.htmlFor = facetObj.DBfield + "_input_ID_" + sensorName;
+        label.nodeValue = facetObj.name;
         //disables text selection on double click.
         label.addEventListener('mousedown', function (e) { e.preventDefault(); }, false);
         var input = document.createElement("input");
-        input.id = facetname + "_input_ID_" + sensorName;
+        input.id = facetObj.DBfield + "_input_ID_" + sensorName;
         //input.name = facetname;
         input.type = "checkbox";
         input.onchange = function () {
@@ -142,42 +156,60 @@ function createFacets(facetsXML, sensorName) {
         label.appendChild(input);
         label.appendChild(text);
         div.appendChild(label);
-        div.appendChild(checkFacetName(facetname)); //APPENDS DIV WITH CONTENT
+        div.appendChild(createFacet(facetObj)); //APPENDS DIV WITH CONTENT
         sensorFacetsDiv.appendChild(div);
     }
     maindivison.appendChild(sensorFacetsDiv);
 }
 
-function checkFacetName(facetname) {
+function createFacet(facetObj) {
     var emptydiv = document.createElement("div");
-    var string = facetname;
-    if (string.includes("Data")) {
-        return createReadDate();
-    } else if (string.includes("Hora")) {
-        return createReadHour();
-    } else if (string.includes("Temp")) {
-        return createTemp();
-    } else if (string.includes("Local")) {
-        return createLocal();
-    } else if (string.includes("GPS")) {
-        return createGPS();
-    } else if (string.includes("Preço")) {
-        return createPrice();
-    } else if (string.includes("Fonte")) {
-        return createFonte();
-    } else if (string.includes("Indicador")) {
-        return createIndicator();
-    } else if (string.includes("Foto")) {
-        return createFoto();
-    } else if (string.includes("Valor")) {
-        return createValor();
-    } else {
-        return emptydiv;
+
+    if (facetObj.semantic.includes("temperatura")) {
+        return createTemp(facetObj);
+
+    } else if (facetObj.semantic.includes("data")) {
+        return createReadDate(facetObj);
+
+    } else if (facetObj.semantic.includes("hora")) {
+        return createReadHour(facetObj);
+
+    } else if (faceObj.semantic.includes("monetário")) {
+        return createReadPrice(facetObj);
+
+    } else if (facetObj.measure.includes("discreto")) {
+        return createDiscrete(facetObj);
+
+    } else if (facetObj.measure.includes("contínuo")) {
+        return createContinuous(facetObj);
     }
+
+    //} else if (facetObj.semantic.includes("localização")) {
+    //    return createLocal();
+
+    //} else if (string.includes("GPS")) {
+    //    return createGPS();
+    //} else if (string.includes("Preço")) {
+    //    return createPrice();
+    //} else if (string.includes("Fonte")) {
+    //    return createFonte();
+    //} else if (string.includes("Indicador")) {
+    //    return createIndicator();
+    //} else if (string.includes("Foto")) {
+    //    return createFoto();
+    //} else if (string.includes("Valor")) {
+    //    return createValor();
+    //} else {
+    //    return emptydiv;
+    //}
+}
+
+function getMinPossibleValue(facetObj) {
+    var link = FACET_MIN_VALUE + "sensor=" + facetObj.sensor + "&facetaCont=" + facetObj.DBfield;
 }
 
 // DATA facet
-function createReadDate() {
+function createReadDate(facetObj) {
     var maindiv = document.createElement("div");
     maindiv.className = "facetscontent";
     maindiv.id = "datedivid";//DIV ID
@@ -198,7 +230,7 @@ function createReadDate() {
 }
 
 // HORA facet
-function createReadHour() {
+function createReadHour(facetObj) {
     var maindiv = document.createElement("div");
     maindiv.className = "facetscontent";
     maindiv.id = "timedivid"; //DIV ID
@@ -219,7 +251,8 @@ function createReadHour() {
 }
 
 // TEMPERATURA facet
-function createTemp() {
+// TODO GET MIN and MAX !!!!!!!!!!
+function createTemp(facetObj) {
     var div = document.createElement("div");
     div.className = "facetscontent";
     div.id = "tempdivid"; //DIV ID
@@ -230,8 +263,9 @@ function createTemp() {
     input.style.width = "59%";
     input.name = "readTemp";
     input.id = "tempid";
+    // min max functions
     input.max = "100";
-    input.min = "-100";
+    input.min = getMinPossibleValue(facetObj);
     input.value = "0";
     var text = document.createTextNode("-100ºC");
     var text_ = document.createTextNode("100ºC");
@@ -256,7 +290,8 @@ function createTemp() {
 }
 
 // LOCAL facet
-function createLocal() {
+// TODO: GET POSSIBLE VALUES !!!!!!!!!!!!!
+function createLocal(facetObj) {
     var local = ["select", "Porto", "VCI"];
     var div = document.createElement("div");
     div.className = "facetscontent";
@@ -309,53 +344,7 @@ function createSubLocal(element) {
     div.style.left = "-10%";
     parentDiv.appendChild(div);
 }
-//GPS facet
-function createGPS() {
-    var emptydiv = document.createElement("div");
-    emptydiv.className = "facetscontent";
-    startDisplaySetting(emptydiv, false);
-    return emptydiv;
-}
 
-//FONTE facet
-function createFonte() {
-    var emptydiv = document.createElement("div");
-    emptydiv.className = "facetscontent";
-    startDisplaySetting(emptydiv, false);
-    return emptydiv;
-}
-
-//VALOR facet
-function createValor() {
-    var emptydiv = document.createElement("div");
-    emptydiv.className = "facetscontent";
-    startDisplaySetting(emptydiv, false);
-    return emptydiv;
-}
-
-//FOTO facet
-function createFoto() {
-    var emptydiv = document.createElement("div");
-    emptydiv.className = "facetscontent";
-    startDisplaySetting(emptydiv, false);
-    return emptydiv;
-}
-
-//INDICATOR facet
-function createIndicator() {
-    var emptydiv = document.createElement("div");
-    emptydiv.className = "facetscontent";
-    startDisplaySetting(emptydiv, false);
-    return emptydiv;
-}
-
-//PRICE facet
-function createPrice() {
-    var emptydiv = document.createElement("div");
-    emptydiv.className = "facetscontent";
-    startDisplaySetting(emptydiv, false);
-    return emptydiv;
-}
 
 //RESULTS 
 
