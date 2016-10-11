@@ -106,7 +106,6 @@ function showFacetsFromSensor(evt, sensorName) {
 function setFacetsMenu() {
     var facetsmenu = document.getElementById("facetsmenuid");
     startDisplaySetting(facetsmenu, true);
-
 }
 
 function showFacetsMenu() {
@@ -200,12 +199,23 @@ function createReadDate() {
 
 // HORA facet
 function createReadHour() {
+    var maindiv = document.createElement("div");
+    maindiv.className = "facetscontent";
+    maindiv.id = "timedivid"; //DIV ID
     var div = document.createElement("div");
-    div.className = "facetscontent";
-    div.id = "timedivid"; //DIV ID
+    var div2 = document.createElement("div");
+    var till = document.createElement("div");
+    var a = document.createElement("a");
+    var text = document.createTextNode("até");
+    a.appendChild(text);
+    till.appendChild(a);
     div.appendChild(getCurrentHourForm());
-    startDisplaySetting(div, false);
-    return div;
+    div2.appendChild(getCurrentHourForm());
+    maindiv.appendChild(div);
+    maindiv.appendChild(till);
+    maindiv.appendChild(div2);
+    startDisplaySetting(maindiv, false);
+    return maindiv;
 }
 
 // TEMPERATURA facet
@@ -347,12 +357,13 @@ function createPrice() {
     return emptydiv;
 }
 
+//RESULTS 
 
 function results() {
     var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?sensor=Temperatura&faceta=Temp";
     var link2 = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura&Data_de_leitura=[2016-09-03,2016-09-05]";
     var link3 = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura&Data_de_leitura=2016-09-03&Local=Porto-Campanhã";
-    // getResults(link2);
+    //getResults(link);
 
 }
 
@@ -405,8 +416,6 @@ function showResults(txtDocument) {
     div.appendChild(table);
     styleTable(div);
     divLocation.appendChild(div);
-
-
 }
 
 function styleTable(div) {
@@ -437,8 +446,8 @@ function styleTable(div) {
         th.style.color = 'white';
         th.style.border = '1px solid #ddd';
     }
-
 }
+
 
 //AUX
 //Auxiliary Function
