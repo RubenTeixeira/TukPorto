@@ -349,10 +349,8 @@ function createSubLocal(element) {
 //RESULTS 
 
 function results() {
-    var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresFacetadoSensor.php?sensor=Temperatura&faceta=Temp";
-    var link2 = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura&Data_de_leitura=[2016-09-03,2016-09-05]";
-    var link3 = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura&Data_de_leitura=2016-09-03&Local=Porto-Campanhã";
-    //getResults(link);
+    var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura";
+    getResults(link);
 
 }
 
