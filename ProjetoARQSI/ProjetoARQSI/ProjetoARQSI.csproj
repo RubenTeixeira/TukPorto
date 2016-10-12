@@ -76,8 +76,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="src\Estilos.css" />
+    <Content Include="src\Objects.js" />
     <Content Include="src\PaginaWeb.html" />
     <Content Include="src\SmartCity.js" />
+    <Content Include="src\Util.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
