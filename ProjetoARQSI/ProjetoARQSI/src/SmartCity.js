@@ -15,13 +15,19 @@ var RESPONSE_XML = 1;
 var RESPONSE_TEXT = 2;
 
 var sensorsArray = [];
-
+var DISCRETE = "discreto";
+var CONTINUOUS = "contínuo";
+var DATATYPE = "data";
+var HOURTYPE = "hora";
+var NUMERICTYPE = "numérico";
+    
 
 function listSensors() {
 	requestAJAX(sensorsAPI, createTabs, RESPONSE_XML, null);
 }
 
 function requestAJAX(uri, handler, responseType, extraParam) {
+    var result;
 	var xmlHttpObj = createXmlHttpRequestObject();
 
 	if (xmlHttpObj) {
@@ -35,16 +41,20 @@ function requestAJAX(uri, handler, responseType, extraParam) {
 						handler(xmlHttpObj.responseXML, extraParam);
 					}
 				} else if (responseType == RESPONSE_TEXT) {
-					if (extraParam == null)
-						handler(xmlHttpObj.responseText);
-					else
-						handler(xmlHttpObj.responseText, extraParam);
+				    if (extraParam == null) {
+				        handler(xmlHttpObj.responseText);
+				       
+				    }
+				    else
+				        handler(xmlHttpObj.responseText, extraParam);
 				}
 			}
 		};
 		xmlHttpObj.open("GET", uri, true);
 		xmlHttpObj.send(null);
+
 	}
+	
 }
 
 function createXmlHttpRequestObject() {
@@ -154,28 +164,7 @@ function createFacets(facetsXML, sensorName) {
 		// Store facet on sensors vector
 		sensorObj.facets.push(facetObj);
 
-		var cb_Div = createCheckBox("facetsdivision", dbField, name, id, name);
-
-		//var div = document.createElement("div");
-		//div.className = "facetsdivision";
-		//div.id = facetObj.DBfield;
-		//var label = document.createElement("label");
-		//label.htmlFor = facetObj.DBfield + "_input_ID_" + sensorName;
-		//label.nodeValue = facetObj.name;
-		////disables text selection on double click.
-		//label.addEventListener('mousedown', function (e) { e.preventDefault(); }, false);
-		//var input = document.createElement("input");
-		//input.id = facetObj.DBfield + "_input_ID_" + sensorName;
-		////input.name = facetname;
-		//input.type = "checkbox";
-		//input.onchange = function () {
-		//    showComponent(this);
-		//}
-		//var text = document.createTextNode(facetObj.name);
-		//label.appendChild(input);
-		//label.appendChild(text);
-		//div.appendChild(label);
-		//.appendChild(createFacet(facetObj)); //APPENDS DIV WITH CONTENT
+		var cb_Div = createCheckBox("facetsdivision", dbField, name, id, name,facetObj);
 		sensorFacetsDiv.appendChild(cb_Div);
 	}
 	maindivison.appendChild(sensorFacetsDiv);
@@ -190,131 +179,104 @@ function showFacetOptions(input) {
 }
 
 function createFacet(facetObj) {
-	var emptydiv = document.createElement("div");
+    var measure = facetObj.measure;
+    var typeOf = facetObj.type;
 
-	if (facetObj.semantic.includes("temperatura")) {
-		return createTemp(facetObj);
+    if (measure === CONTINUOUS) {
+        if (typeOf === DATATYPE) {
+           return createReadDate(facetObj);
+        }
+        else if (typeOf === HOURTYPE) {
+            return createReadHour(facetObj);
+        }
+        else if (typeOf === NUMERICTYPE) {
+            return createReadNumericType(facetObj);
+        }
+       
+    }
 
-	} else if (facetObj.semantic.includes("data")) {
-		return createReadDate(facetObj);
 
-	} else if (facetObj.semantic.includes("hora")) {
-		return createReadHour(facetObj);
-
-	} else if (facetObj.semantic.includes("monetário")) {
-		return createReadPrice(facetObj);
-
-	} else if (facetObj.measure.includes("discreto")) {
-		return createDiscrete(facetObj);
-
-	} else if (facetObj.measure.includes("contínuo")) {
-		return createContinuous(facetObj);
-	}
-
-	//} else if (facetObj.semantic.includes("localização")) {
-	//    return createLocal();
-
-	//} else if (string.includes("GPS")) {
-	//    return createGPS();
-	//} else if (string.includes("Preço")) {
-	//    return createPrice();
-	//} else if (string.includes("Fonte")) {
-	//    return createFonte();
-	//} else if (string.includes("Indicador")) {
-	//    return createIndicator();
-	//} else if (string.includes("Foto")) {
-	//    return createFoto();
-	//} else if (string.includes("Valor")) {
-	//    return createValor();
-	//} else {
-	//    return emptydiv;
-	//}
 }
 
+
+
+function getMaxPossibleValue(facetObj) {
+    var link = FACET_MAX_VALUE + "sensor=" + facetObj.sensor.name + "&facetaCont=" + facetObj.dbField;
+    requestAJAX(link, getMaxLimitValue, RESPONSE_TEXT, null);
+   
+   
+    
+}
+
+function getMaxLimitValue(txtDocument) {
+    var result = JSON.parse(txtDocument);
+    alert(result.max);
+}
+
+
 function getMinPossibleValue(facetObj) {
-	var link = FACET_MIN_VALUE + "sensor=" + facetObj.sensor + "&facetaCont=" + facetObj.DBfield;
+    var link = FACET_MIN_VALUE + "sensor=" + facetObj.sensor.name + "&facetaCont=" + facetObj.dbField;
+    requestAJAX(link, getMinLimitValue, RESPONSE_TEXT, null);
+    
+
+
+}
+
+function getMinLimitValue(txtDocument) {
+    var result = JSON.parse(txtDocument);
+    alert(result.min);
 }
 
 // DATA facet
 function createReadDate(facetObj) {
-	var maindiv = document.createElement("div");
-	maindiv.className = "facetscontent";
-	maindiv.id = "datedivid";//DIV ID
-	var div = document.createElement("div");
-	var till = document.createElement("div");
-	var a = document.createElement("a");
-	var text = document.createTextNode("até");
-	a.appendChild(text);
-	var div2 = document.createElement("div");
-	till.appendChild(a);
-	div.appendChild(getCurrentDateForm());
-	div2.appendChild(getCurrentDateForm());
-	maindiv.appendChild(div);
-	maindiv.appendChild(till);
-	maindiv.appendChild(div2);
-	startDisplaySetting(maindiv, false);
-	return maindiv;
+    var from = document.createTextNode("De: ");
+    var to = document.createTextNode("Até: ");
+    var p = document.createElement("p");
+    var div = document.createElement("div");
+    div.id = facetObj.id;
+    div.style.border = 'none';
+    div.appendChild(from);
+    div.appendChild(getCurrentDateForm());
+    div.appendChild(p);
+    div.appendChild(to);
+    div.appendChild(getCurrentDateForm());
+    startDisplaySetting(div, true);
+    return div;
 }
 
 // HORA facet
 function createReadHour(facetObj) {
-	var maindiv = document.createElement("div");
-	maindiv.className = "facetscontent";
-	maindiv.id = "timedivid"; //DIV ID
-	var div = document.createElement("div");
-	var div2 = document.createElement("div");
-	var till = document.createElement("div");
-	var a = document.createElement("a");
-	var text = document.createTextNode("até");
-	a.appendChild(text);
-	till.appendChild(a);
-	div.appendChild(getCurrentHourForm());
-	div2.appendChild(getCurrentHourForm());
-	maindiv.appendChild(div);
-	maindiv.appendChild(till);
-	maindiv.appendChild(div2);
-	startDisplaySetting(maindiv, false);
-	return maindiv;
+	var from = document.createTextNode("De: ");
+    var to = document.createTextNode("Até: ");
+    var p = document.createElement("p");
+    var div = document.createElement("div");
+    div.id = facetObj.id;
+    div.style.border = 'none';
+    div.appendChild(from);
+    div.appendChild(getCurrentHourForm());
+    div.appendChild(p);
+    div.appendChild(to);
+    div.appendChild(getCurrentHourForm());
+    startDisplaySetting(div, true);
+    return div;
 }
 
-// TEMPERATURA facet
-// TODO GET MIN and MAX !!!!!!!!!!
-function createTemp(facetObj) {
-	var div = document.createElement("div");
-	div.className = "facetscontent";
-	div.id = "tempdivid"; //DIV ID
-	var div_ = document.createElement("div");
-	div_.className = "facetscontent";
-	var input = document.createElement("input");
-	input.type = "range";
-	input.style.width = "59%";
-	input.name = "readTemp";
-	input.id = "tempid";
-	// min max functions
-	input.max = "100";
-	input.min = getMinPossibleValue(facetObj);
-	input.value = "0";
-	var text = document.createTextNode("-100ºC");
-	var text_ = document.createTextNode("100ºC");
-	var output = document.createElement("output");
-	output.name = "out";
-	output.htmlFor = "tempid";
-	output.value = "0";
-	output.style.position = "relative";
-	output.style.left = "41.5%";
-	var form = document.createElement("form");
-	form.oninput = function () {
-		output.value = parseInt(input.value);
-	};
-	form.appendChild(text);
-	form.appendChild(input);
-	form.appendChild(text_);
-	div_.appendChild(output);
-	div.appendChild(form);
-	div.appendChild(div_);
-	startDisplaySetting(div, false);
-	;
-	return div;
+
+function createReadNumericType(facetObj) {
+    getMinPossibleValue(facetObj);
+    getMaxPossibleValue(facetObj);
+    var from = document.createTextNode("De: ");
+    var to = document.createTextNode("Até: ");
+    var div = document.createElement("div");
+    var input = document.createElement("input");
+    div.id = facetObj.id;
+    div.style.border = 'none';
+    input.type = 'range';
+    div.appendChild(from);
+    div.appendChild(input);
+    div.appendChild(to);
+    startDisplaySetting(div, true);
+    return div;
 }
 
 // LOCAL facet

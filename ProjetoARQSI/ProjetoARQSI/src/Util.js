@@ -38,7 +38,7 @@ function changeDisplaySetting(div) {
 /*************************
  ELEMENT CREATORS
  **************************/
-function createCheckBox(divClass, divID, labelText, inputID, inputName) {
+function createCheckBox(divClass, divID, labelText, inputID, inputName,facetObj) {
 	var div = document.createElement("div");
 	div.className = divClass;
 	div.id = divID;
@@ -54,7 +54,8 @@ function createCheckBox(divClass, divID, labelText, inputID, inputName) {
 	input.name = inputName;
 	input.type = "checkbox";
 	input.onchange = function () {
-		showFacetOptions(this);
+	   
+	    div.appendChild(createFacet(facetObj));
 	};
 	var text = document.createTextNode(labelText);
 	label.appendChild(input);
