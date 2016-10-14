@@ -1,7 +1,7 @@
 ﻿div {
     border: 1px solid black;
     width: 100%;
-    overflow: hidden;
+    /*overflow-y: hidden;*/
 }
 
 .styleborder {
@@ -22,12 +22,13 @@
     /* position: fixed; /* Stay in place */
     z-index: 1; /* Stay on top */
     background-color: #ffffff;
-    overflow: hidden; /* Disable horizontal scroll */
+    overflow-y: visible; /* Disable horizontal scroll */
 }
 
 .right {
     float: right;
     width: 68%;
+    overflow: auto;
 }
 
 .footer {
@@ -158,8 +159,7 @@
     box-shadow: 0 0px 0px 0 rgba(0,0,0,0.2), 0 3px 5px 0 rgba(0,0,0,0.19);
 }
 
-.buttonfacets {
-    /*box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);*/
+.buttonfacets, .buttonresults {
     cursor: pointer;
     margin-top: 5px;
     padding: 4px 4px 4px 4px;
@@ -170,21 +170,21 @@
     transition: all 0.5s;
 }
 
-    .buttonfacets span {
-        cursor: pointer;
-        display: inline-block;
-        position: relative;
+.buttonfacets, span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+    .buttonfacets span:after {
+        content: ' ▼';
+        position: absolute;
+        opacity: 0.5;
+        top: 0;
+        right: -20px;
         transition: 0.5s;
     }
-
-        .buttonfacets span:after {
-            content: ' ▼';
-            position: absolute;
-            opacity: 0.5;
-            top: 0;
-            right: -20px;
-            transition: 0.5s;
-        }
 
     .buttonfacets:hover span {
         padding-right: 20px;
@@ -194,6 +194,34 @@
             opacity: 1;
             right: 0;
         }
+
+.buttonresults span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+    .buttonresults span:after {
+        content: ' 👁';
+        position: absolute;
+        opacity: 1;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+    }
+
+.buttonresults:hover span {
+    padding-right: 25px;
+}
+
+    .buttonresults:hover span:after {
+        opacity: 1;
+        right: 0;
+    }
+
+
+
 
 .facetsdivision {
     border: none;
@@ -224,11 +252,9 @@ table, th, td {
     }
 
 tr:nth-child(even) {
-    background-color: #f2f2f2
-
+    background-color: #f2f2f2;
 }
 
 tr:hover {
-    background-color: #82c0d7
-
+    background-color: #82c0d7;
 }

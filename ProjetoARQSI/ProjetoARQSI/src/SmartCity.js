@@ -9,6 +9,7 @@ var facets_values_link = APP_URL + "valoresFacetadoSensor.php?";
 var FACET_MIN_VALUE = APP_URL + "minFaceta.php?";
 var FACET_MAX_VALUE = APP_URL + "maxFaceta.php?";
 var DISCRETE_VALUES_LINK = APP_URL + "valoresFacetadoSensor.php?";
+var VALUES_LINK = APP_URL + "valoresDeSensor.php?sensor=";
 
 var RESPONSE_XML = 1;
 var RESPONSE_TEXT = 2;
@@ -98,7 +99,8 @@ function showFacetsFromSensor(evt, sensorName) {
 	// Hide all currently existant tabcontent div's
 	tabcontent = document.getElementsByClassName("tabcontent");
 	for (i = 0; i < tabcontent.length; i++) {
-		tabcontent[i].style.display = "none";
+	    tabcontent[i].style.display = "none";
+	    showHideResults();
 	}
 
 	// Set all tab links as inactive
@@ -108,15 +110,15 @@ function showFacetsFromSensor(evt, sensorName) {
 	}
 	// set selected tab link as active
 	evt.currentTarget.className += " active";
-
+	
 	// If theres a 'facetsmenuid' child with id=sensorName
 	// lets make it visible and leave
 	var sensorDiv = document.getElementById(sensorName + "_facets");
 	if (sensorDiv)
-		sensorDiv.style.display = "block";
-	else
-		requestFacets(sensorName);
-
+	    sensorDiv.style.display = "block";
+	 else 
+	    requestFacets(sensorName);	    
+		
 	setFacetsMenu();
 }
 
@@ -183,7 +185,7 @@ function showFacetOptions(input) {
 	// TODO:
 	// Verify if options div exists, if so make it visible
 	// otherwise create it:
-	var facetObj;
+    var facetObj;
 	createFacet(facetObj);
 }
 
@@ -396,37 +398,31 @@ function createContinuous(facetObject) {
 
 function getDiscreteValues(facetObj) {
 	var link = DISCRETE_VALUES_LINK + SENSOR_DESIGNATION + "=" + facetObj.sensor + FACET_DESIGNATION + "=" + facetObj.DBfield;
-
 }
+
 
 //RESULTS
-
 function results() {
-	var link = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/valoresDeSensor.php?sensor=Temperatura";
-	getResults(link);
-
+    showHideResults();
+    var ref_array = document.getElementsByClassName("link active");
+    var ref = ref_array[0];
+    var sensorName = ref.childNodes[0].nodeValue.replace(/ /g, "_");
+    var link = VALUES_LINK + sensorName;
+	requestAJAX(link,showResults,RESPONSE_TEXT,null);
 }
 
-function getResults(link) {
-	var httpObj = createXmlHttpRequestObject();
-
-	if (httpObj) {
-		httpObj.onreadystatechange = function () {
-			if (this.readyState == 4 && this.status == 200) {
-				return showResults(httpObj.responseText);
-			}
-		};
-		httpObj.open("GET", link, true);
-		httpObj.send();
-	}
+function showHideResults() {
+    var maindiv = document.getElementById("results");
+    if (maindiv.childNodes[1] != null) {
+        maindiv.removeChild(maindiv.childNodes[1]); 
+    }
 }
 
 function showResults(txtDocument) {
 
-	var divLocation = document.getElementById("widget_horizontal");
+    var divLocation = document.getElementById("results");
 	divLocation.style.overflow = 'auto';
 	var resultObj = JSON.parse(txtDocument);
-
 
 	var div = document.createElement("div");
 	var table = document.createElement("table");
