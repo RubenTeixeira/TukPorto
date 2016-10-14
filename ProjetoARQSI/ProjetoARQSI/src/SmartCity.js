@@ -406,7 +406,9 @@ function results() {
     showHideResults();
     var ref_array = document.getElementsByClassName("link active");
     var ref = ref_array[0];
-    var sensorName = ref.childNodes[0].nodeValue.replace(/ /g, "_");
+    var sensor = ref.childNodes[0].nodeValue;
+    var sensorName = sensor.replace(/ /g, "_");
+    handleRequiredInfo(sensorName); 
     var link = VALUES_LINK + sensorName;
 	requestAJAX(link,showResults,RESPONSE_TEXT,null);
 }
@@ -416,6 +418,20 @@ function showHideResults() {
     if (maindiv.childNodes[1] != null) {
         maindiv.removeChild(maindiv.childNodes[1]); 
     }
+}
+
+function handleRequiredInfo(sensor) {
+    var link;
+    var id = sensor + "_facets";
+    var div = document.getElementById(id);
+    var checkbox_array = div.getElementsByTagName("input");
+    for (var i = 0; i < checkbox_array.length; i++) {
+        if (checkbox_array[i].checked) {
+            //retrieve div of selected checkboxes to manipulate the data accordingly.
+   
+        }
+    }
+    //return string to add to link.
 }
 
 function showResults(txtDocument) {
@@ -431,7 +447,7 @@ function showResults(txtDocument) {
 	var names = Object.getOwnPropertyNames(resultObj[0]);
 	for (var i = 0; i < names.length; i++) {
 		var th = document.createElement("th");
-		var text = document.createTextNode(names[i]);
+		var text = document.createTextNode(names[i].replace(/_/g, " "));
 		th.appendChild(text);
 		tableHeaderRow.appendChild(th);
 	}
@@ -450,6 +466,7 @@ function showResults(txtDocument) {
 	}
 
 	div.appendChild(table);
+	div.style.border = "none";
 	styleTable(div);
 	divLocation.appendChild(div);
 }

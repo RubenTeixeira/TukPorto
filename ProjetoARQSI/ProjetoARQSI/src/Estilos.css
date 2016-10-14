@@ -168,23 +168,24 @@
     outline: 0; /*disable focus on-click*/
     text-align: center;
     transition: all 0.5s;
+    outline: 0;
 }
 
-.buttonfacets, span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
-}
-
-    .buttonfacets span:after {
-        content: ' ▼';
-        position: absolute;
-        opacity: 0.5;
-        top: 0;
-        right: -20px;
+    .buttonfacets span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
         transition: 0.5s;
     }
+
+        .buttonfacets span:after {
+            content: ' ▼';
+            position: absolute;
+            opacity: 0.5;
+            top: 0;
+            right: -20px;
+            transition: 0.5s;
+        }
 
     .buttonfacets:hover span {
         padding-right: 20px;
@@ -195,30 +196,30 @@
             right: 0;
         }
 
-.buttonresults span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
-}
-
-    .buttonresults span:after {
-        content: ' 👁';
-        position: absolute;
-        opacity: 1;
-        top: 0;
-        right: -20px;
+    .buttonresults span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
         transition: 0.5s;
     }
 
-.buttonresults:hover span {
-    padding-right: 25px;
-}
+        .buttonresults span:after {
+            content: ' 👁';
+            position: absolute;
+            opacity: 1;
+            top: 0;
+            right: -20px;
+            transition: 0.5s;
+        }
 
-    .buttonresults:hover span:after {
-        opacity: 1;
-        right: 0;
+    .buttonresults:hover span {
+        padding-right: 25px;
     }
+
+        .buttonresults:hover span:after {
+            opacity: 1;
+            right: 0;
+        }
 
 
 
@@ -234,6 +235,7 @@
 }
 
 table, th, td {
+    font: 10px tahoma;
     border: 1px solid black;
 }
 
