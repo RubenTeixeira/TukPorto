@@ -193,6 +193,10 @@ function createFacet(facetObj) {
         else if (typeOf === NUMERICTYPE) {
             return createReadNumericType(facetObj);
         }
+
+        else if (typeOf === ALPHANUMERIC) {
+            return createSelectAlphaNumericType(facetObj);
+        }
        
     }
 
@@ -205,8 +209,10 @@ function createFacet(facetObj) {
 
 }
 
-function getAllOptions(facetObj,div) {
+function getAllOptions(facetObj, div) {
+    
     var link = DISCRETE_VALUES_LINK + "sensor=" + facetObj.sensor.name + "&faceta=" + facetObj.dbField;
+    console.log(link);
     requestAJAX(link, createAllOptionsInput, RESPONSE_TEXT, div);
     
 }
@@ -229,31 +235,53 @@ function createAllOptionsInput(txtDocument,div) {
 
 
 
-function getMaxPossibleValue(facetObj) {
+function getMaxPossibleValue(facetObj,div) {
     var link = FACET_MAX_VALUE + "sensor=" + facetObj.sensor.name + "&facetaCont=" + facetObj.dbField;
-    requestAJAX(link, getMaxLimitValue, RESPONSE_TEXT, null);
+    requestAJAX(link, getMaxLimitValue, RESPONSE_TEXT,div);
    
    
     
 }
 
-function getMaxLimitValue(txtDocument) {
+function getMaxLimitValue(txtDocument,div) {
     var result = JSON.parse(txtDocument);
-    alert(result.max);
+    var text = document.createTextNode("Max: ");
+    text.size = 8;
+    var maxDiv = document.createElement('div');
+    maxDiv.style.border = 'none';
+    var input = document.createElement("input");
+    input.type = 'text';
+    input.value = result.max;
+    maxDiv.appendChild(text);
+    div.appendChild(maxDiv);
+    div.appendChild(input);
+    
+   
+    
 }
 
 
-function getMinPossibleValue(facetObj) {
+function getMinPossibleValue(facetObj,div) {
     var link = FACET_MIN_VALUE + "sensor=" + facetObj.sensor.name + "&facetaCont=" + facetObj.dbField;
-    requestAJAX(link, getMinLimitValue, RESPONSE_TEXT, null);
+    requestAJAX(link, getMinLimitValue, RESPONSE_TEXT,div);
     
 
 
 }
 
-function getMinLimitValue(txtDocument) {
+function getMinLimitValue(txtDocument, div) {
+    
     var result = JSON.parse(txtDocument);
-    alert(result.min);
+    var text = document.createTextNode("Min: ");
+    text.size = 8;
+    var minDiv = document.createElement('div');
+    minDiv.style.border = 'none';
+    var input = document.createElement("input");
+    input.type = 'text';
+    input.value = result.min;
+    minDiv.appendChild(text);
+    div.appendChild(minDiv);
+    div.appendChild(input);
 }
 
 // DATA facet
@@ -292,19 +320,11 @@ function createReadHour(facetObj) {
 
 
 function createReadNumericType(facetObj) {
-    getMinPossibleValue(facetObj);
-    getMaxPossibleValue(facetObj);
-    var from = document.createTextNode("De: ");
-    var to = document.createTextNode("Até: ");
     var div = document.createElement("div");
-    var input = document.createElement("input");
     div.id = facetObj.id;
     div.style.border = 'none';
-    input.type = 'range';
-    div.appendChild(from);
-    div.appendChild(input);
-    div.appendChild(to);
-    startDisplaySetting(div, true);
+    getMinPossibleValue(facetObj,div);
+    getMaxPossibleValue(facetObj,div);
     return div;
 }
 
@@ -316,84 +336,6 @@ function createSelectAlphaNumericType(facetObj) {
    
 }
 
-// LOCAL facet
-// TODO: GET POSSIBLE VALUES !!!!!!!!!!!!!
-function createLocal(facetObj) {
-	var local = getDiscreteValues(facetObj);
-	var div = document.createElement("div");
-	div.className = "facetscontent";
-	div.id = "localdivid"; //DIV ID
-	var select1 = document.createElement("select");
-	//select1.multiple = true; //Select multiple elements
-	select1.onchange = function () {
-		createSubLocal(this);
-	}
-	for (var i = 0; i < local.length; i++) {
-		var string = local[i];
-		var option = document.createElement("option");
-		option.text = string;
-		select1.add(option);
-	}
-	select1.name = "readLocal";
-	div.appendChild(select1);
-	startDisplaySetting(div, false);
-	return div;
-}
-
-function createSubLocal(element) {
-	//STATIC VALUES - to change.
-	var str = element.options[element.selectedIndex].text;
-	var sublocal = ["Porto"];
-	sublocal["Porto"] = "Campanhã,Isep,Aliados";
-	var sublocal2 = ["VCI"];
-	sublocal2["VCI"] = "Antas,Francos,Amial,A3,Devesas";
-	var array;
-	var div = document.createElement("div");
-	div.className = "facetscontent";
-	var select = document.createElement("select");
-	if (str.includes("Porto")) {
-		array = sublocal["Porto"].split(",");
-	} else {
-		array = sublocal2["VCI"].split(",");
-	}
-	for (var i = 0; i < array.length; i++) {
-		var option = document.createElement("option");
-		option.text = array[i];
-		select.add(option);
-	}
-	select.name = "readSublocal";
-	div.appendChild(select);
-	startDisplaySetting(div, true);
-	var parentDiv = element.parentElement;
-	if (parentDiv.childNodes[1] != null)
-		parentDiv.removeChild(parentDiv.childNodes[1]);
-	div.style.paddingTop = "10px";
-	div.style.position = "relative";
-	div.style.left = "-10%";
-	parentDiv.appendChild(div);
-}
-
-function createDiscrete(facetObj) {
-	var div = document.createElement("div");
-	div.className = "facetscontent";
-	div.id = "localdivid"; //DIV ID
-	var select1 = document.createElement("select");
-	select1.onchange = function () {
-		createDiscreteOptions(this);
-	}
-	select1.name = "readLocal";
-	div.appendChild(select1);
-	startDisplaySetting(div, false);
-	return div;
-}
-
-function createDiscreteOptions(element) {
-	var options = getDiscreteValues()
-}
-
-function createContinuous(facetObject) {
-	return null;
-}
 
 function getDiscreteValues(facetObj) {
 	var link = DISCRETE_VALUES_LINK + SENSOR_DESIGNATION + "=" + facetObj.sensor + FACET_DESIGNATION + "=" + facetObj.DBfield;
