@@ -366,7 +366,7 @@ function filter(sensorName) {
     for (var i = 1; i < checkbox_array.length; i++) {
         if (checkbox_array[i].checked) {
             if (checkbox_array[i].id == "5") { //LOCAL
-                str += "&"+checkbox_array[i].name+"=["
+                str += "&" + checkbox_array[i].name + "=["
                 var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
                 var elements = parentElem.getElementsByTagName("input");
                 //ignores the first one.
@@ -384,8 +384,20 @@ function filter(sensorName) {
                 //ignores the first one.
                 for (var j = 1; j < elements.length; j++) {
                     if (elements[j].checked) {
-                        var local = elements[j].nextSibling.nodeValue;
-                        str += local + ","
+                        var fonte = elements[j].nextSibling.nodeValue;
+                        str += fonte + ","
+                    }
+                }
+                str += "]";
+            } else if (checkbox_array[i].id == "11") {
+                str += "&" + checkbox_array[i].name + "=["
+                var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
+                var elements = parentElem.getElementsByTagName("input");
+                //ignores the first one.
+                for (var j = 1; j < elements.length; j++) {
+                    if (elements[j].checked) {
+                        var indicador = elements[j].nextSibling.nodeValue;
+                        str += indicador + ","
                     }
                 }
                 str += "]";
@@ -413,9 +425,6 @@ function handlePeriodInfo(txtDocument, sensorName) {
             }
             if (checkbox_array[i].name == "Hora de leitura") {
                 filterResults(div, divLocation);
-            }
-            if (checkbox_array[i].name == "Local") {
-                //Data handled previously
             }
         }
     }
