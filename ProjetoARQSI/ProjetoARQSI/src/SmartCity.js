@@ -376,13 +376,6 @@ function results() {
     //Date must be handled after achieving the text file
 }
 
-function showHideResults() {
-    var maindiv = document.getElementById("results");
-    if (maindiv.childNodes[1] != null) {
-        maindiv.removeChild(maindiv.childNodes[1]);
-    }
-}
-
 /*
 This method checks which checkbox is selected*/
 function handleRequiredInfo(txtDocument, sensorName) {
@@ -397,9 +390,9 @@ function handleRequiredInfo(txtDocument, sensorName) {
         if (checkbox_array[i].checked) {
             var div = checkbox_array[i].parentElement.nextElementSibling;
             if (checkbox_array[i].name == "Data de leitura") {
-                extractDate(div, divLocation);
+                filterResults(div, divLocation);
             } else if (checkbox_array[i].name = "Hora de leitura") {
-                extractHour(div, divLocation);
+                filterResults(div, divLocation);
             }
         }
     }
@@ -409,22 +402,26 @@ function handleRequiredInfo(txtDocument, sensorName) {
 }
 
 /*
-This method extracts two dates from the input*/
-function extractDate(div, divLocation) {
-    if (div.id == "1") { //search should be done by id.
-        //two dates max.
+This method extracts two Date Object from the input.*/
+function filterResults(div, divLocation) {
+    if (div.id == "1") { //search should be done by id - validate if this is indeed the right div.
         var date_array = div.getElementsByTagName("input");
         var beginDate = date_array[0].value;
         var endDate = date_array[1].value;
         showResultsDatePeriod(beginDate, endDate, divLocation);
+    } else if (div.id == "2") {
+        var hour_array = div.getElementsByTagName("input");
+        var beginHour = hour_array[0].value;
+        var endHour = hour_array[1].value;
+        showResultsHourPeriod(beginHour, endHour, divLocation);
     }
 }
 
 /*
 Show results in list according to the interval passed in parameteres.*/
 function showResultsDatePeriod(beginDate, endDate, divLocation) {
-    var r, c;
-    r = 0; c = 0;
+    var flag, c;
+    flag = 0; c = 0;
     var rows = divLocation.getElementsByTagName("tr"); //all trs
     loop1:
         for (var i = 0; i < rows.length; i++) {
@@ -435,10 +432,11 @@ function showResultsDatePeriod(beginDate, endDate, divLocation) {
                     var value = row_[j].childNodes[0].nodeValue;
                     if (value == "Data de leitura") {
                         c = j;
+                        flag++;
                         break loop2;
                         //salva posicao da primeira coluna.
                     }
-                    break loop1;
+                    if (flag != 0) break loop1;
                 }
         }
     for (var i = 1; i < rows.length; i++) {
@@ -451,59 +449,41 @@ function showResultsDatePeriod(beginDate, endDate, divLocation) {
             i--;
         }
     }
+}
 
-    //var names = Object.getOwnPropertyNames(resultObj[0]);
-    //for (var i = 0; i < names.length; i++) {
-    //    var th = document.createElement("th");
-    //    var text = document.createTextNode(names[i].replace(/_/g, " "));
-    //    th.appendChild(text);
-    //    tableHeaderRow.appendChild(th);
-    //}
-    //table.appendChild(tableHeaderRow);
-
-    //var flag, flare, fail, flake;
-    //flag = 0; fail = 0;
-    //for (var i = 0; i < resultObj.length; i++) {
-    //    flare = 0;
-    //    flake = 0; //only Date control variables.
-    //    var singleObj = resultObj[i];
-    //    var tr = document.createElement("tr");
-    //    for (var j in singleObj) {
-    //      //if (j == "Data_de_leitura") {
-
-    //        if (flare == 0) {
-    //            flare++;
-    //            var date = singleObj[j];
-    //            if (date > endDate) {
-    //                fail++;
-    //            }
-    //        }
-    //        if (flag == 1 && fail == 0) {
-    //            var td = document.createElement("td");
-    //            var text = document.createTextNode(singleObj[j]);
-    //            td.appendChild(text);
-    //            tr.appendChild(td);
-    //        }
-    //        if (flag == 0 && flake == 0) {
-    //            flake = 1;
-    //            var date = singleObj[j];
-    //            if (date >= beginDate) {
-    //                flag++;
-    //                var td = document.createElement("td");
-    //                var text = document.createTextNode(singleObj[j]);
-    //                td.appendChild(text);
-    //                tr.appendChild(td);
-    //              }
-    //           }
-    //        //}
-    //    }
-    //    table.appendChild(tr);
-    //}
-    //div.appendChild(table);
-    //div.style.border = "none";
-    //styleTable(div);
-    //divLocation.appendChild(div);
-    ////changeDisplaySetting(div);
+function showResultsHourPeriod(beginHour, endHour, divLocation) {
+    var flag, c;
+    flag = 0; c = 0;
+    var rows = divLocation.getElementsByTagName("tr"); //all trs
+    loop1:
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var row_ = row.childNodes;
+            loop2:
+                for (var j = 0; j < row_.length ; j++) { //each cell
+                    var value = row_[j].childNodes[0].nodeValue;
+                    if (value == "Hora de leitura") {
+                        c = j;
+                        flag++;
+                        break loop2;
+                        //salva posicao da primeira coluna.
+                    }
+                    if (flag != 0) break loop1;
+                    
+                }
+        }
+    for (var i = 1; i < rows.length; i++) {
+        var row = rows[i];
+        var row_ = row.childNodes;
+        var hour = row_[c].childNodes[0].nodeValue;
+        beginHour = beginHour + ":00";
+        endHour = endHour + ":00";
+        if (hour < beginHour || hour > endHour) {
+            var table = divLocation.getElementsByTagName("table")[0];
+            table.removeChild(table.childNodes[i]); //remove a coluna da seguite posição.
+            i--;
+        }
+    }
 }
 
 function findSensorByName(sensorName) {
@@ -551,3 +531,9 @@ function buildFullTable(resultObj, divLocation) {
     divLocation.appendChild(div);
 }
 
+function showHideResults() {
+    var maindiv = document.getElementById("results");
+    if (maindiv.childNodes[1] != null) {
+        maindiv.removeChild(maindiv.childNodes[1]);
+    }
+}
