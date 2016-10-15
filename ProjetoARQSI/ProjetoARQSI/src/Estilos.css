@@ -1,12 +1,7 @@
 ﻿div {
     border: 1px solid black;
     width: 100%;
-    /*overflow-y: hidden;*/
-}
-
-.styleborder {
-    border: 0px solid black;
-    /*height: 100%;*/
+    overflow: auto;
 }
 
 .header {
@@ -17,9 +12,6 @@
 .left {
     float: left;
     width: 22%;
-    /*height: 100%; /* 100% Full-height */
-    /*width: 200px; /* 0 width - change this with JavaScript */
-    /* position: fixed; /* Stay in place */
     z-index: 1; /* Stay on top */
     background-color: #ffffff;
     overflow-y: visible; /* Disable horizontal scroll */
@@ -28,7 +20,7 @@
 .right {
     float: right;
     width: 68%;
-    overflow: auto;
+    
 }
 
 .footer {
@@ -45,7 +37,7 @@
 
 .left2 {
     float: left;
-    max-width: 150px;
+    max-width: 250px;
     max-height: 400px;
 }
 
@@ -60,16 +52,16 @@
     max-width: 45%;
 }
 
+.right3 {
+    float: right;
+    max-width: 52%;
+}
+
 .left4 {
     border: none;
     float: left;
     max-width: 70%;
     overflow: hidden;
-}
-
-.right3 {
-    float: right;
-    max-width: 52%;
 }
 
 .right4 {
@@ -86,7 +78,6 @@
     border: none;
     margin: 0;
     padding: 0;
-    /*background-color:#2f2f2f;*/
 }
 
 .sidebarrightside {
@@ -148,6 +139,7 @@
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+    overflow:hidden;
 }
 
 .facetoptions {
@@ -232,6 +224,7 @@
     border: none;
     font: 12px tahoma;
     padding: 7px;
+    overflow:hidden;   
 }
 
 .transition {

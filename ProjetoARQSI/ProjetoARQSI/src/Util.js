@@ -10,12 +10,14 @@
 		}
 
 function startDisplaySetting(div, flag) {
-	if (flag == true) {
+    if (flag == true) {
+        div.style.overflow = "hidden";
 		div.style.transition = "opacity 0.7s ease-out";
 		div.style.visibility = "visible";
 		div.style.height = "auto";
 		div.style.opacity = "1";
-	} else {
+    } else {
+        div.style.overflow = "hidden";
 		div.style.visibility = "hidden";
 		div.style.height = "0";
 		div.style.opacity = "0";
