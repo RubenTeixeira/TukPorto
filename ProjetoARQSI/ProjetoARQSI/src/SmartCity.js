@@ -390,38 +390,140 @@ function handleRequiredInfo(txtDocument, sensorName) {
     var id = sensorName + "_facets";
     var div = document.getElementById(id);
     var checkbox_array = div.getElementsByTagName("input");
+    var divLocation = document.getElementById("results");
+    startDisplaySetting(divLocation, false); //start div as hidden.
+    buildFullTable(resultObj, divLocation);
     for (var i = 0; i < checkbox_array.length; i++) {
         if (checkbox_array[i].checked) {
-            var div = checkbox_array[i].parentElement.nextElementSibling; //div with facet content.
-            extractDate(div, resultObj);
+            var div = checkbox_array[i].parentElement.nextElementSibling;
+            if (checkbox_array[i].name == "Data de leitura") {
+                extractDate(div, divLocation);
+            } else if (checkbox_array[i].name = "Hora de leitura") {
+                extractHour(div, divLocation);
+            }
         }
     }
+    changeDisplaySetting(divLocation);
     //var str = strDate; // add other handlers return value, to form the second part of the link.
     //return str;
 }
 
 /*
 This method extracts two dates from the input*/
-function extractDate(div, resultObj) {
+function extractDate(div, divLocation) {
     if (div.id == "1") { //search should be done by id.
         //two dates max.
         var date_array = div.getElementsByTagName("input");
         var beginDate = date_array[0].value;
         var endDate = date_array[1].value;
-        showResultsDatePeriod(resultObj, beginDate, endDate);
+        showResultsDatePeriod(beginDate, endDate, divLocation);
     }
 }
 
 /*
 Show results in list according to the interval passed in parameteres.*/
-function showResultsDatePeriod(resultObj, beginDate, endDate) {
-    var divLocation = document.getElementById("results");
-    divLocation.style.overflow = 'auto';
+function showResultsDatePeriod(beginDate, endDate, divLocation) {
+    var r, c;
+    r = 0; c = 0;
+    var rows = divLocation.getElementsByTagName("tr"); //all trs
+    loop1:
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var row_ = row.childNodes;
+            loop2:
+                for (var j = 0; j < row_.length ; j++) { //each cell
+                    var value = row_[j].childNodes[0];
+                    if (value == "Data de leitura") {
+                        c = j;
+                        break loop2;
+                        //salva posicao da primeira coluna.
+                    }
+                    break loop1;
+                }
+        }
+    for (var i = 1; i < rows.length; i++) {
+        var row = rows[i];
+        var row_ = row.childNodes;
+        var date = row_[c].childNodes[0].nodeValue;
+        if (date < beginDate || date > endDate) {
+            var table = divLocation.getElementsByTagName("table")[0];
+            table.removeChild(table.childNodes[i]); //remove a coluna da seguite posição.
+            i--;
+        }
+    }
 
+    //var names = Object.getOwnPropertyNames(resultObj[0]);
+    //for (var i = 0; i < names.length; i++) {
+    //    var th = document.createElement("th");
+    //    var text = document.createTextNode(names[i].replace(/_/g, " "));
+    //    th.appendChild(text);
+    //    tableHeaderRow.appendChild(th);
+    //}
+    //table.appendChild(tableHeaderRow);
+
+    //var flag, flare, fail, flake;
+    //flag = 0; fail = 0;
+    //for (var i = 0; i < resultObj.length; i++) {
+    //    flare = 0;
+    //    flake = 0; //only Date control variables.
+    //    var singleObj = resultObj[i];
+    //    var tr = document.createElement("tr");
+    //    for (var j in singleObj) {
+    //      //if (j == "Data_de_leitura") {
+
+    //        if (flare == 0) {
+    //            flare++;
+    //            var date = singleObj[j];
+    //            if (date > endDate) {
+    //                fail++;
+    //            }
+    //        }
+    //        if (flag == 1 && fail == 0) {
+    //            var td = document.createElement("td");
+    //            var text = document.createTextNode(singleObj[j]);
+    //            td.appendChild(text);
+    //            tr.appendChild(td);
+    //        }
+    //        if (flag == 0 && flake == 0) {
+    //            flake = 1;
+    //            var date = singleObj[j];
+    //            if (date >= beginDate) {
+    //                flag++;
+    //                var td = document.createElement("td");
+    //                var text = document.createTextNode(singleObj[j]);
+    //                td.appendChild(text);
+    //                tr.appendChild(td);
+    //              }
+    //           }
+    //        //}
+    //    }
+    //    table.appendChild(tr);
+    //}
+    //div.appendChild(table);
+    //div.style.border = "none";
+    //styleTable(div);
+    //divLocation.appendChild(div);
+    ////changeDisplaySetting(div);
+}
+
+function findSensorByName(sensorName) {
+    var sensorIdx = -1;
+    for (var i = 0; i < sensorsArray.length; i++) {
+        if (sensorsArray[i].name === sensorName) {
+            sensorIdx = i;
+            break;
+        }
+    }
+    return sensorsArray[sensorIdx];
+}
+
+/*
+This method shows full table without any filtering*/
+function buildFullTable(resultObj, divLocation) {
+    divLocation.style.overflow = 'auto';
     var div = document.createElement("div");
     var table = document.createElement("table");
     var tableHeaderRow = document.createElement("tr");
-
     var names = Object.getOwnPropertyNames(resultObj[0]);
     for (var i = 0; i < names.length; i++) {
         var th = document.createElement("th");
@@ -431,54 +533,21 @@ function showResultsDatePeriod(resultObj, beginDate, endDate) {
     }
     table.appendChild(tableHeaderRow);
 
-    var flag, flare, fail, flake;
-    flag = 0; fail = 0;
     for (var i = 0; i < resultObj.length; i++) {
-        flare = 0;
-        flake = 0;
         var singleObj = resultObj[i];
         var tr = document.createElement("tr");
         for (var j in singleObj) {
-            if (flare == 0) {
-                flare++;
-                var date = singleObj[j];
-                if (date > endDate) {
-                    fail++;
-                }
-            }
-            if (flag == 1 && fail == 0) {
-                var td = document.createElement("td");
-                var text = document.createTextNode(singleObj[j]);
-                td.appendChild(text);
-                tr.appendChild(td);
-            }
-            if (flag == 0 && flake == 0) {
-                flake = 1;
-                var date = singleObj[j];
-                if (date >= beginDate) {
-                    flag++;
-                    var td = document.createElement("td");
-                    var text = document.createTextNode(singleObj[j]);
-                    td.appendChild(text);
-                    tr.appendChild(td);
-                }
-            }
+            var td = document.createElement("td");
+            var text = document.createTextNode(singleObj[j]);
+            td.appendChild(text);
+            tr.appendChild(td);
         }
         table.appendChild(tr);
     }
+
     div.appendChild(table);
     div.style.border = "none";
     styleTable(div);
     divLocation.appendChild(div);
 }
 
-function findSensorByName(sensorName) {
-	var sensorIdx = -1;
-	for (var i = 0; i < sensorsArray.length; i++) {
-		if (sensorsArray[i].name === sensorName) {
-			sensorIdx = i;
-			break;
-		}
-	}
-	return sensorsArray[sensorIdx];
-}
