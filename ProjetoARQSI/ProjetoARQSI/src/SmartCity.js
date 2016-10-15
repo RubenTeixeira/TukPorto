@@ -171,12 +171,16 @@ function createFacets(facetsXML, sensorName) {
 	maindivison.appendChild(sensorFacetsDiv);
 }
 
-function showFacetOptions(input) {
-	// TODO:
-	// Verify if options div exists, if so make it visible
-	// otherwise create it:
-    var facetObj;
-	createFacet(facetObj);
+function showFacetOptions(div, facetObj) {
+    var optionsDiv = div.getElementsByClassName("facetoptions")[0];
+    if (optionsDiv) {
+        if (optionsDiv.style.display === "block")
+            optionsDiv.style.display = "none";
+        else
+            optionsDiv.style.display = "block";
+    } else {
+        div.appendChild(createFacet(facetObj));
+    }
 }
 
 function createFacet(facetObj) {
@@ -263,7 +267,9 @@ function createReadDate(facetObj) {
     var p = document.createElement("p");
     var div = document.createElement("div");
     div.id = facetObj.id;
+    div.className = "facetoptions";
     div.style.border = 'none';
+    div.style.display = "block";
     div.appendChild(from);
     div.appendChild(getCurrentDateForm());
     div.appendChild(p);
@@ -280,7 +286,9 @@ function createReadHour(facetObj) {
     var p = document.createElement("p");
     var div = document.createElement("div");
     div.id = facetObj.id;
+    div.className = "facetoptions";
     div.style.border = 'none';
+    div.style.display = "block";
     div.appendChild(from);
     div.appendChild(getCurrentHourForm());
     div.appendChild(p);
@@ -299,7 +307,9 @@ function createReadNumericType(facetObj) {
     var div = document.createElement("div");
     var input = document.createElement("input");
     div.id = facetObj.id;
+    div.className = "facetoptions";
     div.style.border = 'none';
+    div.style.display = "block";
     input.type = 'range';
     div.appendChild(from);
     div.appendChild(input);
@@ -311,6 +321,7 @@ function createReadNumericType(facetObj) {
 function createSelectAlphaNumericType(facetObj) {
     var div = document.createElement("div");
     div.style.border = 'none';
+    div.style.display = "block";
     getAllOptions(facetObj, div);
     return div;
    
@@ -375,7 +386,7 @@ function createSubLocal(element) {
 
 function createDiscrete(facetObj) {
 	var div = document.createElement("div");
-	div.className = "facetscontent";
+	div.className = "facetoptions";
 	div.id = "localdivid"; //DIV ID
 	var select1 = document.createElement("select");
 	select1.onchange = function () {

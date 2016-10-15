@@ -137,8 +137,8 @@
         }
 
         .sidebarmenulink a:hover:not(.active) {
-            background-color: #82c0d7;
-            color: white;
+            background-color: #e1e0e0;
+            color: black;
         }
 
 
@@ -148,6 +148,12 @@
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+}
+
+.facetoptions {
+    display: block;
+    padding-top: 6px;
+    padding-left: 12px;
 }
 
 .header3 {
