@@ -415,7 +415,7 @@ function results() {
     //Date must be handled after achieving the text file
 }
 /*
-This method allow to filter Results by local by providing a portion of the link*/
+This method allow to filter Results by providing a portion of the link*/
 function filter(sensorName) {
     var str = "";
     var id = sensorName + "_facets";
@@ -424,7 +424,19 @@ function filter(sensorName) {
     for (var i = 1; i < checkbox_array.length; i++) {
         if (checkbox_array[i].checked) {
             if (checkbox_array[i].id == "5") { //LOCAL
-                str += "&Local=["
+                str += "&"+checkbox_array[i].name+"=["
+                var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
+                var elements = parentElem.getElementsByTagName("input");
+                //ignores the first one.
+                for (var j = 1; j < elements.length; j++) {
+                    if (elements[j].checked) {
+                        var local = elements[j].nextSibling.nodeValue;
+                        str += local + ","
+                    }
+                }
+                str += "]";
+            } else if (checkbox_array[i].id == "8") {
+                str += "&" + checkbox_array[i].name + "=["
                 var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
                 var elements = parentElem.getElementsByTagName("input");
                 //ignores the first one.
