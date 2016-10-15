@@ -370,67 +370,106 @@ function results() {
     var ref = ref_array[0];
     var sensor = ref.childNodes[0].nodeValue;
     var sensorName = sensor.replace(/ /g, "_");
-    handleRequiredInfo(sensorName); 
+    //var str = handleRequiredInfo(sensorName); 
     var link = VALUES_LINK + sensorName;
-	requestAJAX(link,showResults,RESPONSE_TEXT,null);
+    requestAJAX(link, handleRequiredInfo, RESPONSE_TEXT, sensorName);
+    //Date must be handled after achieving the text file
 }
 
 function showHideResults() {
     var maindiv = document.getElementById("results");
     if (maindiv.childNodes[1] != null) {
-        maindiv.removeChild(maindiv.childNodes[1]); 
+        maindiv.removeChild(maindiv.childNodes[1]);
     }
 }
 
-function handleRequiredInfo(sensor) {
-    var link;
-    var id = sensor + "_facets";
+/*
+This method checks which checkbox is selected*/
+function handleRequiredInfo(txtDocument, sensorName) {
+    var resultObj = JSON.parse(txtDocument);
+    var id = sensorName + "_facets";
     var div = document.getElementById(id);
     var checkbox_array = div.getElementsByTagName("input");
     for (var i = 0; i < checkbox_array.length; i++) {
         if (checkbox_array[i].checked) {
-            //retrieve div of selected checkboxes to manipulate the data accordingly.
-   
+            var div = checkbox_array[i].parentElement.nextElementSibling; //div with facet content.
+            extractDate(div, resultObj);
         }
     }
-    //return string to add to link.
+    //var str = strDate; // add other handlers return value, to form the second part of the link.
+    //return str;
 }
 
-function showResults(txtDocument) {
+/*
+This method extracts two dates from the input*/
+function extractDate(div, resultObj) {
+    if (div.id == "1") { //search should be done by id.
+        //two dates max.
+        var date_array = div.getElementsByTagName("input");
+        var beginDate = date_array[0].value;
+        var endDate = date_array[1].value;
+        showResultsDatePeriod(resultObj, beginDate, endDate);
+    }
+}
 
+/*
+Show results in list according to the interval passed in parameteres.*/
+function showResultsDatePeriod(resultObj, beginDate, endDate) {
     var divLocation = document.getElementById("results");
-	divLocation.style.overflow = 'auto';
-	var resultObj = JSON.parse(txtDocument);
+    divLocation.style.overflow = 'auto';
 
-	var div = document.createElement("div");
-	var table = document.createElement("table");
-	var tableHeaderRow = document.createElement("tr");
+    var div = document.createElement("div");
+    var table = document.createElement("table");
+    var tableHeaderRow = document.createElement("tr");
 
-	var names = Object.getOwnPropertyNames(resultObj[0]);
-	for (var i = 0; i < names.length; i++) {
-		var th = document.createElement("th");
-		var text = document.createTextNode(names[i].replace(/_/g, " "));
-		th.appendChild(text);
-		tableHeaderRow.appendChild(th);
-	}
+    var names = Object.getOwnPropertyNames(resultObj[0]);
+    for (var i = 0; i < names.length; i++) {
+        var th = document.createElement("th");
+        var text = document.createTextNode(names[i].replace(/_/g, " "));
+        th.appendChild(text);
+        tableHeaderRow.appendChild(th);
+    }
+    table.appendChild(tableHeaderRow);
 
-	table.appendChild(tableHeaderRow);
-	for (var i = 0; i < resultObj.length; i++) {
-		var singleObj = resultObj[i];
-		var tr = document.createElement("tr");
-		for (var j in singleObj) {
-			var td = document.createElement("td");
-			var text = document.createTextNode(singleObj[j]);
-			td.appendChild(text);
-			tr.appendChild(td);
-		}
-		table.appendChild(tr);
-	}
-
-	div.appendChild(table);
-	div.style.border = "none";
-	styleTable(div);
-	divLocation.appendChild(div);
+    var flag, flare, fail, flake;
+    flag = 0; fail = 0;
+    for (var i = 0; i < resultObj.length; i++) {
+        flare = 0;
+        flake = 0;
+        var singleObj = resultObj[i];
+        var tr = document.createElement("tr");
+        for (var j in singleObj) {
+            if (flare == 0) {
+                flare++;
+                var date = singleObj[j];
+                if (date > endDate) {
+                    fail++;
+                }
+            }
+            if (flag == 1 && fail == 0) {
+                var td = document.createElement("td");
+                var text = document.createTextNode(singleObj[j]);
+                td.appendChild(text);
+                tr.appendChild(td);
+            }
+            if (flag == 0 && flake == 0) {
+                flake = 1;
+                var date = singleObj[j];
+                if (date >= beginDate) {
+                    flag++;
+                    var td = document.createElement("td");
+                    var text = document.createTextNode(singleObj[j]);
+                    td.appendChild(text);
+                    tr.appendChild(td);
+                }
+            }
+        }
+        table.appendChild(tr);
+    }
+    div.appendChild(table);
+    div.style.border = "none";
+    styleTable(div);
+    divLocation.appendChild(div);
 }
 
 function findSensorByName(sensorName) {
