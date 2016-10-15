@@ -432,7 +432,7 @@ function showResultsDatePeriod(beginDate, endDate, divLocation) {
             var row_ = row.childNodes;
             loop2:
                 for (var j = 0; j < row_.length ; j++) { //each cell
-                    var value = row_[j].childNodes[0];
+                    var value = row_[j].childNodes[0].nodeValue;
                     if (value == "Data de leitura") {
                         c = j;
                         break loop2;
