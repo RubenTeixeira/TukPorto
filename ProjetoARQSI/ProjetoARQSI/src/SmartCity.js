@@ -226,6 +226,7 @@ function createAllOptionsInput(txtDocument,div) {
         var text = document.createTextNode(results[i]);
         var input = document.createElement("input");
         input.type = "checkbox";
+        input.name = "singular";
         individualDiv.appendChild(input);
         individualDiv.appendChild(text);
         div.appendChild(individualDiv);
@@ -344,20 +345,59 @@ function getDiscreteValues(facetObj) {
 
 //RESULTS
 function results() {
+    var str = "";
     showHideResults();
     var ref_array = document.getElementsByClassName("link active");
     var ref = ref_array[0];
     var sensor = ref.childNodes[0].nodeValue;
     var sensorName = sensor.replace(/ /g, "_");
-    //var str = handleRequiredInfo(sensorName); 
-    var link = VALUES_LINK + sensorName;
-    requestAJAX(link, handleRequiredInfo, RESPONSE_TEXT, sensorName);
+    var str = filter(sensorName);
+    var link = VALUES_LINK + sensorName + str;
+    requestAJAX(link, handlePeriodInfo, RESPONSE_TEXT, sensorName);
     //Date must be handled after achieving the text file
+}
+/*
+This method allow to filter Results by providing a portion of the link*/
+function filter(sensorName) {
+    var str = "";
+    var id = sensorName + "_facets";
+    var div = document.getElementById(id); //This is all.
+    var checkbox_array = div.getElementsByTagName("input");
+    for (var i = 1; i < checkbox_array.length; i++) {
+        if (checkbox_array[i].checked) {
+            if (checkbox_array[i].id == "5") { //LOCAL
+                str += "&"+checkbox_array[i].name+"=["
+                var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
+                var elements = parentElem.getElementsByTagName("input");
+                //ignores the first one.
+                for (var j = 1; j < elements.length; j++) {
+                    if (elements[j].checked) {
+                        var local = elements[j].nextSibling.nodeValue;
+                        str += local + ","
+                    }
+                }
+                str += "]";
+            } else if (checkbox_array[i].id == "8") {
+                str += "&" + checkbox_array[i].name + "=["
+                var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
+                var elements = parentElem.getElementsByTagName("input");
+                //ignores the first one.
+                for (var j = 1; j < elements.length; j++) {
+                    if (elements[j].checked) {
+                        var local = elements[j].nextSibling.nodeValue;
+                        str += local + ","
+                    }
+                }
+                str += "]";
+            }
+        }
+    }
+    return str;
 }
 
 /*
 This method checks which checkbox is selected*/
-function handleRequiredInfo(txtDocument, sensorName) {
+function handlePeriodInfo(txtDocument, sensorName) {
     var resultObj = JSON.parse(txtDocument);
     var id = sensorName + "_facets";
     var div = document.getElementById(id);
@@ -370,8 +410,12 @@ function handleRequiredInfo(txtDocument, sensorName) {
             var div = checkbox_array[i].parentElement.nextElementSibling;
             if (checkbox_array[i].name == "Data de leitura") {
                 filterResults(div, divLocation);
-            } else if (checkbox_array[i].name = "Hora de leitura") {
+            }
+            if (checkbox_array[i].name == "Hora de leitura") {
                 filterResults(div, divLocation);
+            }
+            if (checkbox_array[i].name == "Local") {
+                //Data handled previously
             }
         }
     }
