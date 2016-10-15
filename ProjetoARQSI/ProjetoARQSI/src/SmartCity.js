@@ -20,7 +20,8 @@ var CONTINUOUS = "contínuo";
 var DATATYPE = "data";
 var HOURTYPE = "hora";
 var NUMERICTYPE = "numérico";
-    
+var ALPHANUMERIC = "alfanumérico";
+     
 
 function listSensors() {
 	requestAJAX(sensorsAPI, createTabs, RESPONSE_XML, null);
@@ -195,7 +196,35 @@ function createFacet(facetObj) {
        
     }
 
+    else if (measure === DISCRETE) {
+        if (typeOf === ALPHANUMERIC) {
+            return createSelectAlphaNumericType(facetObj);
+        }
+    }
 
+
+}
+
+function getAllOptions(facetObj,div) {
+    var link = DISCRETE_VALUES_LINK + "sensor=" + facetObj.sensor.name + "&faceta=" + facetObj.dbField;
+    requestAJAX(link, createAllOptionsInput, RESPONSE_TEXT, div);
+    
+}
+
+function createAllOptionsInput(txtDocument,div) {
+    var results = JSON.parse(txtDocument);
+   
+    for (var i = 0; i < results.length; i++) {
+        var individualDiv = document.createElement("div");
+        individualDiv.style.border = 'none';
+        var text = document.createTextNode(results[i]);
+        var input = document.createElement("input");
+        input.type = "checkbox";
+        individualDiv.appendChild(input);
+        individualDiv.appendChild(text);
+        div.appendChild(individualDiv);
+      
+    }
 }
 
 
@@ -277,6 +306,14 @@ function createReadNumericType(facetObj) {
     div.appendChild(to);
     startDisplaySetting(div, true);
     return div;
+}
+
+function createSelectAlphaNumericType(facetObj) {
+    var div = document.createElement("div");
+    div.style.border = 'none';
+    getAllOptions(facetObj, div);
+    return div;
+   
 }
 
 // LOCAL facet
