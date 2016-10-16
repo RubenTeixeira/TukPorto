@@ -27,7 +27,7 @@ function listSensors() {
 	requestAJAX(sensorsAPI, createTabs, RESPONSE_XML, null);
 }
 
-function requestAJAX(uri, handler, responseType, extraParam) {
+function requestAJAX(uri, handler, responseType, extraParam, extraParam2) {
     var result;
 	var xmlHttpObj = createXmlHttpRequestObject();
 
@@ -36,18 +36,24 @@ function requestAJAX(uri, handler, responseType, extraParam) {
 			if (this.readyState == 4 && this.status == 200) {
 
 				if (responseType == RESPONSE_XML) {
-					if (extraParam == null) {
+					if (extraParam2 == null && extraParam == null) {
 						handler(xmlHttpObj.responseXML);
-					} else {
+					} else if(extraParam2 == null){
 						handler(xmlHttpObj.responseXML, extraParam);
+					} else {
+					    handler(xmlHttpObj.responseXML, extraParam, extraParam2);
 					}
+                    
 				} else if (responseType == RESPONSE_TEXT) {
-				    if (extraParam == null) {
+				    if (extraParam2 == null && extraParam== null) {
 				        handler(xmlHttpObj.responseText);
 				       
-				    }
-				    else
+				    }else if (extraParam2 == null){
 				        handler(xmlHttpObj.responseText, extraParam);
+				    } else {
+				        handler(xmlHttpObj.responseText, extraParam, extraParam2);
+				    }
+				        
 				}
 			}
 		};
@@ -364,30 +370,30 @@ function results() {
     var sensor = ref.childNodes[0].nodeValue;
     var sensorName = sensor.replace(/ /g, "_");
     var str = filter(sensorName, n);
-   
+
     var link = VALUES_LINK + sensorName + str;
-    requestAJAX(link, handlePeriodInfo, RESPONSE_TEXT, sensorName);
-    //Date must be handled after achieving the text file
+    requestAJAX(link, handlePeriodInfo, RESPONSE_TEXT, sensorName, n);
 }
+
 /*
 This method allow to filter Results by providing a portion of the link*/
-function filter(sensorName,n) {
+function filter(sensorName, n) {
     var str = "";
     var id = sensorName + "_facets";
-    var div = document.getElementById(id); //This is all.
+    var div = document.getElementById(id);
     var checkbox_array = div.getElementsByTagName("input");
     for (var i = 0; i < checkbox_array.length; i++) {
         if (checkbox_array[i].id == "1" || checkbox_array[i].id == "2") {
             continue;
         }
         if (checkbox_array[i].checked) {
-            for (var t = 0; t < sensorsArray[n].facets.length; t++) {           
-                if (checkbox_array[i].id == sensorsArray[n].facets[t].id  && sensorsArray[n].facets[t].measure == DISCRETE) {
-                    str += "&" + checkbox_array[i].name + "=[";
+            for (var t = 0; t < sensorsArray[n].facets.length; t++) {
+                if (checkbox_array[i].id == sensorsArray[n].facets[t].id && sensorsArray[n].facets[t].measure == DISCRETE) {
+                    var name = checkbox_array[i].name.split(" ")[0];
+                    str += "&" + name + "=[";
                     var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
                     var elements = parentElem.getElementsByTagName("input");
-                    //ignores the first one.
-                    for (var j = 1; j < elements.length; j++) {
+                    for (var j = 1; j < elements.length; j++) {//ignores the first one always. It belongs to the major checkbox.
                         if (elements[j].checked) {
                             var info = elements[j].nextSibling.nodeValue;
                             str += info + ","
@@ -395,7 +401,7 @@ function filter(sensorName,n) {
                     }
                     str += "]";
                 } else if (checkbox_array[i].id == sensorsArray[n].facets[t].id && sensorsArray[n].facets[t].measure == CONTINUOUS) {
-                    //Performing extraction from continuos values.
+                    //API NOT PREPARED TO RECEIVE CONTINUOS VALUES.
                 }
             }
         }
@@ -404,8 +410,8 @@ function filter(sensorName,n) {
 }
 
 /*
-This method checks which checkbox is selected*/
-function handlePeriodInfo(txtDocument, sensorName) {
+Checks which checkbox is selected*/
+function handlePeriodInfo(txtDocument, sensorName, n) {
     var resultObj = JSON.parse(txtDocument);
     var id = sensorName + "_facets";
     var div = document.getElementById(id);
@@ -415,118 +421,71 @@ function handlePeriodInfo(txtDocument, sensorName) {
     buildFullTable(resultObj, divLocation);
     for (var i = 0; i < checkbox_array.length; i++) {
         if (checkbox_array[i].checked) {
-            var div = checkbox_array[i].parentElement.nextElementSibling;
-            if (checkbox_array[i].name == "Data de leitura") {
-                filterResults(div, divLocation);
-            }
-            if (checkbox_array[i].name == "Hora de leitura") {
-                filterResults(div, divLocation);
+            for (var t = 0; t < sensorsArray[n].facets.length; t++) {
+                if (checkbox_array[i].id == sensorsArray[n].facets[t].id &&
+                    sensorsArray[n].facets[t].measure == CONTINUOUS) {
+                    var div = checkbox_array[i].parentElement.nextElementSibling;
+                    var col = t;
+                    filterResults(div, divLocation, col);
+                }
             }
         }
     }
     changeDisplaySetting(divLocation);
-    //var str = strDate; // add other handlers return value, to form the second part of the link.
-    //return str;
 }
 
 /*
-This method extracts two Date Object from the input.*/
-function filterResults(div, divLocation) {
-    if (div.id == "1") { //search should be done by id - validate if this is indeed the right div.
-        var date_array = div.getElementsByTagName("input");
-        var beginDate = date_array[0].value;
-        var endDate = date_array[1].value;
-        showResultsDatePeriod(beginDate, endDate, divLocation);
-    } else if (div.id == "2") {
-        var hour_array = div.getElementsByTagName("input");
-        var beginHour = hour_array[0].value;
-        var endHour = hour_array[1].value;
-        showResultsHourPeriod(beginHour, endHour, divLocation);
-    }
+Specifies the type of Data.*/
+function filterResults(div, divLocation, col) {
+    var array = div.getElementsByTagName("input");
+    var initialValue = array[0].value;
+    var finalValue = array[1].value;
+    //if (finalValue < initialValue) {
+    //    var temp = initialValue;
+    //    initialValue = finalValue;
+    //    finalValue = temp;
+    //}
+    filterContinuosValues(initialValue, finalValue, divLocation, col);
 }
 
 /*
 Show results in list according to the interval passed in parameteres.*/
-function showResultsDatePeriod(beginDate, endDate, divLocation) {
+function filterContinuosValues(initialValue, finalValue, divLocation, col) {
     var flag, c;
     flag = 0; c = 0;
-    var rows = divLocation.getElementsByTagName("tr"); //all trs
+    var rows = divLocation.getElementsByTagName("tr");  //all rows.
     loop1:
         for (var i = 0; i < rows.length; i++) {
+            if (flag != 0) break loop1;
             var row = rows[i];
             var row_ = row.childNodes;
             loop2:
-                for (var j = 0; j < row_.length ; j++) { //each cell
-                    var value = row_[j].childNodes[0].nodeValue;
-                    if (value == "Data de leitura") {
-                        c = j;
+                for (var j = 0; j < row_.length; j++) { //each cell from first row.
+                    if (j == col) {
+                        c = j; //saves column index to work on.
                         flag++;
+                        if (col == 1) { //this is specific.
+                            initialValue = initialValue + ":00";
+                            finalValue = finalValue + ":00";
+                        }
                         break loop2;
-                        //salva posicao da primeira coluna.
                     }
-                    if (flag != 0) break loop1;
                 }
         }
     for (var i = 1; i < rows.length; i++) {
         var row = rows[i];
         var row_ = row.childNodes;
-        var date = row_[c].childNodes[0].nodeValue;
-        if (date < beginDate || date > endDate) {
+        var value = row_[c].childNodes[0].nodeValue;
+        if (value < initialValue || value > finalValue) {
             var table = divLocation.getElementsByTagName("table")[0];
-            table.removeChild(table.childNodes[i]); //remove a coluna da seguite posição.
+            table.removeChild(table.childNodes[i]); //deletes row in the current position.
             i--;
         }
     }
-}
-
-function showResultsHourPeriod(beginHour, endHour, divLocation) {
-    var flag, c;
-    flag = 0; c = 0;
-    var rows = divLocation.getElementsByTagName("tr"); //all trs
-    loop1:
-        for (var i = 0; i < rows.length; i++) {
-            var row = rows[i];
-            var row_ = row.childNodes;
-            loop2:
-                for (var j = 0; j < row_.length ; j++) { //each cell
-                    var value = row_[j].childNodes[0].nodeValue;
-                    if (value == "Hora de leitura") {
-                        c = j;
-                        flag++;
-                        break loop2;
-                        //salva posicao da primeira coluna.
-                    }
-                    if (flag != 0) break loop1;
-                    
-                }
-        }
-    for (var i = 1; i < rows.length; i++) {
-        var row = rows[i];
-        var row_ = row.childNodes;
-        var hour = row_[c].childNodes[0].nodeValue;
-        beginHour = beginHour + ":00";
-        endHour = endHour + ":00";
-        if (hour < beginHour || hour > endHour) {
-            var table = divLocation.getElementsByTagName("table")[0];
-            table.removeChild(table.childNodes[i]); //remove a coluna da seguite posição.
-            i--;
-        }
-    }
-}
-
-function findSensorByName(sensorName) {
-    var sensorIdx = -1;
-    for (var i = 0; i < sensorsArray.length; i++) {
-        if (sensorsArray[i].name === sensorName) {
-            sensorIdx = i;
-            break;
-        }
-    }
-    return sensorsArray[sensorIdx];
 }
 
 /*
-This method shows full table without any filtering*/
+This method builds full table without any filtering*/
 function buildFullTable(resultObj, divLocation) {
     divLocation.style.overflow = 'auto';
     var div = document.createElement("div");
@@ -564,4 +523,16 @@ function showHideResults() {
     if (maindiv.childNodes[1] != null) {
         maindiv.removeChild(maindiv.childNodes[1]);
     }
+}
+
+
+function findSensorByName(sensorName) {
+    var sensorIdx = -1;
+    for (var i = 0; i < sensorsArray.length; i++) {
+        if (sensorsArray[i].name === sensorName) {
+            sensorIdx = i;
+            break;
+        }
+    }
+    return sensorsArray[sensorIdx];
 }
