@@ -11,7 +11,7 @@
 
 .left {
     float: left;
-    width: 22%;
+    width: 30%;
     z-index: 1; /* Stay on top */
     background-color: #ffffff;
     overflow-y: visible; /* Disable horizontal scroll */
@@ -74,7 +74,7 @@
     float: left;
     width: 12%;
     overflow: hidden;
-    border: none;
+    border-right: 1px solid #e1e0e0;
     margin: 0;
     padding: 0;
 }
@@ -135,16 +135,17 @@
 /* Style the tab content */
 .tabcontent {
     display: block;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-    overflow: hidden;
+    padding: 6px 1px;
+    border: none;
+    overflow:hidden;
 }
 
 .facetoptions {
     display: block;
     padding-top: 6px;
-    padding-left: 12px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin:auto;
 }
 
 .header3 {
@@ -157,8 +158,10 @@
 }
 
 .buttonfacets, .buttonresults {
+    display: block;
     cursor: pointer;
     margin-top: 5px;
+    margin:auto;
     padding: 4px 4px 4px 4px;
     border-radius: 10px;
     border: none;
@@ -222,8 +225,8 @@
 .facetsdivision {
     border: none;
     font: 12px tahoma;
-    padding: 7px;
-    overflow: hidden;
+    padding-top: 7px;
+    overflow:hidden;   
 }
 
 .transition {
@@ -255,4 +258,12 @@ tr:nth-child(even) {
 
 tr:hover {
     background-color: #82c0d7;
+}
+
+.ui-slider {
+    /*
+    width: 80%;
+    */
+    margin: auto;
+
 }

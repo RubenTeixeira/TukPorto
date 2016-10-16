@@ -76,6 +76,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="src\Estilos.css" />
+    <Content Include="src\jquery\jquery-3.1.1.min.js" />
+    <Content Include="src\jquery\jquery-ui.css" />
+    <Content Include="src\jquery\jquery-ui.js" />
+    <Content Include="src\jquery\jquery-ui.min.css" />
+    <Content Include="src\jquery\jquery-ui.min.js" />
+    <Content Include="src\jquery\jquery-ui.structure.css" />
+    <Content Include="src\jquery\jquery-ui.structure.min.css" />
+    <Content Include="src\jquery\jquery-ui.theme.css" />
+    <Content Include="src\jquery\jquery-ui.theme.min.css" />
     <Content Include="src\Objects.js" />
     <Content Include="src\PaginaWeb.html" />
     <Content Include="src\SmartCity.js" />
@@ -85,6 +94,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

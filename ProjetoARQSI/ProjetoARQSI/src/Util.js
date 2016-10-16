@@ -1,4 +1,9 @@
-﻿/*******************
+﻿
+/* JQUERY reference */
+/// <reference path="jquery/jquery-3.1.1.min.js" />
+/// <reference path="jquery/jquery-ui.js" 
+
+/*******************
  DIV VISIBILTY
  ********************/
 

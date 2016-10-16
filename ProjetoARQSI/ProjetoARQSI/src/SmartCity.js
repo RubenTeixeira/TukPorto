@@ -1,4 +1,10 @@
-﻿var SENSOR_DESIGNATION = "sensor";
+﻿
+
+/* JQUERY reference */
+/// <reference path="jquery/jquery-3.1.1.min.js" />
+
+
+var SENSOR_DESIGNATION = "sensor";
 var FACET_DESIGNATION = "faceta";
 var APP_URL = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/";
 var sensorsAPI = APP_URL + "sensores.php";
@@ -227,16 +233,17 @@ function getMaxPossibleValue(facetObj,div) {
 
 function getMaxLimitValue(txtDocument,div) {
     var result = JSON.parse(txtDocument);
-    var text = document.createTextNode("Max: ");
-    text.size = 8;
-    var maxDiv = document.createElement('div');
-    maxDiv.style.border = 'none';
-    var input = document.createElement("input");
-    input.type = 'text';
-    input.value = result.max;
-    maxDiv.appendChild(text);
-    div.appendChild(maxDiv);
-    div.appendChild(input);
+    //var text = document.createTextNode("Max: ");
+    //text.size = 8;
+    //var maxDiv = document.createElement('div');
+    //maxDiv.style.border = 'none';
+    //var input = document.createElement("input");
+    //input.type = 'text';
+    //input.value = result.max;
+    //maxDiv.appendChild(text);
+    //div.appendChild(maxDiv);
+    //div.appendChild(input);
+    $(div.id).slider("option", "max", result.max);
 }
 
 
@@ -247,16 +254,17 @@ function getMinPossibleValue(facetObj,div) {
 
 function getMinLimitValue(txtDocument, div) {
     var result = JSON.parse(txtDocument);
-    var text = document.createTextNode("Min: ");
-    text.size = 8;
-    var minDiv = document.createElement('div');
-    minDiv.style.border = 'none';
-    var input = document.createElement("input");
-    input.type = 'text';
-    input.value = result.min;
-    minDiv.appendChild(text);
-    div.appendChild(minDiv);
-    div.appendChild(input);
+    //var text = document.createTextNode("Min: ");
+    //text.size = 8;
+    //var minDiv = document.createElement('div');
+    //minDiv.style.border = 'none';
+    //var input = document.createElement("input");
+    //input.type = 'text';
+    //input.value = result.min;
+    //minDiv.appendChild(text);
+    //div.appendChild(minDiv);
+    //div.appendChild(input);
+    $(div.id).slider("option", "min", result.min);
 }
 
 // DATA facet
@@ -299,14 +307,35 @@ function createReadHour(facetObj, facetDiv) {
 
 
 function createReadNumericType(facetObj, facetDiv) {
+    var mainDiv = document.createElement("div");
+    mainDiv.id = facetObj.id;
+    mainDiv.className = "facetoptions";
+    mainDiv.style.border = 'none';
+    mainDiv.style.display = "block";
+    var text = document.createTextNode("Range: ");
+    mainDiv.appendChild(text);
+
     var div = document.createElement("div");
-    div.id = facetObj.id;
-    div.className = "facetoptions";
-    div.style.border = 'none';
-    div.style.display = "block";
+    mainDiv.appendChild(div);
+    facetDiv.appendChild(mainDiv);
+    div.id = facetObj.id + "_slider";
+
+    // Double handle slider using JQueryUI
+    $("#"+div.id).slider({
+        range: true,
+        min: 0,
+        max: 2000,
+        values: [ 300, 1000 ],
+        slide: function( event, ui ) {
+            $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+        }
+    });
+
+    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+      " - $" + $("#slider-range").slider("values", 1));
+
     getMinPossibleValue(facetObj,div);
     getMaxPossibleValue(facetObj,div);
-    facetDiv.appendChild(div);
 }
 
 function createSelectAlphaNumericType(facetObj, facetDiv) {
