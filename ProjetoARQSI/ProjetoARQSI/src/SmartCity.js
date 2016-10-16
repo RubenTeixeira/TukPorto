@@ -88,6 +88,7 @@ function createTabs(xmlDoc) {
 		var sensorNameNode = document.createTextNode(sensorName.replace(/_/g, " "));
 		var a = document.createElement("a");
 		a.appendChild(sensorNameNode);
+		a.id = i;
 		a.href = "#";
 		a.className = "link";
 		a.setAttribute("onclick", "showFacetsFromSensor(event, \"" + sensorName + "\")");
@@ -359,58 +360,43 @@ function results() {
     showHideResults();
     var ref_array = document.getElementsByClassName("link active");
     var ref = ref_array[0];
+    var n = ref.id;
     var sensor = ref.childNodes[0].nodeValue;
     var sensorName = sensor.replace(/ /g, "_");
-    var str = filter(sensorName);
+    var str = filter(sensorName, n);
+   
     var link = VALUES_LINK + sensorName + str;
     requestAJAX(link, handlePeriodInfo, RESPONSE_TEXT, sensorName);
     //Date must be handled after achieving the text file
 }
 /*
 This method allow to filter Results by providing a portion of the link*/
-function filter(sensorName) {
+function filter(sensorName,n) {
     var str = "";
     var id = sensorName + "_facets";
     var div = document.getElementById(id); //This is all.
     var checkbox_array = div.getElementsByTagName("input");
-    for (var i = 1; i < checkbox_array.length; i++) {
+    for (var i = 0; i < checkbox_array.length; i++) {
+        if (checkbox_array[i].id == "1" || checkbox_array[i].id == "2") {
+            continue;
+        }
         if (checkbox_array[i].checked) {
-            if (checkbox_array[i].id == "5") { //LOCAL
-                str += "&" + checkbox_array[i].name + "=["
-                var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
-                var elements = parentElem.getElementsByTagName("input");
-                //ignores the first one.
-                for (var j = 1; j < elements.length; j++) {
-                    if (elements[j].checked) {
-                        var local = elements[j].nextSibling.nodeValue;
-                        str += local + ","
+            for (var t = 0; t < sensorsArray[n].facets.length; t++) {           
+                if (checkbox_array[i].id == sensorsArray[n].facets[t].id  && sensorsArray[n].facets[t].measure == DISCRETE) {
+                    str += "&" + checkbox_array[i].name + "=[";
+                    var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
+                    var elements = parentElem.getElementsByTagName("input");
+                    //ignores the first one.
+                    for (var j = 1; j < elements.length; j++) {
+                        if (elements[j].checked) {
+                            var info = elements[j].nextSibling.nodeValue;
+                            str += info + ","
+                        }
                     }
+                    str += "]";
+                } else if (checkbox_array[i].id == sensorsArray[n].facets[t].id && sensorsArray[n].facets[t].measure == CONTINUOUS) {
+                    //Performing extraction from continuos values.
                 }
-                str += "]";
-            } else if (checkbox_array[i].id == "8") {
-                str += "&" + checkbox_array[i].name + "=["
-                var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
-                var elements = parentElem.getElementsByTagName("input");
-                //ignores the first one.
-                for (var j = 1; j < elements.length; j++) {
-                    if (elements[j].checked) {
-                        var fonte = elements[j].nextSibling.nodeValue;
-                        str += fonte + ","
-                    }
-                }
-                str += "]";
-            } else if (checkbox_array[i].id == "11") {
-                str += "&" + checkbox_array[i].name + "=["
-                var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
-                var elements = parentElem.getElementsByTagName("input");
-                //ignores the first one.
-                for (var j = 1; j < elements.length; j++) {
-                    if (elements[j].checked) {
-                        var indicador = elements[j].nextSibling.nodeValue;
-                        str += indicador + ","
-                    }
-                }
-                str += "]";
             }
         }
     }
