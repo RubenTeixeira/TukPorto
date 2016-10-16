@@ -422,7 +422,13 @@ function filter(sensorName, n) {
         }
         if (checkbox_array[i].checked) {
             for (var t = 0; t < sensorsArray[n].facets.length; t++) {
-                if (checkbox_array[i].id == sensorsArray[n].facets[t].id && sensorsArray[n].facets[t].measure == DISCRETE) {
+                var checkId = sensorsArray[n].facets[t].id;
+                var checkMeasure = sensorsArray[n].facets[t].measure;
+                var checkType = sensorsArray[n].facets[t].type;
+                //This is required because of continual alphanumerical exception.
+                if ((checkbox_array[i].id == checkId && checkMeasure == DISCRETE) ||
+                    (checkbox_array[i].id == checkId && checkMeasure == CONTINUOUS && 
+                    checkType == ALPHANUMERIC)) {
                     var name = checkbox_array[i].name.split(" ")[0];
                     str += "&" + name + "=[";
                     var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
@@ -456,8 +462,11 @@ function handlePeriodInfo(txtDocument, sensorName, n) {
     for (var i = 0; i < checkbox_array.length; i++) {
         if (checkbox_array[i].checked) {
             for (var t = 0; t < sensorsArray[n].facets.length; t++) {
-                if (checkbox_array[i].id == sensorsArray[n].facets[t].id &&
-                    sensorsArray[n].facets[t].measure == CONTINUOUS) {
+                var checkId = sensorsArray[n].facets[t].id;
+                var checkMeasure = sensorsArray[n].facets[t].measure;
+                var checkType = sensorsArray[n].facets[t].type;
+                if (checkbox_array[i].id == checkId &&
+                    checkMeasure == CONTINUOUS && checkType != ALPHANUMERIC) {
                     var div = checkbox_array[i].parentElement.nextElementSibling;
                     var col = t;
                     filterResults(div, divLocation, col);
@@ -556,12 +565,6 @@ function buildFullTable(resultObj, divLocation, n) { //id do sensor ativo.
             } table.appendChild(tr);
         }
     }
-    
-
-    //var header = document.createElement("span");
-    //var txt = document.createTextNode(Object.getOwnPropertyNames(resultObj[0])); //Header.
-    //header.appendChild(txt);
-    //table.appendChild(header);
     div.appendChild(table);
     div.style.border = "none";
     div.style.height = "500px";
