@@ -234,20 +234,10 @@ function getMaxPossibleValue(facetObj,div) {
 function getMaxLimitValue(txtDocument,div) {
     var result = JSON.parse(txtDocument);
     var max = parseFloat(result.max);
-    //var text = document.createTextNode("Max: ");
-    //text.size = 8;
-    //var maxDiv = document.createElement('div');
-    //maxDiv.style.border = 'none';
-    //var input = document.createElement("input");
-    //input.type = 'text';
-    //input.value = result.max;
-    //maxDiv.appendChild(text);
-    //div.appendChild(maxDiv);
-    //div.appendChild(input);
-    console.log("Max value: " + result.max);
+
     $("#" + div.id).slider("option", "max", max);
     $("#" + div.id).slider("values", 1, max);
-    $("#interval").val($("#" + div.id).slider("values", 0) +
+    $("#" + div.id + "_interval").val($("#" + div.id).slider("values", 0) +
       " - " + $("#" + div.id).slider("values", 1));
 }
 
@@ -260,20 +250,10 @@ function getMinPossibleValue(facetObj,div) {
 function getMinLimitValue(txtDocument, div) {
     var result = JSON.parse(txtDocument);
     var min = parseFloat(result.min);
-    //var text = document.createTextNode("Min: ");
-    //text.size = 8;
-    //var minDiv = document.createElement('div');
-    //minDiv.style.border = 'none';
-    //var input = document.createElement("input");
-    //input.type = 'text';
-    //input.value = result.min;
-    //minDiv.appendChild(text);
-    //div.appendChild(minDiv);
-    //div.appendChild(input);
-    console.log("Min value: " + result.min);
+
     $("#" + div.id).slider("option", "min",min );
     $("#" + div.id).slider("values", 0, min);
-    $("#interval").val($("#" + div.id).slider("values", 0) +
+    $("#" + div.id + "_interval").val($("#" + div.id).slider("values", 0) +
       " - " + $("#" + div.id).slider("values", 1));
 }
 
@@ -330,7 +310,6 @@ function createReadNumericType(facetObj, facetDiv) {
     label.appendChild(text);
     var input = document.createElement("input");
     input.type = "text";
-    input.id = "interval";
     input.readOnly = true;
     input.style = "border:0;";
     p.appendChild(label);
@@ -340,21 +319,22 @@ function createReadNumericType(facetObj, facetDiv) {
     var div = document.createElement("div");
     mainDiv.appendChild(div);
     facetDiv.appendChild(mainDiv);
-    div.id = facetObj.id + "_slider";
-    div.style.width = "90%";
+    div.id = facetObj.sensor.name + "_" + facetObj.id + "_slider";
+    input.id = div.id + "_interval";
 
     // Double handle slider using JQueryUI
     $("#"+div.id).slider({
         range: true,
         min: 0,
         max: 100,
-        values: [ 0, 1 ],
+        values: [0, 1],
+        step: 0.01,
         slide: function( event, ui ) {
-            $( "#interval" ).val(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+            $("#" + div.id + "_interval").val(ui.values[0] + " - " + ui.values[1]);
         }
     });
 
-    $("#interval").val($("#" + div.id).slider("values", 0) +
+    $("#" + div.id + "_interval").val($("#" + div.id).slider("values", 0) +
       " - " + $("#" + div.id).slider("values", 1));
 
     getMinPossibleValue(facetObj,div);
@@ -450,7 +430,8 @@ function filter(sensorName, n) {
 }
 
 /*
-Checks which checkbox is selected*/
+Checks which checkbox is selected
+*/
 function handlePeriodInfo(txtDocument, sensorName, n) {
     var resultObj = JSON.parse(txtDocument);
     var id = sensorName + "_facets";
@@ -480,14 +461,22 @@ function handlePeriodInfo(txtDocument, sensorName, n) {
 /*
 Specifies the type of Data.*/
 function filterResults(div, divLocation, col) {
-    var array = div.getElementsByTagName("input");
-    var initialValue = array[0].value;
-    var finalValue = array[1].value;
-    //For when the max value is obtained first than the min value.
-    if (finalValue < initialValue) {
-        var temp = initialValue;
-        initialValue = finalValue;
-        finalValue = temp;
+    var initialValue, finalValue;
+
+    var slider = div.getElementsByClassName("ui-slider")[0];
+    if (slider) {
+        initialValue = $("#" + slider.id).slider("values", 0);
+        finalValue = $("#" + slider.id).slider("values", 1);
+    } else {
+        var array = div.getElementsByTagName("input");
+        initialValue = array[0].value;
+        finalValue = array[1].value;
+        //For when the max value is obtained first than the min value.
+        if (finalValue < initialValue) {
+            var temp = initialValue;
+            initialValue = finalValue;
+            finalValue = temp;
+        }
     }
     filterContinuosValues(initialValue, finalValue, divLocation, col);
 }
