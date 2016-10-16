@@ -233,6 +233,7 @@ function getMaxPossibleValue(facetObj,div) {
 
 function getMaxLimitValue(txtDocument,div) {
     var result = JSON.parse(txtDocument);
+    var max = parseFloat(result.max);
     //var text = document.createTextNode("Max: ");
     //text.size = 8;
     //var maxDiv = document.createElement('div');
@@ -243,7 +244,11 @@ function getMaxLimitValue(txtDocument,div) {
     //maxDiv.appendChild(text);
     //div.appendChild(maxDiv);
     //div.appendChild(input);
-    $(div.id).slider("option", "max", result.max);
+    console.log("Max value: " + result.max);
+    $("#" + div.id).slider("option", "max", max);
+    $("#" + div.id).slider("values", 1, max);
+    $("#interval").val($("#" + div.id).slider("values", 0) +
+      " - " + $("#" + div.id).slider("values", 1));
 }
 
 
@@ -254,6 +259,7 @@ function getMinPossibleValue(facetObj,div) {
 
 function getMinLimitValue(txtDocument, div) {
     var result = JSON.parse(txtDocument);
+    var min = parseFloat(result.min);
     //var text = document.createTextNode("Min: ");
     //text.size = 8;
     //var minDiv = document.createElement('div');
@@ -264,7 +270,11 @@ function getMinLimitValue(txtDocument, div) {
     //minDiv.appendChild(text);
     //div.appendChild(minDiv);
     //div.appendChild(input);
-    $(div.id).slider("option", "min", result.min);
+    console.log("Min value: " + result.min);
+    $("#" + div.id).slider("option", "min",min );
+    $("#" + div.id).slider("values", 0, min);
+    $("#interval").val($("#" + div.id).slider("values", 0) +
+      " - " + $("#" + div.id).slider("values", 1));
 }
 
 // DATA facet
@@ -312,27 +322,40 @@ function createReadNumericType(facetObj, facetDiv) {
     mainDiv.className = "facetoptions";
     mainDiv.style.border = 'none';
     mainDiv.style.display = "block";
-    var text = document.createTextNode("Range: ");
-    mainDiv.appendChild(text);
+    mainDiv.style.overflow = "hidden";
+    var p = document.createElement("p");
+    var label = document.createElement("label");
+    label.htmlFor = "interval";
+    var text = document.createTextNode("Intervalo: ");
+    label.appendChild(text);
+    var input = document.createElement("input");
+    input.type = "text";
+    input.id = "interval";
+    input.readOnly = true;
+    input.style = "border:0;";
+    p.appendChild(label);
+    p.appendChild(input);
+    mainDiv.appendChild(p);
 
     var div = document.createElement("div");
     mainDiv.appendChild(div);
     facetDiv.appendChild(mainDiv);
     div.id = facetObj.id + "_slider";
+    div.style.width = "90%";
 
     // Double handle slider using JQueryUI
     $("#"+div.id).slider({
         range: true,
         min: 0,
-        max: 2000,
-        values: [ 300, 1000 ],
+        max: 100,
+        values: [ 0, 1 ],
         slide: function( event, ui ) {
-            $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+            $( "#interval" ).val(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
         }
     });
 
-    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-      " - $" + $("#slider-range").slider("values", 1));
+    $("#interval").val($("#" + div.id).slider("values", 0) +
+      " - " + $("#" + div.id).slider("values", 1));
 
     getMinPossibleValue(facetObj,div);
     getMaxPossibleValue(facetObj,div);

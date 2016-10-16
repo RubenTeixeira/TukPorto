@@ -82,7 +82,7 @@
 .sidebarrightside {
     border: none;
     float: right;
-    width: 86%;
+    width: 87%;
     overflow: hidden;
 }
 
@@ -146,6 +146,9 @@
     padding-right: 15px;
     padding-left: 15px;
     margin:auto;
+    overflow: hidden;
+    height: auto;
+    width: auto;
 }
 
 .header3 {
@@ -226,7 +229,9 @@
     border: none;
     font: 12px tahoma;
     padding-top: 7px;
-    overflow:hidden;   
+    overflow:hidden;
+    height: auto;
+    width: auto; 
 }
 
 .transition {
@@ -261,9 +266,13 @@ tr:hover {
 }
 
 .ui-slider {
-    /*
-    width: 80%;
-    */
-    margin: auto;
+    width: auto;
+}
+
+.ui-slider .ui-slider-handle {
+    height: 8px;
+    width: 8px;
+    margin-left: -4px;
+    margin-right: -4px;
 
 }
