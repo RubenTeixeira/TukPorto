@@ -422,11 +422,12 @@ function filterResults(div, divLocation, col) {
     var array = div.getElementsByTagName("input");
     var initialValue = array[0].value;
     var finalValue = array[1].value;
-    //if (finalValue < initialValue) {
-    //    var temp = initialValue;
-    //    initialValue = finalValue;
-    //    finalValue = temp;
-    //}
+    //For when the max value is obtained first than the min value.
+    if (finalValue < initialValue) {
+        var temp = initialValue;
+        initialValue = finalValue;
+        finalValue = temp;
+    }
     filterContinuosValues(initialValue, finalValue, divLocation, col);
 }
 
@@ -503,8 +504,15 @@ function buildFullTable(resultObj, divLocation, n) { //id do sensor ativo.
             } table.appendChild(tr);
         }
     }
+    
+
+    //var header = document.createElement("span");
+    //var txt = document.createTextNode(Object.getOwnPropertyNames(resultObj[0])); //Header.
+    //header.appendChild(txt);
+    //table.appendChild(header);
     div.appendChild(table);
     div.style.border = "none";
+    div.style.height = "500px";
     styleTable(div);
     divLocation.appendChild(div);
 }

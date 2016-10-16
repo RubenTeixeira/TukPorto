@@ -20,7 +20,6 @@
 .right {
     float: right;
     width: 68%;
-    
 }
 
 .footer {
@@ -37,14 +36,14 @@
 
 .left2 {
     float: left;
-    max-width: 250px;
+    max-width: 300px;
     max-height: 400px;
 }
 
 .right2 {
     float: right;
-    max-width: 400px;
-    max-height: 150px;
+    max-width: 300px;
+    max-height: 300px;
 }
 
 .left3 {
@@ -139,7 +138,7 @@
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
-    overflow:hidden;
+    overflow: hidden;
 }
 
 .facetoptions {
@@ -224,7 +223,7 @@
     border: none;
     font: 12px tahoma;
     padding: 7px;
-    overflow:hidden;   
+    overflow: hidden;
 }
 
 .transition {
