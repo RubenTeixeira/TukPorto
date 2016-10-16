@@ -400,7 +400,7 @@ function handlePeriodInfo(txtDocument, sensorName, n) {
     var checkbox_array = div.getElementsByTagName("input");
     var divLocation = document.getElementById("results");
     startDisplaySetting(divLocation, false); //start div as hidden.
-    buildFullTable(resultObj, divLocation);
+    buildFullTable(resultObj, divLocation, n);
     for (var i = 0; i < checkbox_array.length; i++) {
         if (checkbox_array[i].checked) {
             for (var t = 0; t < sensorsArray[n].facets.length; t++) {
@@ -468,32 +468,41 @@ function filterContinuosValues(initialValue, finalValue, divLocation, col) {
 
 /*
 This method builds full table without any filtering*/
-function buildFullTable(resultObj, divLocation) {
+function buildFullTable(resultObj, divLocation, n) { //id do sensor ativo.
+    var order = sensorsArray[n].facets;
     divLocation.style.overflow = 'auto';
     var div = document.createElement("div");
     var table = document.createElement("table");
     var tableHeaderRow = document.createElement("tr");
-    var names = Object.getOwnPropertyNames(resultObj[0]);
-    for (var i = 0; i < names.length; i++) {
-        var th = document.createElement("th");
-        var text = document.createTextNode(names[i].replace(/_/g, " "));
-        th.appendChild(text);
-        tableHeaderRow.appendChild(th);
-    }
-    table.appendChild(tableHeaderRow);
+    var names = Object.getOwnPropertyNames(resultObj[0]); //allign order with names.
 
-    for (var i = 0; i < resultObj.length; i++) {
-        var singleObj = resultObj[i];
-        var tr = document.createElement("tr");
-        for (var j in singleObj) {
-            var td = document.createElement("td");
-            var text = document.createTextNode(singleObj[j]);
-            td.appendChild(text);
-            tr.appendChild(td);
+    for (var j = 0; j < order.length; j++) {
+        for (var i = 0; i < names.length; i++) {
+            if (order[j].dbField == names[i]) {
+                var th = document.createElement("th");
+                var text = document.createTextNode(names[i].replace(/_/g, " "));
+                th.appendChild(text);
+                tableHeaderRow.appendChild(th);
+                break;
+            }
         }
-        table.appendChild(tr);
+        table.appendChild(tableHeaderRow);
     }
 
+    for (var i = 0; i < resultObj.length; i++) { //each row.
+        var tr = document.createElement("tr");
+        var singleObj = resultObj[i]; // entire row content.
+        for (var j = 0; j < order.length; j++) { //each facet.
+            for (var p in singleObj) { //each value.
+                if (order[j].dbField == p) {
+                    var td = document.createElement("td");
+                    var text = document.createTextNode(singleObj[p]);
+                    td.appendChild(text);
+                    tr.appendChild(td);
+                }
+            } table.appendChild(tr);
+        }
+    }
     div.appendChild(table);
     div.style.border = "none";
     styleTable(div);
