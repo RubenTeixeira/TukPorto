@@ -266,14 +266,17 @@ tr:hover {
 }
 
 .ui-slider {
-    width: auto;
+    overflow:visible;
+    width:93%;
+    left:5px;
 }
 
 .ui-slider-horizontal {
 	height: 20px;
+    
 }
 
-.ui-slider .ui-slider-handle {
+.ui-slider-horizontal .ui-slider-handle {
     height: 16px;
     width: 10px;
     margin-left: -6px;
