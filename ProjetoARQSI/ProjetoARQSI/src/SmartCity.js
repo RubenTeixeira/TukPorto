@@ -186,62 +186,35 @@ function showFacetOptions(div, facetObj) {
         else
             optionsDiv.style.display = "block";
     } else {
-        div.appendChild(createFacet(facetObj));
+        createFacet(facetObj,div);
     }
 }
 
-function createFacet(facetObj) {
+function createFacet(facetObj, facetDiv) {
     var measure = facetObj.measure;
     var typeOf = facetObj.type;
 
     if (measure === CONTINUOUS) {
         if (typeOf === DATATYPE) {
-           return createReadDate(facetObj);
+            createReadDate(facetObj, facetDiv);
         }
         else if (typeOf === HOURTYPE) {
-            return createReadHour(facetObj);
+            createReadHour(facetObj, facetDiv);
         }
         else if (typeOf === NUMERICTYPE) {
-            return createReadNumericType(facetObj);
+            createReadNumericType(facetObj, facetDiv);
         }
 
         else if (typeOf === ALPHANUMERIC) {
-            return createSelectAlphaNumericType(facetObj);
+            createSelectAlphaNumericType(facetObj, facetDiv);
         }
        
     }
 
     else if (measure === DISCRETE) {
         if (typeOf === ALPHANUMERIC) {
-            return createSelectAlphaNumericType(facetObj);
+            createSelectAlphaNumericType(facetObj, facetDiv);
         }
-    }
-
-
-}
-
-function getAllOptions(facetObj, div) {
-    
-    var link = DISCRETE_VALUES_LINK + "sensor=" + facetObj.sensor.name + "&faceta=" + facetObj.dbField;
-    console.log(link);
-    requestAJAX(link, createAllOptionsInput, RESPONSE_TEXT, div);
-    
-}
-
-function createAllOptionsInput(txtDocument,div) {
-    var results = JSON.parse(txtDocument);
-   
-    for (var i = 0; i < results.length; i++) {
-        var individualDiv = document.createElement("div");
-        individualDiv.style.border = 'none';
-        var text = document.createTextNode(results[i]);
-        var input = document.createElement("input");
-        input.type = "checkbox";
-        input.name = "singular";
-        individualDiv.appendChild(input);
-        individualDiv.appendChild(text);
-        div.appendChild(individualDiv);
-      
     }
 }
 
@@ -250,9 +223,6 @@ function createAllOptionsInput(txtDocument,div) {
 function getMaxPossibleValue(facetObj,div) {
     var link = FACET_MAX_VALUE + "sensor=" + facetObj.sensor.name + "&facetaCont=" + facetObj.dbField;
     requestAJAX(link, getMaxLimitValue, RESPONSE_TEXT,div);
-   
-   
-    
 }
 
 function getMaxLimitValue(txtDocument,div) {
@@ -267,22 +237,15 @@ function getMaxLimitValue(txtDocument,div) {
     maxDiv.appendChild(text);
     div.appendChild(maxDiv);
     div.appendChild(input);
-    
-   
-    
 }
 
 
 function getMinPossibleValue(facetObj,div) {
     var link = FACET_MIN_VALUE + "sensor=" + facetObj.sensor.name + "&facetaCont=" + facetObj.dbField;
     requestAJAX(link, getMinLimitValue, RESPONSE_TEXT,div);
-    
-
-
 }
 
 function getMinLimitValue(txtDocument, div) {
-    
     var result = JSON.parse(txtDocument);
     var text = document.createTextNode("Min: ");
     text.size = 8;
@@ -297,7 +260,7 @@ function getMinLimitValue(txtDocument, div) {
 }
 
 // DATA facet
-function createReadDate(facetObj) {
+function createReadDate(facetObj, facetDiv) {
     var from = document.createTextNode("De: ");
     var to = document.createTextNode("Até: ");
     var p = document.createElement("p");
@@ -312,11 +275,11 @@ function createReadDate(facetObj) {
     div.appendChild(to);
     div.appendChild(getCurrentDateForm());
     startDisplaySetting(div, true);
-    return div;
+    facetDiv.appendChild(div);
 }
 
 // HORA facet
-function createReadHour(facetObj) {
+function createReadHour(facetObj, facetDiv) {
 	var from = document.createTextNode("De: ");
     var to = document.createTextNode("Até: ");
     var p = document.createElement("p");
@@ -331,32 +294,51 @@ function createReadHour(facetObj) {
     div.appendChild(to);
     div.appendChild(getCurrentHourForm());
     startDisplaySetting(div, true);
-    return div;
+    facetDiv.appendChild(div);
 }
 
 
-function createReadNumericType(facetObj) {
+function createReadNumericType(facetObj, facetDiv) {
     var div = document.createElement("div");
     div.id = facetObj.id;
     div.className = "facetoptions";
     div.style.border = 'none';
+    div.style.display = "block";
     getMinPossibleValue(facetObj,div);
     getMaxPossibleValue(facetObj,div);
-    return div;
+    facetDiv.appendChild(div);
 }
 
-function createSelectAlphaNumericType(facetObj) {
+function createSelectAlphaNumericType(facetObj, facetDiv) {
     var div = document.createElement("div");
+    div.className = "facetoptions";
     div.style.border = 'none';
     div.style.display = "block";
-    getAllOptions(facetObj, div);
-    return div;
-   
+    facetDiv.appendChild(div);
+    getDiscreteValues(facetObj, div);
+    //facetDiv.appendChild(div);
 }
 
+function getDiscreteValues(facetObj, div) {
+    var link = DISCRETE_VALUES_LINK + SENSOR_DESIGNATION + "=" + facetObj.sensor.name + "&"+FACET_DESIGNATION+"=" + facetObj.dbField;
+    console.log(link);
+    requestAJAX(link, createAllOptionsInput, RESPONSE_TEXT, div);
+}
 
-function getDiscreteValues(facetObj) {
-	var link = DISCRETE_VALUES_LINK + SENSOR_DESIGNATION + "=" + facetObj.sensor + FACET_DESIGNATION + "=" + facetObj.DBfield;
+function createAllOptionsInput(txtDocument, div) {
+    var results = JSON.parse(txtDocument);
+
+    for (var i = 0; i < results.length; i++) {
+        var individualDiv = document.createElement("div");
+        individualDiv.style.border = 'none';
+        var text = document.createTextNode(results[i]);
+        var input = document.createElement("input");
+        input.type = "checkbox";
+        input.name = "singular";
+        individualDiv.appendChild(input);
+        individualDiv.appendChild(text);
+        div.appendChild(individualDiv);
+    }
 }
 
 

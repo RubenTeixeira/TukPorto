@@ -57,7 +57,6 @@ function createCheckBox(divClass, divID, labelText, inputID, inputName,facetObj)
 	input.type = "checkbox";
 	input.onchange = function () {
 	    showFacetOptions(div, facetObj);
-	    //div.appendChild(createFacet(facetObj));
 	};
 	var text = document.createTextNode(labelText);
 	label.appendChild(input);
