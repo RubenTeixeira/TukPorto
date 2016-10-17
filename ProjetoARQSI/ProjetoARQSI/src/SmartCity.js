@@ -234,11 +234,14 @@ function getMaxPossibleValue(facetObj,div) {
 function getMaxLimitValue(txtDocument,div) {
     var result = JSON.parse(txtDocument);
     var max = parseFloat(result.max);
-
+    if (isNaN(max)) {
+        return;
+    }
     $("#" + div.id).slider("option", "max", max);
     $("#" + div.id).slider("values", 1, max);
     $("#" + div.id + "_interval").val($("#" + div.id).slider("values", 0) +
-      " - " + $("#" + div.id).slider("values", 1));
+      " - " + max);
+
 }
 
 
@@ -250,10 +253,12 @@ function getMinPossibleValue(facetObj,div) {
 function getMinLimitValue(txtDocument, div) {
     var result = JSON.parse(txtDocument);
     var min = parseFloat(result.min);
-
+    if (isNaN(min)) {
+        return;
+    }
     $("#" + div.id).slider("option", "min",min );
     $("#" + div.id).slider("values", 0, min);
-    $("#" + div.id + "_interval").val($("#" + div.id).slider("values", 0) +
+    $("#" + div.id + "_interval").val(min +
       " - " + $("#" + div.id).slider("values", 1));
 }
 
@@ -311,7 +316,7 @@ function createReadNumericType(facetObj, facetDiv) {
     var input = document.createElement("input");
     input.type = "text";
     input.readOnly = true;
-    input.style = "border:0;";
+    input.style = "border:0;width:60%;";
     p.appendChild(label);
     p.appendChild(input);
     mainDiv.appendChild(p);
@@ -326,9 +331,9 @@ function createReadNumericType(facetObj, facetDiv) {
     $("#"+div.id).slider({
         range: true,
         min: 0,
-        max: 100,
+        max: 1000,
         values: [0, 1],
-        step: 0.01,
+        step: 0.000001,
         slide: function( event, ui ) {
             $("#" + div.id + "_interval").val(ui.values[0] + " - " + ui.values[1]);
         }
