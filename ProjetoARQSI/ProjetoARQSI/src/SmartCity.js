@@ -27,6 +27,8 @@ var DATATYPE = "data";
 var HOURTYPE = "hora";
 var NUMERICTYPE = "numérico";
 var ALPHANUMERIC = "alfanumérico";
+
+var column = 0;
      
 
 function listSensors() {
@@ -381,53 +383,42 @@ function createAllOptionsInput(txtDocument, div) {
 
 //RESULTS
 function results() {
-    var str = "";
-    showHideResults();
-    var ref_array = document.getElementsByClassName("link active");
-    var ref = ref_array[0];
-    var n = ref.id;
-    var sensor = ref.childNodes[0].nodeValue;
-    var sensorName = sensor.replace(/ /g, "_");
-    var str = filter(sensorName, n);
+    showHideResults(); //Deletes table division
 
+    /**
+    Gathering Info required to apply filters.*/
+    var str = "";
+    var activeSensor_ = document.getElementsByClassName("link active"); //Active sensor.
+    var sensorTab = activeSensor_[0]; //saves one & only active link tab.
+    var sensorID = sensorTab.id; //Same id as the one used by API
+    var sensorName_ = sensorTab.childNodes[0].nodeValue;
+    var sensorName = sensorName_.replace(/ /g, "_");
+    var sensorFacetsDivID = sensorName + "_facets"; //Facets Division of active Sensor.
+    var sensorFacetsDiv = document.getElementById(sensorFacetsDivID);
+    var checkbox_array = sensorFacetsDiv.getElementsByTagName("input");
+
+    var str = filterPreRequestedData(checkbox_array, sensorID);
     var link = VALUES_LINK + sensorName + str;
-    requestAJAX(link, handlePeriodInfo, RESPONSE_TEXT, sensorName, n);
+    requestAJAX(link, filterPostRequestedData, RESPONSE_TEXT, checkbox_array, sensorID);
 }
 
 /*
-This method allow to filter Results by providing a portion of the link*/
-function filter(sensorName, n) {
+This method allow to filter Pre Requested Data by providing a link for API*/
+function filterPreRequestedData(checkbox_array, sensorID) {
     var str = "";
-    var id = sensorName + "_facets";
-    var div = document.getElementById(id);
-    var checkbox_array = div.getElementsByTagName("input");
     for (var i = 0; i < checkbox_array.length; i++) {
-        if (checkbox_array[i].id == "1" || checkbox_array[i].id == "2") {
-            continue;
-        }
-        if (checkbox_array[i].checked) {
-            for (var t = 0; t < sensorsArray[n].facets.length; t++) {
-                var checkId = sensorsArray[n].facets[t].id;
-                var checkMeasure = sensorsArray[n].facets[t].measure;
-                var checkType = sensorsArray[n].facets[t].type;
-                //This is required because of continual alphanumerical exception.
-                if ((checkbox_array[i].id == checkId && checkMeasure == DISCRETE) ||
-                    (checkbox_array[i].id == checkId && checkMeasure == CONTINUOUS && 
-                    checkType == ALPHANUMERIC)) {
-                    var name = checkbox_array[i].name.split(" ")[0];
-                    str += "&" + name + "=[";
-                    var parentElem = checkbox_array[i].parentElement.parentElement; //div parent.
-                    var elements = parentElem.getElementsByTagName("input");
-                    for (var j = 1; j < elements.length; j++) {//ignores the first one always. It belongs to the major checkbox.
-                        if (elements[j].checked) {
-                            var info = elements[j].nextSibling.nodeValue;
-                            str += info + ","
-                        }
-                    }
-                    str += "]";
-                } else if (checkbox_array[i].id == sensorsArray[n].facets[t].id && sensorsArray[n].facets[t].measure == CONTINUOUS) {
-                    //API NOT PREPARED TO RECEIVE CONTINUOS VALUES.
-                }
+        var checkbox = checkbox_array[i];
+        if (checkbox.checked) {
+            if (validatesCorrectCheckboxes(checkbox, sensorID) == 1) { //Discrete data.
+                var name = checkbox.name.split(" ")[0];//Facet name.
+                str += "&" + name + "=[";
+                var parentElem = checkbox.parentElement.parentElement; //Parent Div.
+                str += getStringDiscreteValues(parentElem, str);
+                str += "]";
+            } else if (validatesCorrectCheckboxes(checkbox, sensorID) == 2) { //Continuos Data.
+
+                //API NOT PREPARED TO RETRIEVE CONTINUOS VALUES.
+
             }
         }
     }
@@ -437,37 +428,87 @@ function filter(sensorName, n) {
 /*
 Checks which checkbox is selected
 */
-function handlePeriodInfo(txtDocument, sensorName, n) {
+function filterPostRequestedData(txtDocument, checkbox_array, sensorID) {
+    var resultsDiv = document.getElementById("results");
+    startDisplaySetting(resultsDiv, false); //start div as hidden.
     var resultObj = JSON.parse(txtDocument);
-    var id = sensorName + "_facets";
-    var div = document.getElementById(id);
-    var checkbox_array = div.getElementsByTagName("input");
-    var divLocation = document.getElementById("results");
-    startDisplaySetting(divLocation, false); //start div as hidden.
-    buildFullTable(resultObj, divLocation, n);
+    buildFullTable(resultObj, resultsDiv, sensorID);
+   
+    
     for (var i = 0; i < checkbox_array.length; i++) {
-        if (checkbox_array[i].checked) {
-            for (var t = 0; t < sensorsArray[n].facets.length; t++) {
-                var checkId = sensorsArray[n].facets[t].id;
-                var checkMeasure = sensorsArray[n].facets[t].measure;
-                var checkType = sensorsArray[n].facets[t].type;
-                if (checkbox_array[i].id == checkId &&
-                    checkMeasure == CONTINUOUS && checkType != ALPHANUMERIC) {
-                    var div = checkbox_array[i].parentElement.nextElementSibling;
-                    var col = t;
-                    filterResults(div, divLocation, col);
-                }
+        checkbox = checkbox_array[i];
+        column = 0;
+        if (checkbox.checked) {         
+            if (validatesCorrectCheckboxes(checkbox, sensorID) == 2) {
+                var div = checkbox.parentElement.nextElementSibling;               
+                filterResults(div, resultsDiv);
             }
         }
     }
-    changeDisplaySetting(divLocation);
+    changeDisplaySetting(resultsDiv);
+}
+
+/*
+Returns a formated String with the Discrete Values for the Request.*/
+function getStringDiscreteValues(parentElem, str) {
+    var elements = parentElem.getElementsByTagName("input"); //Discrete value checkboxes.
+    for (var j = 1; j < elements.length; j++) {//ignores the first one always. It belongs to the major checkbox.
+        if (elements[j].checked) {
+            var info = elements[j].nextSibling.nodeValue;
+            str += info + ","
+        }
+    }
+    return str;
+}
+
+/**
+Valides Checkbox and returns a reference to what kind of facet is the Checkbox associated with.*/
+function validatesCorrectCheckboxes(checkbox, sensorID,col) {
+    for (var t = 0; t < sensorsArray[sensorID].facets.length; t++) {
+        
+        var checkId = sensorsArray[sensorID].facets[t].id;
+        //This is required because of continual alphanumerical exception.
+        if ((checkbox.id == checkId && checkFacetMeasure(sensorID, t)) ||
+           (checkbox.id == checkId && !checkFacetMeasure(sensorID, t) &&
+                    checkFacetType(sensorID, t) == 2)) {
+            return 1; //Checkbox has Discrete Values. 
+        } else if (checkbox.id == checkId && !checkFacetMeasure(sensorID, t)) {
+            return 2; //Checkbox with Continuos Values.
+        }
+        column++;
+    }
+}
+/*
+Checks Measurement of Facet for a specific Sensor.*/
+function checkFacetMeasure(sensorID, facetsID) {
+    var measure = sensorsArray[sensorID].facets[facetsID].measure;
+    if (measure == DISCRETE) {
+        return true;
+    } else if (measure == CONTINUOUS) {
+        return false;
+    }
+    return 0;
+}
+/*
+Checks Type of a Facet for a speficic Sensor.*/
+function checkFacetType(sensorID, facetsID) {
+    var type = sensorsArray[sensorID].facets[facetsID].type;
+    if (type == NUMERICTYPE) {
+        return 1;
+    } else if (type == ALPHANUMERIC) {
+        return 2;
+    } else if (type == DATATYPE) {
+        return 3
+    } else if (type == HOURTYPE) {
+        return 4;
+    }
+    return 0;
 }
 
 /*
 Specifies the type of Data.*/
-function filterResults(div, divLocation, col) {
+function filterResults(div, resultsDiv) {
     var initialValue, finalValue;
-
     var slider = div.getElementsByClassName("ui-slider")[0];
     if (slider) {
         initialValue = $("#" + slider.id).slider("values", 0);
@@ -483,15 +524,15 @@ function filterResults(div, divLocation, col) {
             finalValue = temp;
         }
     }
-    filterContinuosValues(initialValue, finalValue, divLocation, col);
+    filterContinuosValues(initialValue, finalValue, resultsDiv);
 }
 
 /*
 Show results in list according to the interval passed in parameteres.*/
-function filterContinuosValues(initialValue, finalValue, divLocation, col) {
+function filterContinuosValues(initialValue, finalValue, resultsDiv) {
     var flag, c;
     flag = 0; c = 0;
-    var rows = divLocation.getElementsByTagName("tr");  //all rows.
+    var rows = resultsDiv.getElementsByTagName("tr");  //all rows.
     loop1:
         for (var i = 0; i < rows.length; i++) {
             if (flag != 0) break loop1;
@@ -499,10 +540,10 @@ function filterContinuosValues(initialValue, finalValue, divLocation, col) {
             var row_ = row.childNodes;
             loop2:
                 for (var j = 0; j < row_.length; j++) { //each cell from first row.
-                    if (j == col) {
+                    if (j == column) {
                         c = j; //saves column index to work on.
                         flag++;
-                        if (col == 1) { //this is specific.
+                        if (column == 1) { //this is specific.
                             initialValue = initialValue + ":00";
                             finalValue = finalValue + ":00";
                         }
@@ -515,7 +556,7 @@ function filterContinuosValues(initialValue, finalValue, divLocation, col) {
         var row_ = row.childNodes;
         var value = row_[c].childNodes[0].nodeValue;
         if (value < initialValue || value > finalValue) {
-            var table = divLocation.getElementsByTagName("table")[0];
+            var table = resultsDiv.getElementsByTagName("table")[0];
             table.removeChild(table.childNodes[i]); //deletes row in the current position.
             i--;
         }
@@ -524,9 +565,9 @@ function filterContinuosValues(initialValue, finalValue, divLocation, col) {
 
 /*
 This method builds full table without any filtering*/
-function buildFullTable(resultObj, divLocation, n) { //id do sensor ativo.
+function buildFullTable(resultObj, resultsDiv, n) { //id do sensor ativo.
     var order = sensorsArray[n].facets;
-    divLocation.style.overflow = 'auto';
+    resultsDiv.style.overflow = 'auto';
     var div = document.createElement("div");
     var table = document.createElement("table");
     var tableHeaderRow = document.createElement("tr");
@@ -563,9 +604,11 @@ function buildFullTable(resultObj, divLocation, n) { //id do sensor ativo.
     div.style.border = "none";
     div.style.height = "500px";
     styleTable(div);
-    divLocation.appendChild(div);
+    resultsDiv.appendChild(div);
 }
 
+/**
+Deletes table division when another table is required.*/
 function showHideResults() {
     var maindiv = document.getElementById("results");
     if (maindiv.childNodes[1] != null) {
