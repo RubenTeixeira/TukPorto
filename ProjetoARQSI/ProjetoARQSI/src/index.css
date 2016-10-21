@@ -1,0 +1,54 @@
+﻿div {
+    border: 1px solid black;
+    width: 100%;
+    overflow: scroll;
+}
+
+.header {
+    clear: both;
+    width: 100%;
+}
+
+.left {
+    float: left;
+    width: 25%;
+}
+
+.right {
+    float: right;
+    width: 72%;
+}
+
+.footer {
+    clear: both;
+    width: 100%;
+}
+
+.header2 {
+    clear: both;
+    width: 100%;
+    min-height: 50px;
+    max-height: 200px;
+}
+
+.left2 {
+    float: left;
+    max-width: 150px;
+    max-height: 400px;
+}
+
+.right2 {
+    float: right;
+    max-width: 400px;
+    max-height: 150px;
+}
+
+.left3 {
+    float: left;
+    max-width: 45%;
+}
+
+.right3 {
+    float: right;
+    max-width: 52%;
+}
