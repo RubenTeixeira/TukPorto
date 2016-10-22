@@ -1,5 +1,6 @@
 ﻿#smartCity div {
     overflow: initial;
+    
 }
 
 #smartCity {
@@ -8,26 +9,33 @@
     overflow: visible;
     width: auto;
     padding: unset;
-    display: unset;
+    display: block;
+    /*min-height: 450px;
+    max-height: 600px;*/
+    height: 100%;
     min-width: 220px;
-    min-height: 450px;
-    max-height: 600px;
 }
 
 .sidebarleftside {
     float: left;
-    width: 15%;
+    width: 14%;
     margin: 0;
-    border: none;
+    border-right: 1px solid black;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
 }
 
 
 .sidebarrightside {
-    float: right;
+    display: flex;
+    flex-direction: column;
     width: 84%;
-    min-height: 445px;
+    height: 100%;
     border-top: none;
     border-right: none;
+    border-bottom: none;
+    box-shadow: -5px 0px 3px grey;
 }
 
     .sidebarrightside div {
@@ -52,7 +60,7 @@
         text-align: center;
         text-decoration: none;
         transition: 0.5s;
-        font: 11px arial, sans-serif;
+        font: 0.7em arial, sans-serif;
         writing-mode: vertical-lr;
         -ms-writing-mode: bt-lr; /* IE */
         transform: rotate(-180deg);
@@ -61,6 +69,7 @@
         border-right: 1px solid black;
         border-bottom-right-radius: 15px;
         border-top-right-radius: 15px;
+        box-shadow: 2px -5px 3px grey;
     }
 
         .sidebarmenulink a.active {
@@ -77,12 +86,8 @@
 /* Style the tab content */
 .tabcontent {
     display: block;
-    padding-left: 8px;
-    padding-bottom: 16px;
-}
-
-#facetsmenuid {
-    /*border-bottom: 1px solid black;*/
+    margin-left: 8px;
+    margin-bottom: 16px;
 }
 
 .facetoptions {
@@ -112,7 +117,6 @@
 }
 
 .buttonfacets, .buttonresults {
-    /*display: block;*/
     cursor: pointer;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -135,7 +139,6 @@
         }
 
             .buttonfacets span:after {
-                /*content: '▼';*/
                 content: '\f139';
                 transform: none;
                 font-family: FontAwesome;
@@ -199,23 +202,20 @@
     margin-bottom: 8px;
 }
 
-.facetsdivision {
+.singlefacet {
     font: 11px tahoma;
-    padding-top: 7px;
-    padding-left: 7px;
-    height: auto;
-    width: auto;
+    margin-top: 7px;
+    margin-left: 7px;
 }
 
-div#facetsdivision {
+div.facetsdivision {
     border-bottom: 1px solid black;
 }
 
 
-/*.resultsdivision div {
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-}*/
+.ui-table div {
+    height:auto;
+}
 
 .transition {
     transition: 0.5s;
@@ -259,3 +259,11 @@ tr:hover {
         top: 1px;
         z-index: 2;
     }
+
+.resultsdivision {
+    height: 100%;
+}
+
+div#resultsTable {
+    overflow: auto;
+}

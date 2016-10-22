@@ -51,7 +51,6 @@ function requestAJAX(uri, handler, responseType, extraParam, extraParam2) {
  ********************/
 
 function toggleVisibility(div) {
-
     if (div.style.display === "none")
         $("#" + div.id).show(TOGGLE_VISIB_ANIM_DURATION);
     else
@@ -59,14 +58,12 @@ function toggleVisibility(div) {
 }
 
 function showDiv(div) {
-
     if (div.style.display === "none")
         $("#" + div.id).show(TOGGLE_VISIB_ANIM_DURATION);
 }
 
 function hideDiv(div) {
-
-    if (div.style.display === "none")
+    if (div.style.display !== "none")
         $("#" + div.id).hide(TOGGLE_VISIB_ANIM_DURATION);
 }
 

@@ -39,8 +39,8 @@ function smartCity() {
 
     /* Facets */
     var rightbar = createDiv("sidebarrightside", "sidebarrightside");
-    var facetsDiv = createDiv("facetsdivision", "");
-    var facetsButton = createArrowButton("facetsbutton", "buttonfacets", "showFacetsMenu()", "Pesquisa por Facetas ");
+    var facetsDiv = createDiv("facetsdivision", "facetsdivision");
+    var facetsButton = createArrowButton("facetsbutton", "buttonfacets", "toggleFacetsMenu()", "Pesquisa por Facetas ");
     var btn_div = createDiv("facetsbuttondiv", "buttondiv");
     btn_div.appendChild(facetsButton);
     var searchButton = createArrowButton("searchbutton", "searchbutton ui-button ui-widget ui-corner-all", "results()", "Ver Resultados");
@@ -59,6 +59,7 @@ function smartCity() {
 
     var resultsDiv = createDiv("results", "resultsDiv");
     resultsDiv.appendChild(btn_div);
+    resultsDiv.style.display = "none";
     div.appendChild(resultsDiv);
 
     rightbar.appendChild(div);
@@ -112,10 +113,8 @@ function createTabs(xmlDoc) {
         li.appendChild(a);
         ul.appendChild(li);
         div.appendChild(ul);
-        // For each sensor we're adding as a tab, we need to
-        // create a tabcontent DIV on the webpage which will be hidden by default
-        //requestFacets(sensorName);
     }
+    // Show the first sensor's facets...
     document.getElementsByClassName("link")[0].click();
     return allSensors.length;
 }
@@ -149,12 +148,20 @@ function showFacetsFromSensor(evt, sensorName) {
     else
         requestFacets(sensorName);
 
-    showHideResults();
-    resetFacetButtonArrow();
+    clearResults();
+    showFacetsMenu();
 }
 
 
 function showFacetsMenu() {
+    var facetsmenu = document.getElementById("facetsmenuid");
+    resetFacetButtonArrow();
+    var btnDiv = document.getElementById("searchBtnDiv");
+    showDiv(btnDiv);
+    showDiv(facetsmenu);
+}
+
+function toggleFacetsMenu() {
     var facetsmenu = document.getElementById("facetsmenuid");
     rotateFacetButtonArrow();
     var btnDiv = document.getElementById("searchBtnDiv");
@@ -196,7 +203,7 @@ function createFacets(facetsXML, sensorName) {
         // Store facet on sensors vector
         sensorObj.facets.push(facetObj);
 
-        var cb_Div = createCheckBox("facetsdivision", dbField, name, id, name, facetObj);
+        var cb_Div = createCheckBox("singlefacet", dbField, name, id, name, facetObj);
         sensorFacetsDiv.appendChild(cb_Div);
     }
     maindivison.appendChild(sensorFacetsDiv);
@@ -296,8 +303,8 @@ function createReadDate(facetObj, facetDiv) {
     div.appendChild(p);
     div.appendChild(to);
     div.appendChild(getCurrentDateForm());
-    showDiv(div);
     facetDiv.appendChild(div);
+    showDiv(div);
 }
 
 // HORA facet
@@ -401,7 +408,7 @@ function createAllOptionsInput(txtDocument, div) {
 //RESULTS
 function results() {
     var str = "";
-    showHideResults();
+    clearResults();
     var ref_array = document.getElementsByClassName("link active");
     var ref = ref_array[0];
     var n = ref.id;
@@ -462,7 +469,6 @@ function handlePeriodInfo(txtDocument, sensorName, n) {
     var div = document.getElementById(id);
     var checkbox_array = div.getElementsByTagName("input");
     var divLocation = document.getElementById("results");
-    hideDiv(divLocation); //start div as hidden.
     buildFullTable(resultObj, divLocation, n);
     for (var i = 0; i < checkbox_array.length; i++) {
         if (checkbox_array[i].checked) {
@@ -479,6 +485,7 @@ function handlePeriodInfo(txtDocument, sensorName, n) {
             }
         }
     }
+    toggleFacetsMenu();
     showDiv(divLocation);
 }
 
@@ -539,6 +546,17 @@ function filterContinuosValues(initialValue, finalValue, divLocation, col) {
             i--;
         }
     }
+    if (rows.length === 1)
+        printNoResultsFound(divLocation);
+}
+
+
+function printNoResultsFound(divLocation) {
+    var text = document.createTextNode("Sorry. No results were found.");
+    var span = document.createElement("span");
+    span.appendChild(text);
+    span.style = "font: 0.8em arial, sans-serif; margin-left: 0.5em;"
+    divLocation.replaceChild(span, divLocation.childNodes[1]);
 }
 
 /*
@@ -547,10 +565,7 @@ function buildFullTable(resultObj, divLocation, n) { //id do sensor ativo.
     var count = 0;
     var order = sensorsArray[n].facets;
     divLocation.style.overflow = 'initial';
-    //while (divLocation.hasChildNodes()) {
-    //    divLocation.removeChild(divLocation.lastChild);
-    //}
-    showHideResults();
+    divLocation.style.height = 'auto';
     var div = createDiv("resultsTable", "ui-table");
     var table = document.createElement("table");
     var tableHeaderRow = document.createElement("tr");
@@ -585,18 +600,16 @@ function buildFullTable(resultObj, divLocation, n) { //id do sensor ativo.
         }
     }
     div.appendChild(table);
-    div.style.border = "none";
-    div.style.height = "500px";
     styleTable(div);
     divLocation.appendChild(div);
-    console.log("Results: " + count);
 }
 
-function showHideResults() {
+function clearResults() {
     var maindiv = document.getElementById("results");
     if (maindiv.childNodes[1] != null) {
         maindiv.removeChild(maindiv.childNodes[1]);
     }
+    maindiv.style.display = "none";
 }
 
 
