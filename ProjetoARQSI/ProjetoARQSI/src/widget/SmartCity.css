@@ -1,83 +1,82 @@
 ﻿#smartCity div {
-    overflow: initial;
+    overflow: auto;
 
 }
 
 #smartCity {
     border: none;
     margin: auto;
-    overflow: visible;
     width: auto;
     padding: unset;
     display: block;
-    /*min-height: 450px;*/
-    max-height: 100vh;
+    max-height: 59vh;
     height: 100%;
     min-width: 220px;
+	overflow: auto;
 }
 
 .sidebarleftside {
     float: left;
-    width: 14%;
-    margin: 0;
-    border-right: 1px solid black;
-    border-left: none;
-    border-top: none;
-    border-bottom: none;
+	width: 10%;
+    border: none;
+	margin-right: -1px;
 }
 
+.sidebarleftside div {
+	overflow: visible;
+}
 
 .sidebarrightside {
     display: flex;
     flex-direction: column;
-    width: 84%;
-    height: 100%;
-    border-top: none;
-    border-right: none;
-    border-bottom: none;
-    box-shadow: -5px 0px 3px grey;
+    width: 89%;
+	height: 500px;
+    box-shadow: -2px 2px 2px grey;
+	border-top:none;
 }
 
 .sidebarrightside div {
 	border: none;
 }
 
-.sidebarmenu {
-    margin: 0;
-    padding: 0;
-    border: none;
+ul.sidebarmenu {
+	float: right;
+	margin: 5px 0px 0px 0px;
+	list-style-type: none;
+	writing-mode: vertical-lr;
+	-ms-writing-mode: bt-lr;  /*IE*/
+	transform: rotate(-180deg);
 }
 
-.sidebarmenulink {
-    float: right;
-    display: block;
+ul.sidebarmenu li {
+	float: right;
 }
 
-.sidebarmenulink a {
-	background-color: #ffffff;
+ul.sidebarmenu li a {
 	display: inline-block;
+	background-color: #ffffff;
 	color: black;
 	text-align: center;
 	text-decoration: none;
 	transition: 0.5s;
-	font: 0.7em arial, sans-serif;
-	writing-mode: vertical-lr;
-	-ms-writing-mode: bt-lr; /* IE */
-	transform: rotate(-180deg);
-	padding: 16px 8px;
+	font: 0.71em arial, sans-serif;
+	font-weight: bold;
+    padding: 12px 8px;
 	border-top: 1px solid black;
 	border-right: 1px solid black;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
 	border-bottom-right-radius: 15px;
 	border-top-right-radius: 15px;
-	box-shadow: 2px -5px 3px grey;
+	box-shadow: 2px -2px 2px gray;
 }
 
-.sidebarmenulink a.active {
+ul.sidebarmenu li a.active {
 	background-color: #82c0d7;
 	color: white;
 }
 
-.sidebarmenulink a:hover:not(.active) {
+ul.sidebarmenu li a:hover:not(.active) {
 	background-color: #e1e0e0;
 	color: black;
 }
@@ -86,8 +85,9 @@
 /* Style the tab content */
 .tabcontent {
     display: block;
-    margin-left: 8px;
-    margin-bottom: 16px;
+    margin-left: 8%;
+    margin-bottom: 8%;
+	width: 92%;
 }
 
 .facetoptions {
@@ -117,19 +117,24 @@
 }
 
 .buttonfacets, .buttonresults {
+	font-family: Arial;
+    font-size: 12px;
     cursor: pointer;
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 4px;
+    padding: 6px;
     border-radius: 10px;
     border: 10px;
     outline: 0; /*disable focus on-click*/
     transition: all 0.5s;
-    width: 160px;
+	width: 150px;
 }
 
-.buttonfacets, .buttonresults span {
+.buttonresults {
+	width: 100px;
+	margin-right: -17px;
 }
+
 
 .buttonfacets span {
 	cursor: pointer;
@@ -147,7 +152,7 @@
 	position: absolute;
 	opacity: 0.0;
 	top: 0;
-	right: -10px;
+	right: 1px;
 	transition: 0.5s;
 	display: inline-block;
 }
@@ -178,22 +183,34 @@
 }
 
 .buttonresults span:after {
-	content: '👁';
-	font-weight: 500;
+	content: '\f139';
+	transform: none;
+	font-family: FontAwesome;
+	font-weight: 400;
+	font-style: normal;
 	position: absolute;
-	opacity: 0;
+	opacity: 0.0;
 	top: 0;
-	right: -10px;
+	right: -1px;
 	transition: 0.5s;
+	display: inline-block;
 }
 
 .buttonresults:hover span {
-	padding-right: 20px;
+	padding-right: 25px;
 }
 
 .buttonresults:hover span:after {
 	opacity: 1;
 	right: 0;
+}
+
+.buttonresults span.active:after {
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
 }
 
 .searchbutton {
@@ -204,11 +221,13 @@
 
 .singlefacet {
     font: 11px tahoma;
-    margin-top: 7px;
-    margin-left: 7px;
+    margin-top: 2%;
+    margin-left: 4%;
+	width: 96%;
 }
 
-div.facetsdivision {
+div#facetsdivision {
+	overflow: visible;
     border-bottom: 1px solid black;
 }
 
@@ -240,9 +259,9 @@ tr:hover {
     background-color: #82c0d7;
 }
 
-.ui-slider {
-    overflow: visible;
-    width: 93%;
+#smartCity .ui-slider {
+	overflow: visible;
+    width: 82%;
     left: 5px;
 }
 
@@ -258,6 +277,10 @@ tr:hover {
 	position: absolute;
 	top: 1px;
 	z-index: 2;
+}
+
+.ui-widget-content {
+	overflow: visible;
 }
 
 .resultsdivision {
