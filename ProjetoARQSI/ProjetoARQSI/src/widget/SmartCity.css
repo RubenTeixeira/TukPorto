@@ -1,6 +1,6 @@
 ﻿#smartCity div {
     overflow: initial;
-    
+
 }
 
 #smartCity {
@@ -10,8 +10,8 @@
     width: auto;
     padding: unset;
     display: block;
-    /*min-height: 450px;
-    max-height: 600px;*/
+    /*min-height: 450px;*/
+    max-height: 100vh;
     height: 100%;
     min-width: 220px;
 }
@@ -38,9 +38,9 @@
     box-shadow: -5px 0px 3px grey;
 }
 
-    .sidebarrightside div {
-        border: none;
-    }
+.sidebarrightside div {
+	border: none;
+}
 
 .sidebarmenu {
     margin: 0;
@@ -53,34 +53,34 @@
     display: block;
 }
 
-    .sidebarmenulink a {
-        background-color: #ffffff;
-        display: inline-block;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-        transition: 0.5s;
-        font: 0.7em arial, sans-serif;
-        writing-mode: vertical-lr;
-        -ms-writing-mode: bt-lr; /* IE */
-        transform: rotate(-180deg);
-        padding: 16px 8px;
-        border-top: 1px solid black;
-        border-right: 1px solid black;
-        border-bottom-right-radius: 15px;
-        border-top-right-radius: 15px;
-        box-shadow: 2px -5px 3px grey;
-    }
+.sidebarmenulink a {
+	background-color: #ffffff;
+	display: inline-block;
+	color: black;
+	text-align: center;
+	text-decoration: none;
+	transition: 0.5s;
+	font: 0.7em arial, sans-serif;
+	writing-mode: vertical-lr;
+	-ms-writing-mode: bt-lr; /* IE */
+	transform: rotate(-180deg);
+	padding: 16px 8px;
+	border-top: 1px solid black;
+	border-right: 1px solid black;
+	border-bottom-right-radius: 15px;
+	border-top-right-radius: 15px;
+	box-shadow: 2px -5px 3px grey;
+}
 
-        .sidebarmenulink a.active {
-            background-color: #82c0d7;
-            color: white;
-        }
+.sidebarmenulink a.active {
+	background-color: #82c0d7;
+	color: white;
+}
 
-        .sidebarmenulink a:hover:not(.active) {
-            background-color: #e1e0e0;
-            color: black;
-        }
+.sidebarmenulink a:hover:not(.active) {
+	background-color: #e1e0e0;
+	color: black;
+}
 
 
 /* Style the tab content */
@@ -128,73 +128,73 @@
     width: 160px;
 }
 
-    .buttonfacets, .buttonresults span {
-    }
+.buttonfacets, .buttonresults span {
+}
 
-        .buttonfacets span {
-            cursor: pointer;
-            display: inline-block;
-            position: relative;
-            transition: 0.5s;
-        }
+.buttonfacets span {
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	transition: 0.5s;
+}
 
-            .buttonfacets span:after {
-                content: '\f139';
-                transform: none;
-                font-family: FontAwesome;
-                font-weight: 400;
-                font-style: normal;
-                position: absolute;
-                opacity: 0.0;
-                top: 0;
-                right: -10px;
-                transition: 0.5s;
-                display: inline-block;
-            }
+.buttonfacets span:after {
+	content: '\f139';
+	transform: none;
+	font-family: FontAwesome;
+	font-weight: 400;
+	font-style: normal;
+	position: absolute;
+	opacity: 0.0;
+	top: 0;
+	right: -10px;
+	transition: 0.5s;
+	display: inline-block;
+}
 
-            .buttonfacets span.active:after {
-                -webkit-transform: rotate(180deg);
-                -moz-transform: rotate(180deg);
-                -ms-transform: rotate(180deg);
-                -o-transform: rotate(180deg);
-                transform: rotate(180deg);
-            }
+.buttonfacets span.active:after {
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
 
 
-        .buttonfacets:hover span {
-            padding-right: 20px;
-        }
+.buttonfacets:hover span {
+	padding-right: 20px;
+}
 
-            .buttonfacets:hover span:after {
-                opacity: 1;
-                right: 0;
-            }
+.buttonfacets:hover span:after {
+	opacity: 1;
+	right: 0;
+}
 
-    .buttonresults span {
-        cursor: pointer;
-        display: inline-block;
-        position: relative;
-        transition: 0.5s;
-    }
+.buttonresults span {
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	transition: 0.5s;
+}
 
-        .buttonresults span:after {
-            content: '👁';
-            font-weight: 500;
-            position: absolute;
-            opacity: 0;
-            top: 0;
-            right: -10px;
-            transition: 0.5s;
-        }
+.buttonresults span:after {
+	content: '👁';
+	font-weight: 500;
+	position: absolute;
+	opacity: 0;
+	top: 0;
+	right: -10px;
+	transition: 0.5s;
+}
 
-    .buttonresults:hover span {
-        padding-right: 20px;
-    }
+.buttonresults:hover span {
+	padding-right: 20px;
+}
 
-        .buttonresults:hover span:after {
-            opacity: 1;
-            right: 0;
-        }
+.buttonresults:hover span:after {
+	opacity: 1;
+	right: 0;
+}
 
 .searchbutton {
     font-family: Arial;
@@ -250,18 +250,18 @@ tr:hover {
     height: 20px;
 }
 
-    .ui-slider-horizontal .ui-slider-handle {
-        height: 16px;
-        width: 10px;
-        margin-left: -6px;
-        cursor: default;
-        position: absolute;
-        top: 1px;
-        z-index: 2;
-    }
+.ui-slider-horizontal .ui-slider-handle {
+	height: 16px;
+	width: 10px;
+	margin-left: -6px;
+	cursor: default;
+	position: absolute;
+	top: 1px;
+	z-index: 2;
+}
 
 .resultsdivision {
-    height: 100%;
+    /*height: 100%;*/
 }
 
 div#resultsTable {
