@@ -110,7 +110,7 @@ function createTabs(xmlDoc) {
 		a.className = "link";
 		a.setAttribute("onclick", "showFacetsFromSensor(event, \"" + sensorName + "\")");
 		var li = document.createElement("li");
-		li.className = "sidebarmenulink";
+//		li.className = "sidebarmenulink";
 		li.appendChild(a);
 		ul.appendChild(li);
 		div.appendChild(ul);
@@ -156,7 +156,8 @@ function showFacetsFromSensor(evt, sensorName) {
 
 function showFacetsMenu() {
 	var facetsmenu = document.getElementById("facetsmenuid");
-	resetFacetButtonArrow();
+	var span = $("#facetsbutton > span")[0];
+	resetButtonArrow(span);
 	var btnDiv = document.getElementById("searchBtnDiv");
 	showDiv(btnDiv);
 	showDiv(facetsmenu);
@@ -164,24 +165,11 @@ function showFacetsMenu() {
 
 function toggleFacetsMenu() {
 	var facetsmenu = document.getElementById("facetsmenuid");
-	rotateFacetButtonArrow();
+	var span = $("#facetsbutton > span")[0];
+	rotateButtonArrow(span);
 	var btnDiv = document.getElementById("searchBtnDiv");
 	toggleVisibility(btnDiv);
 	toggleVisibility(facetsmenu);
-}
-
-function rotateFacetButtonArrow() {
-	var span = $("#facetsbutton > span")[0];
-	if (span.className.indexOf("active") !== -1)
-		span.className = span.className.replace(" active", "");
-	else
-		span.className += " active";
-}
-
-function resetFacetButtonArrow() {
-	var span = $("#facetsbutton > span")[0];
-	if (span.className.indexOf("active") !== -1)
-		span.className = span.className.replace(" active", "");
 }
 
 function createFacets(facetsXML, sensorName) {
@@ -328,16 +316,16 @@ function createReadNumericType(facetObj, facetDiv) {
 	mainDiv.className = "facetoptions";
 	mainDiv.style.border = 'none';
 	mainDiv.style.display = "block";
-	mainDiv.style.overflow = "hidden";
 	var p = document.createElement("p");
 	var label = document.createElement("label");
 	label.htmlFor = "interval";
 	var text = document.createTextNode("Intervalo: ");
 	label.appendChild(text);
+	label.style.color = 'darkgray';
 	var input = document.createElement("input");
 	input.type = "text";
 	input.readOnly = true;
-	input.style = "border:0;width:60%;";
+	input.style = "border:0;width:60%;font:inherit";
 	p.appendChild(label);
 	p.appendChild(input);
 	mainDiv.appendChild(p);
@@ -644,8 +632,11 @@ function clearResults() {
 	var maindiv = document.getElementById("results");
 	if (maindiv.childNodes[1] != null) {
 		maindiv.removeChild(maindiv.childNodes[1]);
+		maindiv.style.display = "none";
+		var span = $("#resultsbutton > span")[0];
+		resetButtonArrow(span);
+		$("#resultsbutton").css('margin-right', '0px');
 	}
-	maindiv.style.display = "none";
 }
 
 
@@ -663,6 +654,14 @@ function findSensorByName(sensorName) {
 
 function toggleResults() {
 	var resultsDiv = document.getElementById("resultsTable");
-	if (resultsDiv)
+	if (resultsDiv) {
+		var span = $("#resultsbutton > span")[0];
+		rotateButtonArrow(span);
 		toggleVisibility(resultsDiv);
+		var margin = $("#resultsbutton").css('margin-right');
+		if (margin === '0px')
+			$("#resultsbutton").css('margin-right', '-17px');
+		else
+			$("#resultsbutton").css('margin-right', '0px');
+	}
 }
