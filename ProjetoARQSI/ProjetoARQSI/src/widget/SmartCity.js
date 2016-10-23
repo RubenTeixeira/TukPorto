@@ -106,7 +106,7 @@ function createTabs(xmlDoc) {
 		var a = document.createElement("a");
 		a.appendChild(sensorNameNode);
 		a.id = i;
-		a.href = "#";
+		a.href = "#/";
 		a.className = "link";
 		a.setAttribute("onclick", "showFacetsFromSensor(event, \"" + sensorName + "\")");
 		var li = document.createElement("li");
