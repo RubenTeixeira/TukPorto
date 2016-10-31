@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoARQSI", "ProjetoARQSI\ProjetoARQSI.csproj", "{777497E7-9F32-4A66-91B7-34107EF6C49C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Widget", "ProjetoARQSI\Widget.csproj", "{777497E7-9F32-4A66-91B7-34107EF6C49C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryARQSI", "ClassLibraryARQSI\ClassLibraryARQSI.csproj", "{973E637F-173B-41A8-A4CB-56EC3C63CFC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lugares", "Lugares\Lugares.csproj", "{C143C103-780B-4270-B285-53098B3DE750}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{777497E7-9F32-4A66-91B7-34107EF6C49C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{777497E7-9F32-4A66-91B7-34107EF6C49C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{777497E7-9F32-4A66-91B7-34107EF6C49C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{973E637F-173B-41A8-A4CB-56EC3C63CFC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{973E637F-173B-41A8-A4CB-56EC3C63CFC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{973E637F-173B-41A8-A4CB-56EC3C63CFC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{973E637F-173B-41A8-A4CB-56EC3C63CFC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C143C103-780B-4270-B285-53098B3DE750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C143C103-780B-4270-B285-53098B3DE750}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C143C103-780B-4270-B285-53098B3DE750}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C143C103-780B-4270-B285-53098B3DE750}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
