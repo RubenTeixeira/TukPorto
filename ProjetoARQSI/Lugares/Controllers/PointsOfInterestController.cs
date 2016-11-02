@@ -50,11 +50,12 @@ namespace Lugares.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Nome,Descricao")] PointOfInterest pointOfInterest, FormCollection form)
         {
-            int selectedLocalID = Int32.Parse(form["Local"]);
-            pointOfInterest.LocalID = selectedLocalID;
 
             if (ModelState.IsValid)
             {
+                int selectedLocalID = Int32.Parse(form["Local"]);
+                pointOfInterest.LocalID = selectedLocalID;
+
                 db.PointsOfInterest.Add(pointOfInterest);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
