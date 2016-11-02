@@ -1,4 +1,5 @@
-﻿@model ClassLibraryARQSI.PointOfInterest
+﻿@using Datum.Models
+@model Datum.Models.PointOfInterest
 
 @{
     ViewBag.Title = "Edit";
@@ -10,7 +11,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>PointOfInterest</h4>
         <hr />
@@ -20,8 +21,12 @@
         <div class="form-group">
             @Html.LabelFor(model => model.LocalID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.LocalID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LocalID, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.LocalID, ((IEnumerable<Local>)ViewBag.LocalList).Select(Option => new SelectListItem
+           {
+               Value = Option.LocalID.ToString(),
+               Text = Option.Nome,
+               Selected = (Model != null) && (Option.LocalID == Model.LocalID)
+           }), new { @class = "form-control" })
             </div>
         </div>
 

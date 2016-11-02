@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Widget", "ProjetoARQSI\Widget.csproj", "{777497E7-9F32-4A66-91B7-34107EF6C49C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryARQSI", "ClassLibraryARQSI\ClassLibraryARQSI.csproj", "{973E637F-173B-41A8-A4CB-56EC3C63CFC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datum", "ClassLibraryARQSI\Datum.csproj", "{973E637F-173B-41A8-A4CB-56EC3C63CFC6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lugares", "Lugares\Lugares.csproj", "{C143C103-780B-4270-B285-53098B3DE750}"
 EndProject

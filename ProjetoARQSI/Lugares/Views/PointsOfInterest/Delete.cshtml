@@ -1,4 +1,4 @@
-﻿@model ClassLibraryARQSI.PointOfInterest
+﻿@model Datum.Models.PointOfInterest
 
 @{
     ViewBag.Title = "Delete";
@@ -12,11 +12,11 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.LocalID)
+            @Html.DisplayNameFor(model => model.Local)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LocalID)
+            @Html.DisplayFor(model => model.Local.Nome)
         </dd>
 
         <dt>

@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Datum.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using ClassLibraryARQSI;
 
-namespace Lugares.DAL
+
+namespace Datum.DAL
 {
-    public class LugaresInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<LugaresContext>
+    public class DatumInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<DatumContext>
     {
-        protected override void Seed(LugaresContext context)
+        protected override void Seed(DatumContext context)
         {
             var locais = new List<Local>
             {

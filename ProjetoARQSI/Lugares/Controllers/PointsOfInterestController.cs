@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using ClassLibraryARQSI;
-using Lugares.DAL;
+using Datum.DAL;
+using Datum.Models;
+using System;
 
 namespace Lugares.Controllers
 {
     public class PointsOfInterestController : Controller
     {
-        private LugaresContext db = new LugaresContext();
+        private DatumContext db = new DatumContext();
 
         // GET: PointsOfInterest
         public async Task<ActionResult> Index()
@@ -38,8 +34,12 @@ namespace Lugares.Controllers
         }
 
         // GET: PointsOfInterest/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            var locals = await db.Locals.ToListAsync();
+
+            ViewBag.Locals = locals;
+
             return View();
         }
 
@@ -48,8 +48,11 @@ namespace Lugares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "PointOfInterestID,LocalID,Nome,Descricao")] PointOfInterest pointOfInterest)
+        public async Task<ActionResult> Create([Bind(Include = "Nome,Descricao")] PointOfInterest pointOfInterest, FormCollection form)
         {
+            int selectedLocalID = Int32.Parse(form["Local"]);
+            pointOfInterest.LocalID = selectedLocalID;
+
             if (ModelState.IsValid)
             {
                 db.PointsOfInterest.Add(pointOfInterest);
@@ -72,6 +75,11 @@ namespace Lugares.Controllers
             {
                 return HttpNotFound();
             }
+
+            var locals = await db.Locals.ToListAsync();
+
+            ViewBag.LocalList = locals;
+
             return View(pointOfInterest);
         }
 

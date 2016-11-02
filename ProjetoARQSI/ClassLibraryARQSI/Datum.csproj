@@ -7,8 +7,8 @@
     <ProjectGuid>{973E637F-173B-41A8-A4CB-56EC3C63CFC6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClassLibraryARQSI</RootNamespace>
-    <AssemblyName>ClassLibraryARQSI</AssemblyName>
+    <RootNamespace>Datum</RootNamespace>
+    <AssemblyName>Datum</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -49,9 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Local.cs" />
-    <Compile Include="Metereologia.cs" />
-    <Compile Include="PointOfInterest.cs" />
+    <Compile Include="DAL\DatumContext.cs" />
+    <Compile Include="DAL\DatumInitializer.cs" />
+    <Compile Include="Models\Local.cs" />
+    <Compile Include="Models\Metereologia.cs" />
+    <Compile Include="Models\PointOfInterest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

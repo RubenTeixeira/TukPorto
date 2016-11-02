@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using ClassLibraryARQSI;
-using Lugares.DAL;
+using Datum.Models;
+using Datum.DAL;
 
 namespace Lugares.Controllers
 {
     public class LocalsController : Controller
     {
-        private LugaresContext db = new LugaresContext();
+        private DatumContext db = new DatumContext();
 
         // GET: Locals
         public async Task<ActionResult> Index()

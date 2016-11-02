@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassLibraryARQSI
+namespace Datum.Models
 {
     public class Local
     {

@@ -6,16 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassLibraryARQSI
+namespace Datum.Models
 {
     public class PointOfInterest
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PointOfInterestID { get; set; }
+        [ForeignKey("Local")]
         public int LocalID { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
-        
+
+
+        public virtual Local Local { get; set; }
     }
 }

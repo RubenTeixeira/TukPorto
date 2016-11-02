@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using ClassLibraryARQSI;
+﻿using Datum.Models;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
-namespace Lugares.DAL
+namespace Datum.DAL
 {
-    public class LugaresContext : DbContext
+    public class DatumContext : DbContext
     {
 
-        public LugaresContext() : base("POIContext")
+        public DatumContext() : base("POIContext")
         {
         }
 

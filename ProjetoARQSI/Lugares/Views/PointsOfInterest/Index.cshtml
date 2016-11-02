@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ClassLibraryARQSI.PointOfInterest>
+﻿@model IEnumerable<Datum.Models.PointOfInterest>
 
 @{
     ViewBag.Title = "Index";
@@ -12,7 +12,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.LocalID)
+            @Html.DisplayNameFor(model => model.Local)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Nome)
@@ -26,7 +26,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.LocalID)
+            @Html.DisplayFor(modelItem => item.Local.Nome)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Nome)
