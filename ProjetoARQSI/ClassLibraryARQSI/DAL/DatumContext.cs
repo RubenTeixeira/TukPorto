@@ -7,8 +7,9 @@ namespace Datum.DAL
     public class DatumContext : DbContext
     {
 
-        public DatumContext() : base("POIContext")
+        public DatumContext() : base("DatumContext")
         {
+            base.Configuration.ProxyCreationEnabled = false;
         }
 
         public DbSet<PointOfInterest> PointsOfInterest { get; set; }
@@ -18,5 +19,7 @@ namespace Datum.DAL
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
+
+        public System.Data.Entity.DbSet<Datum.Models.Metereologia> Metereologias { get; set; }
     }
 }

@@ -7,7 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Widget", "ProjetoARQSI\Widg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datum", "ClassLibraryARQSI\Datum.csproj", "{973E637F-173B-41A8-A4CB-56EC3C63CFC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lugares", "Lugares\Lugares.csproj", "{C143C103-780B-4270-B285-53098B3DE750}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lugares_Cancela", "Lugares\Lugares_Cancela.csproj", "{C143C103-780B-4270-B285-53098B3DE750}"
+	ProjectSection(ProjectDependencies) = postProject
+		{973E637F-173B-41A8-A4CB-56EC3C63CFC6} = {973E637F-173B-41A8-A4CB-56EC3C63CFC6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

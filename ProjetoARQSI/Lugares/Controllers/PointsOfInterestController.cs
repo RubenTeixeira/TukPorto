@@ -48,13 +48,13 @@ namespace Lugares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Nome,Descricao")] PointOfInterest pointOfInterest, FormCollection form)
+        public async Task<ActionResult> Create([Bind(Include = "LocalID,Nome,Descricao")] PointOfInterest pointOfInterest, FormCollection form)
         {
 
             if (ModelState.IsValid)
             {
-                int selectedLocalID = Int32.Parse(form["Local"]);
-                pointOfInterest.LocalID = selectedLocalID;
+                //int selectedLocalID = Int32.Parse(form["Local"]);
+                //pointOfInterest.LocalID = selectedLocalID;
 
                 db.PointsOfInterest.Add(pointOfInterest);
                 await db.SaveChangesAsync();
