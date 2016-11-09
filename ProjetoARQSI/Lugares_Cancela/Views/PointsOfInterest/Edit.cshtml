@@ -2,10 +2,10 @@
 @model Datum.Models.PointOfInterest
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
 }
 
-<h2>Create</h2>
+<h2>Edit</h2>
 
 
 @using (Html.BeginForm())
@@ -15,15 +15,18 @@
     <div class="form-horizontal">
         <h4>PointOfInterest</h4>
         <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.PointOfInterestID)
+
         <div class="form-group">
-            @Html.LabelFor(model => model.local, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.LocalID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.LocalID, ((IEnumerable<Local>)ViewBag.Locals).Select(Option => new SelectListItem
+                @Html.DropDownListFor(model => model.LocalID, ((IEnumerable<Local>)ViewBag.LocalList).Select(Option => new SelectListItem
            {
                Value = Option.LocalID.ToString(),
                Text = Option.Nome,
-           }), "Pick a Local...", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.LocalID, "", new { @class = "text-danger" })
+               Selected = (Model != null) && (Option.LocalID == Model.LocalID)
+           }), new { @class = "form-control" })
             </div>
         </div>
 
@@ -45,7 +48,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>
