@@ -7,7 +7,11 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Search by Date and Time", "SearchDateTime") |
+    @Html.ActionLink("Search By Point of Interest", "SearchPOI") 
+</p>
+<p>
+    
 </p>
 <table class="table">
     <tr>
@@ -71,9 +75,9 @@
             @Html.DisplayFor(modelItem => item.CO2)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MetereologiaID }) |
+           
             @Html.ActionLink("Details", "Details", new { id=item.MetereologiaID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MetereologiaID })
+          
         </td>
     </tr>
 }
