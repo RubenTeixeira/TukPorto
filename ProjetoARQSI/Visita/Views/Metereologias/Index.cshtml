@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Datum.Models.Metereologia>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Local.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DataHoraLeitura)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Temp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Vento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Humidade)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Pressao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NO)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NO2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CO2)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Local.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataHoraLeitura)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Temp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Vento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Humidade)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Pressao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NO)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NO2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CO2)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.MetereologiaID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.MetereologiaID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.MetereologiaID })
+        </td>
+    </tr>
+}
+
+</table>
