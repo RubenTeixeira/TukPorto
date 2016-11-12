@@ -37,7 +37,41 @@ namespace Cancela.Controllers
             return Ok(meteorologia);
         }
 
+<<<<<<< HEAD:ProjetoARQSI/Cancela/Controllers/MeteorologiasController.cs
         // PUT: api/Meteorologias/5
+=======
+        // GET: api/Metereologias/date/2000-12-16T00:00:00
+        // [Route("date/{DataHoraLeitura:datetime}")]
+        [ResponseType(typeof(Metereologia))]
+        public async Task<IHttpActionResult> GetMetereologiaByDataHoraLeitura(DateTime datetime)
+        {
+            var meteos = await db.Metereologias.Where(x => x.DataHoraLeitura == datetime).ToListAsync();
+            if (meteos == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(meteos);
+        }
+
+        // GET: api/Metereologias/poi/5
+        // [Route("poi/")]
+        [ResponseType(typeof(Metereologia))]
+        public async Task<IHttpActionResult> GetMetereologiaByPoi(int poiID)
+        {
+            var meteos = await db.Metereologias.Where(x => x.LocalID == poiID).ToListAsync();
+            if (meteos == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(meteos);
+        }
+
+
+
+        // PUT: api/Metereologias/5
+>>>>>>> 29b548cf078e8596a079594ba345d5bdb54bb085:ProjetoARQSI/Cancela/Controllers/MetereologiasController.cs
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutMeteorologia(int id, Meteorologia meteorologia)
         {
