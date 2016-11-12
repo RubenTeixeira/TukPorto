@@ -11,7 +11,7 @@ namespace Datum.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(Datum.DAL.DatumContext context)
@@ -28,14 +28,22 @@ namespace Datum.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            var locais = new List<Local>
-            {
-                new Local {Nome="Porto",GPS_Lat=41.1628634M,GPS_Long=-8.6568726M},
-                new Local {Nome="Lisboa",GPS_Lat=38.7436056M,GPS_Long=-9.2302442M}
-            };
 
-            locais.ForEach(s => context.Locals.AddOrUpdate(s));
+            context.Locals.AddOrUpdate(l => l.Nome,   // Nome nao pode ser repetido
+                    new Local { Nome = "Porto", GPS_Lat = 41.1628634M, GPS_Long = -8.6568726M },
+                    new Local { Nome = "Lisboa", GPS_Lat = 38.7436056M, GPS_Long = -9.2302442M },
+                    new Local { Nome = "Amarante", GPS_Lat= 41.2693098M , GPS_Long= -8.0975483M }
+                );
+
+
+            context.PointsOfInterest.AddOrUpdate(p => p.Nome,
+                new PointOfInterest { LocalID = 1, Nome = "ISEP", Descricao = "Campus ISEP" },
+                new PointOfInterest { LocalID = 2, Nome = "Marquês de Pombal", Descricao = "Estação de Metropolitano"},
+                new PointOfInterest { LocalID = 3, Nome = "Igreja de S. Gonçalo", Descricao = "Igreja de S. Gonçalo de Amarante"}
+                );
+
             context.SaveChanges();
+
         }
     }
 }

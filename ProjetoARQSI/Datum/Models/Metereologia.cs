@@ -13,8 +13,10 @@ namespace Datum.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MetereologiaID { get; set; }
-        [ForeignKey("Local")]
+
         public int LocalID { get; set; }
+        public Local Local { get; set; }
+
         public DateTime DataHoraLeitura { get; set; }
         public double Temp { get; set; }
         public double Vento { get; set; }
@@ -25,7 +27,6 @@ namespace Datum.Models
         public double CO2 { get; set; }
 
 
-        public virtual Local Local { get; set; }
 
     }
 }

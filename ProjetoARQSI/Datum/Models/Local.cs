@@ -15,6 +15,10 @@ namespace Datum.Models
         public int LocalID { get; set; }
         public decimal GPS_Lat { get; set; }
         public decimal GPS_Long { get; set; }
+        
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(450)]
+        [Index(IsUnique = true)]
         public string Nome { get; set; }
     }
 }

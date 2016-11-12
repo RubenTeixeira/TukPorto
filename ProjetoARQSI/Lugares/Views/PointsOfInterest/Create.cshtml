@@ -16,7 +16,7 @@
         <h4>PointOfInterest</h4>
         <hr />
         <div class="form-group">
-            @Html.LabelFor(model => model.local, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Local, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.LocalID, ((IEnumerable<Local>)ViewBag.Locals).Select(Option => new SelectListItem
            {

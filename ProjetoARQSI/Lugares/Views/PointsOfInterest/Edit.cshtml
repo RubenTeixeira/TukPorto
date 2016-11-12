@@ -19,7 +19,7 @@
         @Html.HiddenFor(model => model.PointOfInterestID)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.LocalID, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Local, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.LocalID, ((IEnumerable<Local>)ViewBag.LocalList).Select(Option => new SelectListItem
            {

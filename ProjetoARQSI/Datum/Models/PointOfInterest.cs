@@ -13,12 +13,16 @@ namespace Datum.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PointOfInterestID { get; set; }
-        
+
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(450)]
+        [Index(IsUnique = true)]
         public string Nome { get; set; }
+
         public string Descricao { get; set; }
 
         
         public int LocalID { get; set; }
-        public Local Local { get; set; }
+        public virtual Local Local { get; set; }
     }
 }
