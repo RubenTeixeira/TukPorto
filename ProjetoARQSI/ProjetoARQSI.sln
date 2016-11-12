@@ -13,11 +13,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datum", "Datum\Datum.csproj", "{1F2A9B75-122D-4F78-AF13-6D4305880E58}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cancela", "Cancela\Cancela.csproj", "{9C76A64C-2B9B-43EE-9FBC-448BA7531693}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B9321344-6B3F-4AB6-BE7F-81815E440ADA} = {B9321344-6B3F-4AB6-BE7F-81815E440ADA}
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visita", "Visita\Visita.csproj", "{9D6BFDB3-8A83-4476-9639-FEEED51A470A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visita", "Visita\Visita.csproj", "{72E0093E-2F94-4B6A-AE7D-7C0126E2325B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +38,10 @@ Global
 		{9C76A64C-2B9B-43EE-9FBC-448BA7531693}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C76A64C-2B9B-43EE-9FBC-448BA7531693}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C76A64C-2B9B-43EE-9FBC-448BA7531693}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D6BFDB3-8A83-4476-9639-FEEED51A470A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D6BFDB3-8A83-4476-9639-FEEED51A470A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D6BFDB3-8A83-4476-9639-FEEED51A470A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D6BFDB3-8A83-4476-9639-FEEED51A470A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E0093E-2F94-4B6A-AE7D-7C0126E2325B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E0093E-2F94-4B6A-AE7D-7C0126E2325B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E0093E-2F94-4B6A-AE7D-7C0126E2325B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E0093E-2F94-4B6A-AE7D-7C0126E2325B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Datum.Models.Metereologia>
+﻿@model IEnumerable<Datum.Models.Meteorologia>
 
 @{
     ViewBag.Title = "Index";
@@ -7,16 +7,12 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Search by Date and Time", "SearchDateTime") |
-    @Html.ActionLink("Search By Point of Interest", "SearchPOI") 
-</p>
-<p>
-    
+    @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Local.Nome)
+            @Html.DisplayNameFor(model => model.Local)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.DataHoraLeitura)
@@ -75,9 +71,9 @@
             @Html.DisplayFor(modelItem => item.CO2)
         </td>
         <td>
-           
-            @Html.ActionLink("Details", "Details", new { id=item.MetereologiaID }) |
-          
+            @*@Html.ActionLink("Edit", "Edit", new { id=item.MetereologiaID }) |*@
+            @Html.ActionLink("Details", "Details", new { id=item.MetereologiaID }) @*|*@
+            @*@Html.ActionLink("Delete", "Delete", new { id=item.MetereologiaID })*@
         </td>
     </tr>
 }

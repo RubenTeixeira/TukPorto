@@ -14,44 +14,44 @@ using Datum.Models;
 
 namespace Cancela.Controllers
 {
-    public class MetereologiasController : ApiController
+    public class MeteorologiasController : ApiController
     {
         private DatumContext db = new DatumContext();
 
-        // GET: api/Metereologias
-        public IQueryable<Metereologia> GetMetereologias()
+        // GET: api/Meteorologias
+        public IQueryable<Meteorologia> GetMetereologias()
         {
-            return db.Metereologias;
+            return db.Metereologias.Include(m => m.Local);
         }
 
-        // GET: api/Metereologias/5
-        [ResponseType(typeof(Metereologia))]
-        public async Task<IHttpActionResult> GetMetereologia(int id)
+        // GET: api/Meteorologias/5
+        [ResponseType(typeof(Meteorologia))]
+        public async Task<IHttpActionResult> GetMeteorologia(int id)
         {
-            Metereologia metereologia = await db.Metereologias.FindAsync(id);
-            if (metereologia == null)
+            Meteorologia meteorologia = await db.Metereologias.Include("Local").SingleOrDefaultAsync(m => m.MetereologiaID == id);
+            if (meteorologia == null)
             {
                 return NotFound();
             }
 
-            return Ok(metereologia);
+            return Ok(meteorologia);
         }
 
-        // PUT: api/Metereologias/5
+        // PUT: api/Meteorologias/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutMetereologia(int id, Metereologia metereologia)
+        public async Task<IHttpActionResult> PutMeteorologia(int id, Meteorologia meteorologia)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != metereologia.MetereologiaID)
+            if (id != meteorologia.MetereologiaID)
             {
                 return BadRequest();
             }
 
-            db.Entry(metereologia).State = EntityState.Modified;
+            db.Entry(meteorologia).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace Cancela.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MetereologiaExists(id))
+                if (!MeteorologiaExists(id))
                 {
                     return NotFound();
                 }
@@ -72,35 +72,35 @@ namespace Cancela.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Metereologias
-        [ResponseType(typeof(Metereologia))]
-        public async Task<IHttpActionResult> PostMetereologia(Metereologia metereologia)
+        // POST: api/Meteorologias
+        [ResponseType(typeof(Meteorologia))]
+        public async Task<IHttpActionResult> PostMeteorologia(Meteorologia meteorologia)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Metereologias.Add(metereologia);
+            db.Metereologias.Add(meteorologia);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = metereologia.MetereologiaID }, metereologia);
+            return CreatedAtRoute("DefaultApi", new { id = meteorologia.MetereologiaID }, meteorologia);
         }
 
-        // DELETE: api/Metereologias/5
-        [ResponseType(typeof(Metereologia))]
-        public async Task<IHttpActionResult> DeleteMetereologia(int id)
+        // DELETE: api/Meteorologias/5
+        [ResponseType(typeof(Meteorologia))]
+        public async Task<IHttpActionResult> DeleteMeteorologia(int id)
         {
-            Metereologia metereologia = await db.Metereologias.FindAsync(id);
-            if (metereologia == null)
+            Meteorologia meteorologia = await db.Metereologias.Include("Local").SingleOrDefaultAsync(m => m.MetereologiaID == id);
+            if (meteorologia == null)
             {
                 return NotFound();
             }
 
-            db.Metereologias.Remove(metereologia);
+            db.Metereologias.Remove(meteorologia);
             await db.SaveChangesAsync();
 
-            return Ok(metereologia);
+            return Ok(meteorologia);
         }
 
         protected override void Dispose(bool disposing)
@@ -112,7 +112,7 @@ namespace Cancela.Controllers
             base.Dispose(disposing);
         }
 
-        private bool MetereologiaExists(int id)
+        private bool MeteorologiaExists(int id)
         {
             return db.Metereologias.Count(e => e.MetereologiaID == id) > 0;
         }

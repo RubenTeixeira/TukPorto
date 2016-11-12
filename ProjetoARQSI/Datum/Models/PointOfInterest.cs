@@ -23,6 +23,6 @@ namespace Datum.Models
 
         
         public int LocalID { get; set; }
-        public virtual Local Local { get; set; }
+        public Local Local { get; set; }
     }
 }

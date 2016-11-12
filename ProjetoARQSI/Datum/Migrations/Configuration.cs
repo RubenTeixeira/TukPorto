@@ -42,6 +42,10 @@ namespace Datum.Migrations
                 new PointOfInterest { LocalID = 3, Nome = "Igreja de S. Gonçalo", Descricao = "Igreja de S. Gonçalo de Amarante"}
                 );
 
+            context.Metereologias.AddOrUpdate(m => new {m.LocalID, m.DataHoraLeitura},
+                new Meteorologia { LocalID = 3, DataHoraLeitura = new DateTime(2016,11,12), CO2=0.04, Humidade=90, NO=0.05, NO2=0.15, Pressao=1024, Temp=16.00, Vento=11 }
+                );
+
             context.SaveChanges();
 
         }

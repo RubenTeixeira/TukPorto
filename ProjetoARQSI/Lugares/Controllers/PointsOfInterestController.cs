@@ -15,7 +15,7 @@ namespace Lugares.Controllers
         // GET: PointsOfInterest
         public async Task<ActionResult> Index()
         {
-            return View(await db.PointsOfInterest.ToListAsync());
+            return View(await db.PointsOfInterest.Include(p => p.Local).ToListAsync());
         }
 
         // GET: PointsOfInterest/Details/5
@@ -25,7 +25,7 @@ namespace Lugares.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfInterest pointOfInterest = await db.PointsOfInterest.FindAsync(id);
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include("Local").SingleOrDefaultAsync(p => p.PointOfInterestID == id);
             if (pointOfInterest == null)
             {
                 return HttpNotFound();
@@ -107,7 +107,7 @@ namespace Lugares.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfInterest pointOfInterest = await db.PointsOfInterest.FindAsync(id);
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include("Local").SingleOrDefaultAsync(p => p.PointOfInterestID == id);
             if (pointOfInterest == null)
             {
                 return HttpNotFound();

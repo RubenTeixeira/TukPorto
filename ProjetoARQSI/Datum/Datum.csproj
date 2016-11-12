@@ -52,7 +52,7 @@
     <Compile Include="DAL\DatumContext.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Local.cs" />
-    <Compile Include="Models\Metereologia.cs" />
+    <Compile Include="Models\Meteorologia.cs" />
     <Compile Include="Models\PointOfInterest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\WebApiHttpClient.cs" />
