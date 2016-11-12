@@ -51,7 +51,6 @@ namespace Lugares.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
             return View(local);
         }
 
