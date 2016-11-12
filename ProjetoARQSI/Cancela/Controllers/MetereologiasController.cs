@@ -37,6 +37,36 @@ namespace Cancela.Controllers
             return Ok(metereologia);
         }
 
+        // GET: api/Metereologias/date/2000-12-16T00:00:00
+        // [Route("date/{DataHoraLeitura:datetime}")]
+        [ResponseType(typeof(Metereologia))]
+        public async Task<IHttpActionResult> GetMetereologiaByDataHoraLeitura(DateTime datetime)
+        {
+            var meteos = await db.Metereologias.Where(x => x.DataHoraLeitura == datetime).ToListAsync();
+            if (meteos == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(meteos);
+        }
+
+        // GET: api/Metereologias/poi/5
+        // [Route("poi/")]
+        [ResponseType(typeof(Metereologia))]
+        public async Task<IHttpActionResult> GetMetereologiaByPoi(int poiID)
+        {
+            var meteos = await db.Metereologias.Where(x => x.LocalID == poiID).ToListAsync();
+            if (meteos == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(meteos);
+        }
+
+
+
         // PUT: api/Metereologias/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutMetereologia(int id, Metereologia metereologia)

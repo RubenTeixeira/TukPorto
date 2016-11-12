@@ -33,7 +33,8 @@ namespace Visita.Controllers
             else
             {
                 return Content("Ocorreu um erro: " + response.StatusCode);
-            }
+            }
+
         }
 
         //// GET: Metereologias/Details/
@@ -59,6 +60,41 @@ namespace Visita.Controllers
                 return Content("Ocorreu um erro: " + response.StatusCode);
             }
         }
+
+        //SearchByDatetime
+        public async Task<ActionResult> SearchByDateTime(DateTime datetime)
+        {
+            var client = WebApiHttpClient.GetClient();
+            HttpResponseMessage response = await client.GetAsync("api/Metereologias/date/"+datetime);
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                var meteos = JsonConvert.DeserializeObject<IEnumerable<Metereologia>>(content);
+                return View(meteos);
+            }
+            else
+            {
+                return Content("Ocorreu um erro: " + response.StatusCode);
+            }
+        }
+
+        //SearchByDatetime
+        public async Task<ActionResult> SearchByPoi(int poiId)
+        {
+            var client = WebApiHttpClient.GetClient();
+            HttpResponseMessage response = await client.GetAsync("api/Metereologias/poi/" + poiId);
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                var meteos = JsonConvert.DeserializeObject<IEnumerable<Metereologia>>(content);
+                return View(meteos);
+            }
+            else
+            {
+                return Content("Ocorreu um erro: " + response.StatusCode);
+            }
+        }
+
 
 
     }
