@@ -1,7 +1,7 @@
 ﻿/// <reference path="../jquery/jquery-ui.js" />
 /// <reference path="Util.js" />
 
-
+var CANCELA_SENSORS = "http://localhost:4168/api/sensores"
 
 var SENSOR_DESIGNATION = "sensor";
 var FACET_DESIGNATION = "faceta";
@@ -37,6 +37,9 @@ function smartCity() {
         return;
     }
     var leftBar = createDiv("sidebarleftside", "sidebarleftside");
+    var ul = document.createElement("ul");
+    ul.className = "sidebarmenu nav-bar";
+    leftBar.appendChild(ul);
 
     /* Facets */
     var rightbar = createDiv("sidebarrightside", "sidebarrightside");
@@ -73,27 +76,58 @@ function smartCity() {
 
 function listSensors() {
     requestAJAX(sensorsAPI, createTabs, RESPONSE_XML, null);
+    requestAJAX(CANCELA_SENSORS, createTabs, RESPONSE_XML, null);
 }
 
 function createXmlHttpRequestObject() {
     return new XMLHttpRequest();
 }
 
+function requestFacets_Cancela(sensorObj) {
+    var uri = CANCELA_SENSORS + "/" + sensorObj.id;
+    requestAJAX(uri, createFacets, RESPONSE_TEXT, sensorObj.name);
+
+}
+
 function requestFacets(sensorName) {
-    var uri = facets_name_link;
-    uri += sensorName;
+    if (sensorName == "Meteorologia") {
+        var sensorId = findSensorByName(sensorName).id;
+        var uri = CANCELA_SENSORS + "/" + sensorId;
+    } else {
+        var uri = facets_name_link;
+        uri += sensorName;
+    }
     requestAJAX(uri, createFacets, RESPONSE_XML, sensorName);
+}
+
+function createTabs_Cancela(jsonDoc) {
+    var div = document.getElementById("sidebarleftside");
+    var ul = div.childNodes[0];
+    var results = JSON.parse(jsonDoc);
+    //console.log("object: %O", results);
+    var sensor;
+    for (var i = 0; i < results.length; i++) {
+        sensor = results[i];
+        var sensorObj = Sensor(sensor.id, sensor.nome, sensor.descricao);
+        sensorsArray.push(sensorObj);
+        var tab = getNewTab(sensorObj);
+        ul.appendChild(tab);
+        requestFacets_Cancela(sensorObj);
+    }
 }
 
 function createTabs(xmlDoc) {
     var allSensors = xmlDoc.getElementsByTagName("sensor");
+    if (allSensors.length === 0)
+        allSensors = xmlDoc.getElementsByTagName("Sensor");
+    if (allSensors.length === 0)
+        return;
     var div = document.getElementById("sidebarleftside");
-    var ul = document.createElement("ul");
-    ul.className = "sidebarmenu nav-bar";
+    var ul = div.childNodes[0];
     var sensor;
+
     for (i = 0; i < allSensors.length; i++) {
         sensor = allSensors[i];
-
         var sensorID = sensor.id;
         var sensorName = sensor.childNodes[0].childNodes[0].nodeValue;
         var sensorDescription = sensor.childNodes[1].childNodes[0].nodeValue;
@@ -101,25 +135,29 @@ function createTabs(xmlDoc) {
         // Create an object for in-memory storage and later reference
         var sensorObj = Sensor(sensorID, sensorName, sensorDescription);
         sensorsArray.push(sensorObj);
-
-        var sensorNameNode = document.createTextNode(sensorName.replace(/_/g, " "));
-        var a = document.createElement("a");
-        a.appendChild(sensorNameNode);
-        a.id = i;
-        a.href = "#/";
-        a.className = "link";
-        a.setAttribute("onclick", "showFacetsFromSensor(event, \"" + sensorName + "\")");
-        var li = document.createElement("li");
-        //		li.className = "sidebarmenulink";
-        li.appendChild(a);
-        ul.appendChild(li);
-        div.appendChild(ul);
+        var tab = getNewTab(sensorObj);
+        ul.appendChild(tab);
     }
     // Show the first sensor's facets...
     document.getElementsByClassName("link")[0].click();
     return allSensors.length;
 }
 
+function getNewTab(sensor) {
+
+    var sensorNameNode = document.createTextNode(sensor.name.replace(/_/g, " "));
+    var a = document.createElement("a");
+    a.appendChild(sensorNameNode);
+    a.id = sensor.id;
+    a.href = "#/";
+    a.className = "link";
+    a.setAttribute("onclick", "showFacetsFromSensor(event, \"" + sensor.name + "\")");
+    var li = document.createElement("li");
+    //		li.className = "sidebarmenulink";
+    li.appendChild(a);
+    return li;
+
+}
 
 function showFacetsFromSensor(evt, sensorName) {
     var i, tabcontent, tablinks;
@@ -197,6 +235,10 @@ function createFacets(facetsXML, sensorName) {
     }
     maindivison.appendChild(sensorFacetsDiv);
     showDiv(sensorFacetsDiv);
+}
+
+function createFacets_Cancela(facetsJSON, sensorId) {
+    var sensorObj = findSensorById(sensorId);
 }
 
 function showFacetOptions(div, facetObj) {
@@ -644,6 +686,17 @@ function findSensorByName(sensorName) {
     var sensorIdx = -1;
     for (var i = 0; i < sensorsArray.length; i++) {
         if (sensorsArray[i].name === sensorName) {
+            sensorIdx = i;
+            break;
+        }
+    }
+    return sensorsArray[sensorIdx];
+}
+
+function findSensorById(sensorId) {
+    var sensorIdx = -1;
+    for (var i = 0; i < sensorsArray.length; i++) {
+        if (sensorsArray[i].id === sensorId) {
             sensorIdx = i;
             break;
         }
