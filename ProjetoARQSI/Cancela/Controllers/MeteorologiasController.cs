@@ -41,12 +41,9 @@ namespace Cancela.Controllers
         }
 
         // GET: api/Metereologias/date/2000-12-16T00:00:00
-<<<<<<< HEAD
         //[Route("date/{DataHoraLeitura:datetime}")]
-=======
         // [Route("date/{DataHoraLeitura:datetime}")]
         [EnableCors(origins: "*", headers: "*", methods: "*")]
->>>>>>> 347008d340b16e9505700cc53dab919c20fbdcf0
         [ResponseType(typeof(Meteorologia))]
         public async Task<IHttpActionResult> GetMetereologiaByDataHoraLeitura(DateTime datetime)
         {
