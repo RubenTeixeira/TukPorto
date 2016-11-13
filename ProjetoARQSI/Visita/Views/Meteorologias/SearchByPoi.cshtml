@@ -4,7 +4,7 @@
     ViewBag.Title = "SearchByPoi";
 }
 
-<h2>SearchByPoi</h2>
+<h2>Make search by Point of Interest</h2>
 
 <p>
     
@@ -35,7 +35,7 @@
             @Html.DisplayFor(modelItem => item.Descricao)
         </td>
         <td>
-            item.Local.LocalID
+           
             @Html.ActionLink("Choose this One", "ResultsByPoi", new { id=item.Local.LocalID }) 
          
         </td>

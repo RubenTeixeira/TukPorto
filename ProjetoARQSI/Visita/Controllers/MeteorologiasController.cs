@@ -20,10 +20,10 @@ namespace Visita.Controllers
         //private DatumContext db = new DatumContext();
 
         // GET: Meteorologias
-        public async Task<ActionResult> Index(string datetime)
+        public async Task<ActionResult> Index()
         {
-            if (String.IsNullOrEmpty(datetime))
-            {
+           
+            
                 var client = WebApiHttpClient.GetClient();
                 HttpResponseMessage response = await client.GetAsync("api/Meteorologias");
                 if (response.IsSuccessStatusCode)
@@ -36,22 +36,8 @@ namespace Visita.Controllers
                 {
                     return Content("Ocorreu um erro: " + response.StatusCode);
                 }
-            }
-            else
-            {
-                var client = WebApiHttpClient.GetClient();
-                HttpResponseMessage response = await client.GetAsync("api/Meteorologias?datetime=" + datetime);
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    var meteos = JsonConvert.DeserializeObject<IEnumerable<Meteorologia>>(content);
-                    return View(meteos);
-                }
-                else
-                {
-                    return Content("Ocorreu um erro: " + response.StatusCode);
-                }
-            }
+           
+            
         }
 
         // GET: Meteorologias/Details/5

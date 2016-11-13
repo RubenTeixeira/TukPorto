@@ -10,21 +10,7 @@
 
     @Html.ActionLink("Search by Date and Time", "SearchByDateTime") |
     @Html.ActionLink("Search By Point of Interest", "SearchByPoi") | 
-    <form action="">
-        Search by DateTime:<br>
-        <input type="datetime" name="datetime" value="2016-11-12"><br>
-        <input type="submit" value="Submit">
-    </form>
-<<<<<<< HEAD
-    <form action="">
-        Search by Poi:<br>
-        <input type="text" name="poi" value="3"><br>
-        <input type="submit" value="Submit">
-    </form>
-</p>
-=======
 
->>>>>>> 99ee68de9aabe023a863061b12f64aae9cc94ea5
 <table class="table">
     <tr>
         <th>
@@ -87,9 +73,9 @@
             @Html.DisplayFor(modelItem => item.CO2)
         </td>
         <td>
-            @*@Html.ActionLink("Edit", "Edit", new { id=item.MetereologiaID }) |*@
-            @Html.ActionLink("Details", "Details", new { id=item.MetereologiaID }) @*|*@
-            @*@Html.ActionLink("Delete", "Delete", new { id=item.MetereologiaID })*@
+          
+            @Html.ActionLink("Details", "Details", new { id=item.MetereologiaID }) 
+        
         </td>
     </tr>
 }
