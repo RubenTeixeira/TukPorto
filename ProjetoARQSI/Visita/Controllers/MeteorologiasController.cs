@@ -125,6 +125,28 @@ namespace Visita.Controllers
             }
         }
 
+        public ActionResult SearchByPeriod()
+        {
+            return View();
+        }
+
+        
+        public async Task<ActionResult> ResultsByPeriod(string date1,string date2)
+        {
+            var client = WebApiHttpClient.GetClient();
+            HttpResponseMessage response = await client.GetAsync("api/Meteorologias?date1="+date1+"&date2="+date2);
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                var meteos = JsonConvert.DeserializeObject<IEnumerable<Meteorologia>>(content);
+                return View(meteos);
+            }
+            else
+            {
+                return Content("Ocorreu um erro: " + response.StatusCode);
+            }
+        }
+
 
 
         //// GET: Meteorologias/Create
