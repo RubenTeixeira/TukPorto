@@ -50,9 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAL\DatumContext.cs" />
-    <Compile Include="Migrations\201611131407156_Initial.cs" />
-    <Compile Include="Migrations\201611131407156_Initial.Designer.cs">
-      <DependentUpon>201611131407156_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201611131958165_add meteos.cs" />
+    <Compile Include="Migrations\201611131958165_add meteos.Designer.cs">
+      <DependentUpon>201611131958165_add meteos.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Local.cs" />
@@ -68,8 +68,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201611131407156_Initial.resx">
-      <DependentUpon>201611131407156_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201611131958165_add meteos.resx">
+      <DependentUpon>201611131958165_add meteos.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
