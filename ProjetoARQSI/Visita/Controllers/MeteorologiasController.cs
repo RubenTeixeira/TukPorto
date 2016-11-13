@@ -80,24 +80,21 @@ namespace Visita.Controllers
 
 
 
-       
 
-        public async Task<ActionResult> SearchByDateTime()
+
+        public ActionResult SearchByDateTime()
         {
-                return View();
+            return View();
         }
 
         //SearchByDatetime
-        public async Task<ActionResult> ResultsByDateTime(string mydatetime)
+        public async Task<ActionResult> ResultsByDateTime(string datetime)
         {
-          
-            DateTime dt = Convert.ToDateTime(mydatetime);
-           
             var client = WebApiHttpClient.GetClient();
-            HttpResponseMessage response = await client.GetAsync("api/Meteorologias?datetime=" + dt);
+            HttpResponseMessage response = await client.GetAsync("api/Meteorologias?datetime=" + datetime);
             if (response.IsSuccessStatusCode)
             {
-                string content = await response.Content.ReadAsStringAsync();
+                string content = await response.Content.ReadAsStringAsync();       
                 var meteos = JsonConvert.DeserializeObject<IEnumerable<Meteorologia>>(content);
                 return View(meteos);
             }
