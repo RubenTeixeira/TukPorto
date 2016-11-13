@@ -20,20 +20,37 @@ namespace Visita.Controllers
         //private DatumContext db = new DatumContext();
 
         // GET: Meteorologias
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string datetime)
         {
-            var client = WebApiHttpClient.GetClient();
-            HttpResponseMessage response = await client.GetAsync("api/Meteorologias");
-            if (response.IsSuccessStatusCode)
+            if (String.IsNullOrEmpty(datetime))
             {
-                string content = await response.Content.ReadAsStringAsync();
-                var editoras =
-                JsonConvert.DeserializeObject<IEnumerable<Meteorologia>>(content);
-                return View(editoras);
+                var client = WebApiHttpClient.GetClient();
+                HttpResponseMessage response = await client.GetAsync("api/Meteorologias");
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    var meteos = JsonConvert.DeserializeObject<IEnumerable<Meteorologia>>(content);
+                    return View(meteos);
+                }
+                else
+                {
+                    return Content("Ocorreu um erro: " + response.StatusCode);
+                }
             }
             else
             {
-                return Content("Ocorreu um erro: " + response.StatusCode);
+                var client = WebApiHttpClient.GetClient();
+                HttpResponseMessage response = await client.GetAsync("api/Meteorologias?datetime=" + datetime);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    var meteos = JsonConvert.DeserializeObject<IEnumerable<Meteorologia>>(content);
+                    return View(meteos);
+                }
+                else
+                {
+                    return Content("Ocorreu um erro: " + response.StatusCode);
+                }
             }
         }
 
@@ -49,9 +66,11 @@ namespace Visita.Controllers
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
-                var editora = JsonConvert.DeserializeObject<Meteorologia>(content);
-                if (editora == null) return HttpNotFound();
-                return View(editora);
+                var meteos = JsonConvert.DeserializeObject<Meteorologia>(content);
+                if (meteos == null)
+                    return HttpNotFound();
+
+                return View(meteos);
             }
             else
             {
@@ -59,11 +78,23 @@ namespace Visita.Controllers
             }
         }
 
-        //SearchByDatetime
-        public async Task<ActionResult> SearchByDateTime(DateTime datetime)
+
+
+       
+
+        public async Task<ActionResult> SearchByDateTime()
         {
+                return View();
+        }
+
+        //SearchByDatetime
+        public async Task<ActionResult> ResultsByDateTime(string mydatetime)
+        {
+          
+            DateTime dt = Convert.ToDateTime(mydatetime);
+            Console.Write(dt);
             var client = WebApiHttpClient.GetClient();
-            HttpResponseMessage response = await client.GetAsync("api/Meteorologias/date/" + datetime);
+            HttpResponseMessage response = await client.GetAsync("api/Meteorologias?datetime=" + dt);
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
