@@ -13,6 +13,7 @@ function requestAJAX(uri, handler, responseType, extraParam, extraParam2) {
     var xmlHttpObj = createXmlHttpRequestObject();
 
     if (xmlHttpObj) {
+        
         xmlHttpObj.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
 
@@ -39,6 +40,10 @@ function requestAJAX(uri, handler, responseType, extraParam, extraParam2) {
             }
         };
         xmlHttpObj.open("GET", uri, true);
+        if (responseType == RESPONSE_XML)
+            xmlHttpObj.setRequestHeader('Accept', 'application/xml');
+        else
+            xmlHttpObj.setRequestHeader('Accept', 'application/json');
         xmlHttpObj.send(null);
 
     }

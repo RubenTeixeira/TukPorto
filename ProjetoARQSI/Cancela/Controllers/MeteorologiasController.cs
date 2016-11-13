@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Datum.DAL;
 using Datum.Models;
+using System.Web.Http.Cors;
 
 namespace Cancela.Controllers
 {
@@ -19,12 +20,14 @@ namespace Cancela.Controllers
         private DatumContext db = new DatumContext();
 
         // GET: api/Meteorologias
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public IQueryable<Meteorologia> GetMetereologias()
         {
             return db.Metereologias.Include(m => m.Local);
         }
 
         // GET: api/Meteorologias/5
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         [ResponseType(typeof(Meteorologia))]
         public async Task<IHttpActionResult> GetMeteorologia(int id)
         {
@@ -39,6 +42,7 @@ namespace Cancela.Controllers
 
         // GET: api/Metereologias/date/2000-12-16T00:00:00
         // [Route("date/{DataHoraLeitura:datetime}")]
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         [ResponseType(typeof(Meteorologia))]
         public async Task<IHttpActionResult> GetMetereologiaByDataHoraLeitura(DateTime datetime)
         {
@@ -53,6 +57,7 @@ namespace Cancela.Controllers
 
         // GET: api/Metereologias/poi/5
         // [Route("poi/")]
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         [ResponseType(typeof(Meteorologia))]
         public async Task<IHttpActionResult> GetMetereologiaByPoi(int poiID)
         {
@@ -68,6 +73,7 @@ namespace Cancela.Controllers
 
 
         // PUT: api/Metereologias/5
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutMeteorologia(int id, Meteorologia meteorologia)
         {
@@ -103,6 +109,7 @@ namespace Cancela.Controllers
         }
 
         // POST: api/Meteorologias
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         [ResponseType(typeof(Meteorologia))]
         public async Task<IHttpActionResult> PostMeteorologia(Meteorologia meteorologia)
         {
@@ -118,6 +125,7 @@ namespace Cancela.Controllers
         }
 
         // DELETE: api/Meteorologias/5
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         [ResponseType(typeof(Meteorologia))]
         public async Task<IHttpActionResult> DeleteMeteorologia(int id)
         {

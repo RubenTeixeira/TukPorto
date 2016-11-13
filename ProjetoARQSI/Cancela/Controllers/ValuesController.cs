@@ -10,9 +10,10 @@ namespace Cancela.Controllers
     public class ValuesController : ApiController
     {
         // GET api/values
-        public IEnumerable<string> Get()
+        public HttpResponseMessage Get()
         {
-            return new string[] { "value1", "value2" };
+            return this.Request.CreateResponse(HttpStatusCode.OK,
+                new { name = "command", index = "X", optional = "0" });
         }
 
         // GET api/values/5
