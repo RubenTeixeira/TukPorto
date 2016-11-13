@@ -274,6 +274,8 @@
     <Content Include="Views\Meteorologias\Index.cshtml" />
     <Content Include="Views\Meteorologias\SearchByDateTime.cshtml" />
     <Content Include="Views\Meteorologias\ResultsByDateTime.cshtml" />
+    <Content Include="Views\Meteorologias\ResultsByPoi.cshtml" />
+    <Content Include="Views\Meteorologias\SearchByPoi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

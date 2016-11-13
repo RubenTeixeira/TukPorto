@@ -92,7 +92,7 @@ namespace Visita.Controllers
         {
           
             DateTime dt = Convert.ToDateTime(mydatetime);
-            Console.Write(dt);
+           
             var client = WebApiHttpClient.GetClient();
             HttpResponseMessage response = await client.GetAsync("api/Meteorologias?datetime=" + dt);
             if (response.IsSuccessStatusCode)
@@ -107,11 +107,29 @@ namespace Visita.Controllers
             }
         }
 
-        //SearchByDatetime
-        public async Task<ActionResult> SearchByPoi(int poiId)
+
+        public async Task<ActionResult> SearchByPoi()
         {
             var client = WebApiHttpClient.GetClient();
-            HttpResponseMessage response = await client.GetAsync("api/Meteorologias/poi/" + poiId);
+            HttpResponseMessage response = await client.GetAsync("api/PointsOfInterest");
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                var pois = JsonConvert.DeserializeObject<IEnumerable<PointOfInterest>>(content);
+                return View(pois);
+            }
+            else
+            {
+                return Content("Ocorreu um erro: " + response.StatusCode);
+            }
+        }
+
+        //SearchByDatetime
+        public async Task<ActionResult> ResultsByPoi(string id)
+        {
+            
+            var client = WebApiHttpClient.GetClient();
+            HttpResponseMessage response = await client.GetAsync("api/Meteorologias?poiID=" + id);
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();

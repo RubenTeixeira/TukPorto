@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Datum.Models.PointOfInterest>
+
+@{
+    ViewBag.Title = "SearchByPoi";
+}
+
+<h2>SearchByPoi</h2>
+
+<p>
+    
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Local.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Local.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descricao)
+        </td>
+        <td>
+            item.Local.LocalID
+            @Html.ActionLink("Choose this One", "ResultsByPoi", new { id=item.Local.LocalID }) 
+         
+        </td>
+    </tr>
+}
+
+</table>

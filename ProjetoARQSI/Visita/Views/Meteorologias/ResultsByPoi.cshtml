@@ -1,30 +1,18 @@
 ﻿@model IEnumerable<Datum.Models.Meteorologia>
 
-
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "ResultsByPoi";
 }
 
-<h2>Index</h2>
+<h2>ResultsByPoi</h2>
 
 <p>
-    @Html.ActionLink("Search by Date and Time", "SearchByDateTime") |
-    @Html.ActionLink("Search By Point of Interest", "SearchByPoi") | 
-    <form action="">
-        Search by DateTime:<br>
-        <input type="text" name="datetime" value="2016-11-12"><br>
-        <input type="submit" value="Submit">
-    </form>
-    <form action="">
-        Search by Poi:<br>
-        <input type="text" name="poi" value="3"><br>
-        <input type="submit" value="Submit">
-    </form>
+   
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Local)
+            @Html.DisplayNameFor(model => model.Local.Nome)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.DataHoraLeitura)
@@ -83,9 +71,9 @@
             @Html.DisplayFor(modelItem => item.CO2)
         </td>
         <td>
-            @*@Html.ActionLink("Edit", "Edit", new { id=item.MetereologiaID }) |*@
-            @Html.ActionLink("Details", "Details", new { id=item.MetereologiaID }) @*|*@
-            @*@Html.ActionLink("Delete", "Delete", new { id=item.MetereologiaID })*@
+            
+            @Html.ActionLink("Details", "Details", new { id=item.MetereologiaID }) |
+            
         </td>
     </tr>
 }
