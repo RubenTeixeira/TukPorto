@@ -464,7 +464,12 @@ function results() {
 	var checkbox_array = sensorFacetsDiv.getElementsByTagName("input");
 
 	var str = filterPreRequestedData(checkbox_array, sensorID);
-	var link = VALUES_LINK + sensorName + str;
+	var link;
+	if (sensorName_ === "Meteorologia") {
+		link = CANCELA_DISCRETE_FACET_VALUES + "sensorId=" + sensorID.sensor.id + "&facetaId=" + facetObj.id;
+	} else {
+		var link = VALUES_LINK + sensorName + str;
+	}
 	requestAJAX(link, filterPostRequestedData, RESPONSE_TEXT, checkbox_array, sensorID);
 }
 
@@ -475,18 +480,18 @@ function filterPreRequestedData(checkbox_array, sensorID) {
 	for (var i = 0; i < checkbox_array.length; i++) {
 		var checkbox = checkbox_array[i];
 		if (checkbox.checked) {
-			if (validatesCorrectCheckboxes(checkbox, sensorID) == 1) { //Discrete data.
+			if (validatesCorrectCheckboxes(checkbox, sensorID) === 1) { //Discrete data.
 
 				var name = checkbox.name.split(" ")[0];//Facet name.
 				str += "&" + name + "=[";
 				var parentElem = checkbox.parentElement.parentElement; //Parent Div.
 				var values = getStringDiscreteValues(parentElem, str);
-				if (values == null) // no options selected
+				if (values === null) // no options selected
 					return "";
 				str += values;
 				str += "]";
 
-			} else if (validatesCorrectCheckboxes(checkbox, sensorID) == 2) { //Continuos Data.
+			} else if (validatesCorrectCheckboxes(checkbox, sensorID) === 2) { //Continuos Data.
 
 				//API NOT PREPARED TO RETRIEVE CONTINUOS VALUES.
 
@@ -510,7 +515,7 @@ function filterPostRequestedData(txtDocument, checkbox_array, sensorID) {
 		checkbox = checkbox_array[i];
 		column = 0;
 		if (checkbox.checked) {
-			if (validatesCorrectCheckboxes(checkbox, sensorID) == 2) {
+			if (validatesCorrectCheckboxes(checkbox, sensorID) === 2) {
 				var div = checkbox.parentElement.nextElementSibling;
 				filterResults(div, resultsDiv);
 			}
@@ -539,7 +544,12 @@ function getStringDiscreteValues(parentElem) {
 }
 
 /**
- Valides Checkbox and returns a reference to what kind of facet is the Checkbox associated with.*/
+ Valides Checkbox and returns a reference to what kind of facet is the Checkbox associated with.
+ * @param {element} checkbox
+ * @param {Number} sensorID
+ * @param {type} col
+ * @returns {Number}
+ */
 function validatesCorrectCheckboxes(checkbox, sensorID, col) {
 	for (var i = 0; i < sensorsArray[sensorID].facets.length; i++) {
 
@@ -548,7 +558,7 @@ function validatesCorrectCheckboxes(checkbox, sensorID, col) {
 		var type = getFacetType(sensorID, i);
 
 
-		if (checkbox.id == checkId) {
+		if (checkbox.id === checkId) {
 
 			//This is required because of continual alphanumerical exception.
 
