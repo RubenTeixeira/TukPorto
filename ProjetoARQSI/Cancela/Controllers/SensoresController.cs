@@ -2,7 +2,6 @@
 using Datum.DAL;
 using Datum.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -11,6 +10,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using LinqKit;
+using System.Web.Http.ModelBinding;
+using System.ComponentModel;
 
 namespace Cancela.Controllers
 {
@@ -36,9 +38,9 @@ namespace Cancela.Controllers
             if (id == 100)
             {
                 var meteoFacetas = new MeteorologiaFacetas();
-                meteoFacetas.addFaceta("1", "Local", "Local", "discreto", "alfanumérico", "localização");
-                meteoFacetas.addFaceta("2", "DataHoraLeitura", "Data", "contínuo", "data", "data");
-                meteoFacetas.addFaceta("3", "DataHoraLeitura", "Hora", "contínuo", "hora", "hora");
+                meteoFacetas.addFaceta("1", "Data", "Data", "contínuo", "data", "data");
+                meteoFacetas.addFaceta("2", "Hora", "Hora", "contínuo", "hora", "hora");
+                meteoFacetas.addFaceta("3", "Local", "Local", "discreto", "alfanumérico", "localização");
                 meteoFacetas.addFaceta("4", "Temp", "Temperatura", "contínuo", "numérico", "temperatura");
                 meteoFacetas.addFaceta("5", "Vento", "Vento", "contínuo", "numérico", "vento");
                 meteoFacetas.addFaceta("6", "Humidade", "Humidade", "contínuo", "numérico", "humidade");
@@ -64,7 +66,7 @@ namespace Cancela.Controllers
             var list = new List<Object>();
             switch (facetaId)
             {
-                case 1:
+                case 3:
                     var locals = await db.Locals.ToListAsync();
                     foreach (var item in locals) { list.Add(item.Nome); };
                     break;
@@ -107,7 +109,7 @@ namespace Cancela.Controllers
                     minvalue = db.Metereologias.Min(m => m.CO2);
                     break;
                 default:
-                    return this.Request.CreateResponse(HttpStatusCode.NotFound);
+                    return this.Request.CreateResponse(HttpStatusCode.OK, "No Data!");
             }
             return this.Request.CreateResponse(HttpStatusCode.OK, new { min = minvalue.ToString() });
         }
@@ -146,51 +148,148 @@ namespace Cancela.Controllers
                     maxvalue = db.Metereologias.Max(m => m.CO2);
                     break;
                 default:
-                    return this.Request.CreateResponse(HttpStatusCode.NotFound);
+                    return this.Request.CreateResponse(HttpStatusCode.OK, "No Data!");
             }
             return this.Request.CreateResponse(HttpStatusCode.OK, new { max = maxvalue.ToString() });
         }
 
 
 
-        //// GET api/sensores/SensorValues?sensorId=100&facetaId=1...&facetaidN=N
-        //[Route("SensorValues")]
-        //[HttpGet]
-        //[EnableCors(origins: "*", headers: "*", methods: "*")]
-        //public async Task<HttpResponseMessage> SensorValues(int sensorId, SearchCriteria filters)
-        //{
+        // GET api/sensores/SensorValues?sensorId=100&facetaName=Porto...&facetaNameN=[2016-11-10]
+        [Route("SensorValues")]
+        [HttpGet]
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        public async Task<HttpResponseMessage> SensorValues(int sensorId, [FromUri]SearchCriteria filters)
+        {
+            List<Meteorologia> results;
 
-        //    var results = await GetByCriteria(filters);
+            System.Diagnostics.Debug.WriteLine("FILTERS: \nLocal: " + filters.Local
+                + "\nTemp: " + filters.Temp
+                + "\nVento: " + filters.Vento
+                + "\nHumidade: " + filters.Humidade
+                + "\nPressao: " + filters.Pressao
+                + "\nNO: " + filters.NO
+                + "\nNO2: " + filters.NO2
+                + "\nCO2: " + filters.CO2);
 
-        //    return this.Request.CreateResponse(HttpStatusCode.OK, results);
-        //}
+            results = await searchByCriteria(filters);
 
-        //public Task<IEnumerable<Meteorologia>> GetByCriteria(SearchCriteria filters)
-        //{
-        //    IQueryable<Meteorologia> query = db.Metereologias;
-        //    foreach (var filter in filters)
-        //    {
-        //        string temp = keyword;
-        //        query = query.Where(p => p.Description.Contains(temp));
-        //    }
-        //    return matches;
-        //}
+            var resultDtos = results.Select(x => MetereologiaDtoAssembler.convert(x)).ToList();
+
+
+            return this.Request.CreateResponse(HttpStatusCode.OK, resultDtos);
+        }
+
+
+
+        public static T[] StringtoArray<T>(string s)
+        {
+            if (s != null)
+            {
+                var converter = TypeDescriptor.GetConverter(typeof(T));
+                var values = Array.ConvertAll(s.Replace("[", string.Empty).Replace("]", string.Empty).Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries),
+                    x => { return converter.ConvertFromString(x != null ? x.Trim() : x); });
+
+                T[] typedValues = (T[])Array.CreateInstance(typeof(T), values.Length);
+
+                values.CopyTo(typedValues, 0);
+                return typedValues;
+            }
+            return null;
+
+        }
+
+
+
+        public async Task<List<Meteorologia>> searchByCriteria(SearchCriteria filters)
+        {
+
+            var mainPredicate = PredicateBuilder.New<Meteorologia>(true);
+
+            var localPredicate = PredicateBuilder.New<Meteorologia>(true);
+            var tempPredicate = PredicateBuilder.New<Meteorologia>(true);
+            var ventoPredicate = PredicateBuilder.New<Meteorologia>(true);
+            var humidadePredicate = PredicateBuilder.New<Meteorologia>(true);
+            var pressaoPredicate = PredicateBuilder.New<Meteorologia>(true);
+            var noPredicate = PredicateBuilder.New<Meteorologia>(true);
+            var no2Predicate = PredicateBuilder.New<Meteorologia>(true);
+            var co2Predicate = PredicateBuilder.New<Meteorologia>(true);
+
+
+            if (filters.Local != null)
+            {
+                foreach (var item in StringtoArray<string>(filters.Local))
+                {
+                    localPredicate = localPredicate.Or(m => m.Local.Nome == item);
+                }
+            }
+            if (filters.Temp != null)
+            {
+                foreach (var item in StringtoArray<double>(filters.Temp))
+                {
+                    tempPredicate = tempPredicate.Or(m => m.Temp.Equals(item));
+                }
+            }
+            if (filters.Vento != null)
+            {
+                foreach (var item in StringtoArray<double>(filters.Vento))
+                {
+                    ventoPredicate = ventoPredicate.Or(m => m.Vento.Equals(item));
+                }
+            }
+            if (filters.Humidade != null)
+            {
+                foreach (var item in StringtoArray<int>(filters.Humidade))
+                {
+                    humidadePredicate = humidadePredicate.Or(m => m.Humidade.Equals(item));
+                }
+            }
+            if (filters.Pressao != null)
+            {
+                foreach (var item in StringtoArray<int>(filters.Pressao))
+                {
+                    pressaoPredicate = pressaoPredicate.Or(m => m.Pressao.Equals(item));
+                }
+            }
+            if (filters.NO != null)
+            {
+                foreach (var item in StringtoArray<double>(filters.NO))
+                {
+                    noPredicate = noPredicate.Or(m => m.NO.Equals(item));
+                }
+            }
+            if (filters.NO2 != null)
+            {
+                foreach (var item in StringtoArray<double>(filters.NO2))
+                {
+                    no2Predicate = no2Predicate.Or(m => m.NO2.Equals(item));
+                }
+            }
+            if (filters.CO2 != null)
+            {
+                foreach (var item in filters.CO2)
+                {
+                    co2Predicate = co2Predicate.Or(m => m.CO2.Equals(item));
+                }
+            }
+            var predicate = mainPredicate
+                .And(localPredicate)
+                .And(tempPredicate)
+                .And(ventoPredicate)
+                .And(humidadePredicate)
+                .And(pressaoPredicate)
+                .And(noPredicate)
+                .And(no2Predicate)
+                .And(co2Predicate);
+
+            return await db.Metereologias.Include("Local").AsExpandable().Where(predicate).ToListAsync();
+        }
 
 
 
     }
 
-    public class SearchCriteria
-    {
-        public string Local { get; set; }
-        public double Temp { get; set; }
-        public double Vento { get; set; }
-        public int Humidade { get; set; }
-        public int Pressao { get; set; }
-        public double NO { get; set; }
-        public double NO2 { get; set; }
-        public double CO2 { get; set; }
-    }
 
-    
+
+
 }

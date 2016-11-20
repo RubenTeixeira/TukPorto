@@ -5,6 +5,7 @@
 var CANCELA_DISCRETE_FACET_VALUES = CANCELA_SENSORS + "/DiscreteValues?";
 var CANCELA_FACET_MIN_VALUE = CANCELA_SENSORS + "/MinValue?";
 var CANCELA_FACET_MAX_VALUE = CANCELA_SENSORS + "/MaxValue?";
+var CANCELA_SENSOR_VALUES = CANCELA_SENSORS + "/SensorValues?";
 
 
 
@@ -242,10 +243,6 @@ function createFacets(facetsXML, sensorName) {
 	showDiv(sensorFacetsDiv);
 }
 
-function createFacets_Cancela(facetsJSON, sensorId) {
-	var sensorObj = findSensorById(sensorId);
-}
-
 function showFacetOptions(div, facetObj) {
 	var optionsDiv = div.getElementsByClassName("facetoptions")[0];
 	if (optionsDiv) {
@@ -466,7 +463,8 @@ function results() {
 	var str = filterPreRequestedData(checkbox_array, sensorID);
 	var link;
 	if (sensorName_ === "Meteorologia") {
-		link = CANCELA_DISCRETE_FACET_VALUES + "sensorId=" + sensorID.sensor.id + "&facetaId=" + facetObj.id;
+		link = CANCELA_SENSOR_VALUES + "sensorId=" + sensorID + str;
+		console.log("LINK _------> " + link);
 	} else {
 		var link = VALUES_LINK + sensorName + str;
 	}
@@ -530,10 +528,11 @@ function filterPostRequestedData(txtDocument, checkbox_array, sensorID) {
 function getStringDiscreteValues(parentElem) {
 	var str = "";
 	var elements = parentElem.getElementsByTagName("input"); //Discrete value checkboxes.
+	var selectedCount = 0;
 	for (var j = 1; j < elements.length; j++) {//ignores the first one always. It belongs to the major checkbox.
 		if (elements[j].checked) {
 
-			if (j > 1)
+			if (++selectedCount > 1)
 				str += ",";
 			str += elements[j].nextSibling.nodeValue;
 		}
@@ -551,11 +550,12 @@ function getStringDiscreteValues(parentElem) {
  * @returns {Number}
  */
 function validatesCorrectCheckboxes(checkbox, sensorID, col) {
-	for (var i = 0; i < sensorsArray[sensorID].facets.length; i++) {
+	var sensorObj = findSensorById(sensorID);
+	for (var i = 0; i < sensorObj.facets.length; i++) {
 
-		var checkId = sensorsArray[sensorID].facets[i].id;
-		var measure = getFacetMeasure(sensorID, i);
-		var type = getFacetType(sensorID, i);
+		var checkId = sensorObj.facets[i].id;
+		var measure = getFacetMeasure(sensorObj, i);
+		var type = getFacetType(sensorObj, i);
 
 
 		if (checkbox.id === checkId) {
@@ -572,14 +572,14 @@ function validatesCorrectCheckboxes(checkbox, sensorID, col) {
 }
 /*
  Gets Measurement of Facet for a specific Sensor.*/
-function getFacetMeasure(sensorID, facetsID) {
-	var measure = sensorsArray[sensorID].facets[facetsID].measure;
+function getFacetMeasure(sensorObj, facetsID) {
+	var measure = sensorObj.facets[facetsID].measure;
 	return measure;
 }
 /*
  Gets Type of a Facet for a speficic Sensor.*/
-function getFacetType(sensorID, facetsID) {
-	var type = sensorsArray[sensorID].facets[facetsID].type;
+function getFacetType(sensorObj, facetsID) {
+	var type = sensorObj.facets[facetsID].type;
 	return type;
 }
 
@@ -591,6 +591,7 @@ function filterResults(div, resultsDiv) {
 	if (slider) {
 		initialValue = $("#" + slider.id).slider("values", 0);
 		finalValue = $("#" + slider.id).slider("values", 1);
+		console.log("Slider range ------> " + initialValue + " - " + finalValue);
 	} else {
 		var array = div.getElementsByTagName("input");
 		initialValue = array[0].value;
@@ -657,7 +658,8 @@ function printNoResultsFound(divLocation) {
 /*
  This method builds full table without any filtering*/
 function buildFullTable(resultObj, resultsDiv, n) { //id do sensor ativo.
-	var order = sensorsArray[n].facets;
+	var order = findSensorById(n).facets;
+	//var order = sensorsArray[n].facets;
 	resultsDiv.style.overflow = 'initial';
 	resultsDiv.style.height = 'auto';
 	var div = createDiv("resultsTable", "ui-table");
