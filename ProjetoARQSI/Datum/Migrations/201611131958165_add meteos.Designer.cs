@@ -7,13 +7,13 @@ namespace Datum.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Initial : IMigrationMetadata
+    public sealed partial class addmeteos : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addmeteos));
         
         string IMigrationMetadata.Id
         {
-            get { return "201611131407156_Initial"; }
+            get { return "201611131958165_add meteos"; }
         }
         
         string IMigrationMetadata.Source

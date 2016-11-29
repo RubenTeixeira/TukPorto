@@ -75,7 +75,7 @@ namespace Cancela.Controllers
         [ResponseType(typeof(Meteorologia))]
         public async Task<IHttpActionResult> GetMetereologiaByPeriod(DateTime date1,DateTime date2)
         {
-            var meteos = await db.Metereologias.Where(x => x.DataHoraLeitura >= date1 && x.DataHoraLeitura <= date2).ToListAsync();
+            var meteos = await db.Metereologias.Where(x => (x.DataHoraLeitura >= date1) && (x.DataHoraLeitura <= date2)).ToListAsync();
             if (meteos == null)
             {
                 return NotFound();
