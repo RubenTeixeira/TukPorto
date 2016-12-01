@@ -1,9 +1,14 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
-using Datum.Models;
 using Datum.DAL;
+using Datum.Models;
 
 namespace Lugares.Controllers
 {
@@ -12,12 +17,14 @@ namespace Lugares.Controllers
         private DatumContext db = new DatumContext();
 
         // GET: Locals
+        [AllowAnonymous]
         public async Task<ActionResult> Index()
         {
             return View(await db.Locals.ToListAsync());
         }
 
         // GET: Locals/Details/5
+        [AllowAnonymous]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,7 +50,7 @@ namespace Lugares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "GPS_Lat,GPS_Long,Nome")] Local local)
+        public async Task<ActionResult> Create([Bind(Include = "LocalID,GPS_Lat,GPS_Long,Nome")] Local local)
         {
             if (ModelState.IsValid)
             {
@@ -51,6 +58,7 @@ namespace Lugares.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+
             return View(local);
         }
 

@@ -5,16 +5,20 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Widget", "Widget\Widget.csproj", "{777497E7-9F32-4A66-91B7-34107EF6C49C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lugares", "Lugares\Lugares.csproj", "{B9321344-6B3F-4AB6-BE7F-81815E440ADA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lugares_old", "Lugares_old\Lugares_old.csproj", "{B9321344-6B3F-4AB6-BE7F-81815E440ADA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1F2A9B75-122D-4F78-AF13-6D4305880E58} = {1F2A9B75-122D-4F78-AF13-6D4305880E58}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datum", "Datum\Datum.csproj", "{1F2A9B75-122D-4F78-AF13-6D4305880E58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cancela", "Cancela\Cancela.csproj", "{9C76A64C-2B9B-43EE-9FBC-448BA7531693}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cancela_old", "Cancela_old\Cancela_old.csproj", "{9C76A64C-2B9B-43EE-9FBC-448BA7531693}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visita", "Visita\Visita.csproj", "{72E0093E-2F94-4B6A-AE7D-7C0126E2325B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cancela", "Cancela\Cancela.csproj", "{C48E6AF2-8223-49ED-A350-E803FA1F4C1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lugares", "Lugares\Lugares.csproj", "{AC77EF66-2321-4C96-AC9F-D5E53276DF63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +46,14 @@ Global
 		{72E0093E-2F94-4B6A-AE7D-7C0126E2325B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72E0093E-2F94-4B6A-AE7D-7C0126E2325B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72E0093E-2F94-4B6A-AE7D-7C0126E2325B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C48E6AF2-8223-49ED-A350-E803FA1F4C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C48E6AF2-8223-49ED-A350-E803FA1F4C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C48E6AF2-8223-49ED-A350-E803FA1F4C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C48E6AF2-8223-49ED-A350-E803FA1F4C1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC77EF66-2321-4C96-AC9F-D5E53276DF63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC77EF66-2321-4C96-AC9F-D5E53276DF63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC77EF66-2321-4C96-AC9F-D5E53276DF63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC77EF66-2321-4C96-AC9F-D5E53276DF63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

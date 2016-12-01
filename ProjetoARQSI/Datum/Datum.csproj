@@ -38,6 +38,14 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -50,11 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAL\DatumContext.cs" />
-    <Compile Include="Migrations\201611131958165_add meteos.cs" />
-    <Compile Include="Migrations\201611131958165_add meteos.Designer.cs">
-      <DependentUpon>201611131958165_add meteos.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\DatumContext\Configuration.cs" />
+    <Compile Include="Migrations\DatumIdentityDbContext\Configuration.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Local.cs" />
     <Compile Include="Models\Meteorologia.cs" />
     <Compile Include="Models\PointOfInterest.cs" />
@@ -65,12 +71,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201611131958165_add meteos.resx">
-      <DependentUpon>201611131958165_add meteos.cs</DependentUpon>
-    </EmbeddedResource>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,13 +7,13 @@ using System.Web.Http;
 
 namespace Cancela.Controllers
 {
+    [Authorize]
     public class ValuesController : ApiController
     {
         // GET api/values
-        public HttpResponseMessage Get()
+        public IEnumerable<string> Get()
         {
-            return this.Request.CreateResponse(HttpStatusCode.OK,
-                new { name = "command", index = "X", optional = "0" });
+            return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5

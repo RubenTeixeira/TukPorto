@@ -1,10 +1,14 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using Datum.DAL;
 using Datum.Models;
-using System;
 
 namespace Lugares.Controllers
 {
@@ -13,19 +17,22 @@ namespace Lugares.Controllers
         private DatumContext db = new DatumContext();
 
         // GET: PointsOfInterest
+        [AllowAnonymous]
         public async Task<ActionResult> Index()
         {
-            return View(await db.PointsOfInterest.Include(p => p.Local).ToListAsync());
+            var pointsOfInterest = db.PointsOfInterest.Include(p => p.Local);
+            return View(await pointsOfInterest.ToListAsync());
         }
 
         // GET: PointsOfInterest/Details/5
+        [AllowAnonymous]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include("Local").SingleOrDefaultAsync(p => p.PointOfInterestID == id);
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include(p => p.Local).FirstAsync(i => i.PointOfInterestID == id);
             if (pointOfInterest == null)
             {
                 return HttpNotFound();
@@ -34,12 +41,9 @@ namespace Lugares.Controllers
         }
 
         // GET: PointsOfInterest/Create
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
-            var locals = await db.Locals.ToListAsync();
-
-            ViewBag.Locals = locals;
-
+            ViewBag.LocalID = new SelectList(db.Locals, "LocalID", "Nome");
             return View();
         }
 
@@ -48,23 +52,22 @@ namespace Lugares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "LocalID,Nome,Descricao")] PointOfInterest pointOfInterest, FormCollection form)
+        [Authorize(Roles = "Editor")]
+        public async Task<ActionResult> Create([Bind(Include = "PointOfInterestID,Nome,Descricao,LocalID")] PointOfInterest pointOfInterest)
         {
-
             if (ModelState.IsValid)
             {
-                //int selectedLocalID = Int32.Parse(form["Local"]);
-                //pointOfInterest.LocalID = selectedLocalID;
-
                 db.PointsOfInterest.Add(pointOfInterest);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
+            ViewBag.LocalID = new SelectList(db.Locals, "LocalID", "Nome", pointOfInterest.LocalID);
             return View(pointOfInterest);
         }
 
         // GET: PointsOfInterest/Edit/5
+        [Authorize(Roles = "Editor")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,11 +79,7 @@ namespace Lugares.Controllers
             {
                 return HttpNotFound();
             }
-
-            var locals = await db.Locals.ToListAsync();
-
-            ViewBag.LocalList = locals;
-
+            ViewBag.LocalID = new SelectList(db.Locals, "LocalID", "Nome", pointOfInterest.LocalID);
             return View(pointOfInterest);
         }
 
@@ -89,7 +88,8 @@ namespace Lugares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "PointOfInterestID,LocalID,Nome,Descricao")] PointOfInterest pointOfInterest)
+        [Authorize(Roles = "Editor")]
+        public async Task<ActionResult> Edit([Bind(Include = "PointOfInterestID,Nome,Descricao,LocalID")] PointOfInterest pointOfInterest)
         {
             if (ModelState.IsValid)
             {
@@ -97,17 +97,19 @@ namespace Lugares.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            ViewBag.LocalID = new SelectList(db.Locals, "LocalID", "Nome", pointOfInterest.LocalID);
             return View(pointOfInterest);
         }
 
         // GET: PointsOfInterest/Delete/5
+        [Authorize(Roles = "Editor")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include("Local").SingleOrDefaultAsync(p => p.PointOfInterestID == id);
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include(p => p.Local).FirstAsync(i => i.PointOfInterestID == id);
             if (pointOfInterest == null)
             {
                 return HttpNotFound();
@@ -118,6 +120,7 @@ namespace Lugares.Controllers
         // POST: PointsOfInterest/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Editor")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             PointOfInterest pointOfInterest = await db.PointsOfInterest.FindAsync(id);
