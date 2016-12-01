@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - Lugares</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -25,6 +26,7 @@
                     <li>@Html.ActionLink("PointsOfInterest", "Index", "PointsOfInterest")</li>
                     <li>@Html.ActionLink("Locals", "Index", "Locals")</li>
                 </ul>
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>

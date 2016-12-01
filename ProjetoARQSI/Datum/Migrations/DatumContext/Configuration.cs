@@ -1,8 +1,7 @@
-namespace Datum.Migrations
+namespace Datum.Migrations.DatumContext
 {
     using Models;
     using System;
-    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -12,6 +11,7 @@ namespace Datum.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            MigrationsDirectory = @"Migrations\DatumContext";
         }
 
         protected override void Seed(Datum.DAL.DatumContext context)

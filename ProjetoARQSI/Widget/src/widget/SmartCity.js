@@ -1,7 +1,7 @@
 ﻿/// <reference path="../jquery/jquery-ui.js" />
 /// <reference path="Util.js" />
 
-		var CANCELA_SENSORS = "http://localhost:4168/api/sensores";
+var CANCELA_SENSORS = "https://localhost:44317/api/sensores";
 var CANCELA_DISCRETE_FACET_VALUES = CANCELA_SENSORS + "/DiscreteValues?";
 var CANCELA_FACET_MIN_VALUE = CANCELA_SENSORS + "/MinValue?";
 var CANCELA_FACET_MAX_VALUE = CANCELA_SENSORS + "/MaxValue?";
