@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿
+
 using System.Web.Mvc;
 
 namespace Lugares
@@ -9,6 +10,7 @@ namespace Lugares
         {
             filters.Add(new HandleErrorAttribute());
             filters.Add(new AuthorizeAttribute());
+            filters.Add(new AuthorizeAttribute { Roles = "Editor" });
             filters.Add(new RequireHttpsAttribute());
         }
     }

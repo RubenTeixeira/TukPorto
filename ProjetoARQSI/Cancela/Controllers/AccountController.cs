@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -16,6 +15,7 @@ using Microsoft.Owin.Security.OAuth;
 using Cancela.Models;
 using Cancela.Providers;
 using Cancela.Results;
+using Datum.UserManagement;
 
 namespace Cancela.Controllers
 {

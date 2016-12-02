@@ -15,6 +15,7 @@ using System.Web.Http.Cors;
 
 namespace Cancela.Controllers
 {
+    [Authorize]
     public class MeteorologiasController : ApiController
     {
         private DatumContext db = new DatumContext();

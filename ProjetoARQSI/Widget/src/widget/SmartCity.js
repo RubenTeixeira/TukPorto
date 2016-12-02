@@ -1,6 +1,9 @@
 ﻿/// <reference path="../jquery/jquery-ui.js" />
 /// <reference path="Util.js" />
 
+/* DEEBUG: 1 = ON */
+var DEBUG = 0;
+
 var CANCELA_SENSORS = "https://localhost:44317/api/sensores";
 var CANCELA_DISCRETE_FACET_VALUES = CANCELA_SENSORS + "/DiscreteValues?";
 var CANCELA_FACET_MIN_VALUE = CANCELA_SENSORS + "/MinValue?";
@@ -11,7 +14,9 @@ var CANCELA_SENSOR_VALUES = CANCELA_SENSORS + "/SensorValues?";
 
 var SENSOR_DESIGNATION = "sensor";
 var FACET_DESIGNATION = "faceta";
-var APP_URL = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/";
+//var APP_URL = "http://phpdev2.dei.isep.ipp.pt/~arqsi/smartcity/";
+/* IP ADDRESS INSTEAD OF DNS USED WHILE DEVELOPING USING SPLIT TUNNELING TO DEI VPN */
+var APP_URL = "http://10.8.8.20/~arqsi/smartcity/";
 var sensorsAPI = APP_URL + "sensores.php";
 var facets_ID_link = APP_URL + "facetas.php?" + SENSOR_DESIGNATION + "=";
 var facets_name_link = APP_URL + "facetasByNomeSensor.php?" + SENSOR_DESIGNATION + "=";
@@ -110,7 +115,8 @@ function createTabs_Cancela(jsonDoc) {
 	var div = document.getElementById("sidebarleftside");
 	var ul = div.childNodes[0];
 	var results = JSON.parse(jsonDoc);
-	//console.log("object: %O", results);
+	if (DEBUG === 1)
+	    console.log("object: %O", results);
 	var sensor;
 	for (var i = 0; i < results.length; i++) {
 		sensor = results[i];
@@ -424,7 +430,8 @@ function getDiscreteValues(facetObj, div) {
 	} else {
 		link = DISCRETE_VALUES_LINK + SENSOR_DESIGNATION + "=" + facetObj.sensor.name + "&" + FACET_DESIGNATION + "=" + facetObj.dbField;
 	}
-	console.log(link);
+	if (DEBUG === 1)
+    	console.log(link);
 	requestAJAX(link, createAllOptionsInput, RESPONSE_TEXT, div);
 }
 
@@ -463,8 +470,9 @@ function results() {
 	var str = filterPreRequestedData(checkbox_array, sensorID);
 	var link;
 	if (sensorName_ === "Meteorologia") {
-		link = CANCELA_SENSOR_VALUES + "sensorId=" + sensorID + str;
-		console.log("LINK _------> " + link);
+	    link = CANCELA_SENSOR_VALUES + "sensorId=" + sensorID + str;
+	    if (DEBUG === 1)
+    		console.log("LINK _------> " + link);
 	} else {
 		var link = VALUES_LINK + sensorName + str;
 	}
@@ -591,7 +599,8 @@ function filterResults(div, resultsDiv) {
 	if (slider) {
 		initialValue = $("#" + slider.id).slider("values", 0);
 		finalValue = $("#" + slider.id).slider("values", 1);
-		console.log("Slider range ------> " + initialValue + " - " + finalValue);
+		if (DEBUG === 1)
+    		console.log("Slider range ------> " + initialValue + " - " + finalValue);
 	} else {
 		var array = div.getElementsByTagName("input");
 		initialValue = array[0].value;

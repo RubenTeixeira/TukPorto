@@ -4,7 +4,7 @@ namespace Visita.Helpers
 {
     public static class WebApiHttpClient
     {
-        public const string WebApiBaseAddress = "http://localhost:4168/";
+        public const string WebApiBaseAddress = "https://localhost:44317/";
         public static HttpClient GetClient()
         {
             HttpClient client = new HttpClient();

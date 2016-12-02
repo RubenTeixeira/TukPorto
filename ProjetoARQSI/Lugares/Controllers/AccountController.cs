@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Lugares.Models;
 using Datum.Models;
+using Datum.UserManagement;
 
 namespace Lugares.Controllers
 {

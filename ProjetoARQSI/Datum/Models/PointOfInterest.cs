@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Datum.UserManagement;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Datum.Models
 {
@@ -24,5 +20,9 @@ namespace Datum.Models
         
         public int LocalID { get; set; }
         public Local Local { get; set; }
+
+        
+        public string CriadorID { get; set; }
+        public ApplicationUser Criador { get; set; }
     }
 }

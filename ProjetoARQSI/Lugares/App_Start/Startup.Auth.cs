@@ -4,7 +4,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
-using Datum.Models;
+using Datum.DAL;
+using Datum.UserManagement;
 
 namespace Lugares
 {
@@ -14,7 +15,7 @@ namespace Lugares
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
-            app.CreatePerOwinContext(DatumIdentityDbContext.Create);
+            app.CreatePerOwinContext(DatumContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 

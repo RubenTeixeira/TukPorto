@@ -17,7 +17,6 @@ namespace Lugares.Controllers
         private DatumContext db = new DatumContext();
 
         // GET: PointsOfInterest
-        [AllowAnonymous]
         public async Task<ActionResult> Index()
         {
             var pointsOfInterest = db.PointsOfInterest.Include(p => p.Local);
@@ -25,14 +24,13 @@ namespace Lugares.Controllers
         }
 
         // GET: PointsOfInterest/Details/5
-        [AllowAnonymous]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include(p => p.Local).FirstAsync(i => i.PointOfInterestID == id);
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.FindAsync(id);
             if (pointOfInterest == null)
             {
                 return HttpNotFound();
@@ -52,7 +50,6 @@ namespace Lugares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Editor")]
         public async Task<ActionResult> Create([Bind(Include = "PointOfInterestID,Nome,Descricao,LocalID")] PointOfInterest pointOfInterest)
         {
             if (ModelState.IsValid)
@@ -67,7 +64,6 @@ namespace Lugares.Controllers
         }
 
         // GET: PointsOfInterest/Edit/5
-        [Authorize(Roles = "Editor")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,7 +84,6 @@ namespace Lugares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Editor")]
         public async Task<ActionResult> Edit([Bind(Include = "PointOfInterestID,Nome,Descricao,LocalID")] PointOfInterest pointOfInterest)
         {
             if (ModelState.IsValid)
@@ -102,14 +97,13 @@ namespace Lugares.Controllers
         }
 
         // GET: PointsOfInterest/Delete/5
-        [Authorize(Roles = "Editor")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include(p => p.Local).FirstAsync(i => i.PointOfInterestID == id);
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.FindAsync(id);
             if (pointOfInterest == null)
             {
                 return HttpNotFound();
@@ -120,7 +114,6 @@ namespace Lugares.Controllers
         // POST: PointsOfInterest/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Editor")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             PointOfInterest pointOfInterest = await db.PointsOfInterest.FindAsync(id);

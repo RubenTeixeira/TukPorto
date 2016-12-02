@@ -14,6 +14,7 @@ using Datum.Models;
 
 namespace Cancela.Controllers
 {
+    [Authorize]
     public class PointsOfInterestController : ApiController
     {
         private DatumContext db = new DatumContext();

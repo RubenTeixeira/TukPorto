@@ -17,14 +17,12 @@ namespace Lugares.Controllers
         private DatumContext db = new DatumContext();
 
         // GET: Locals
-        [AllowAnonymous]
         public async Task<ActionResult> Index()
         {
             return View(await db.Locals.ToListAsync());
         }
 
         // GET: Locals/Details/5
-        [AllowAnonymous]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)

@@ -14,6 +14,7 @@ using Datum.Models;
 
 namespace Cancela.Controllers
 {
+    [Authorize]
     public class LocalsController : ApiController
     {
         private DatumContext db = new DatumContext();

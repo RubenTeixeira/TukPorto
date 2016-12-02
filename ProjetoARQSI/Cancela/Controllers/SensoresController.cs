@@ -16,6 +16,7 @@ using System.ComponentModel;
 
 namespace Cancela.Controllers
 {
+    [Authorize]
     [RoutePrefix("api/Sensores")]
     public class SensoresController : ApiController
     {
