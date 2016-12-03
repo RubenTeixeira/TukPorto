@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Datum.DAL;
 using Datum.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Lugares.Controllers
 {
@@ -19,7 +20,7 @@ namespace Lugares.Controllers
         // GET: PointsOfInterest
         public async Task<ActionResult> Index()
         {
-            var pointsOfInterest = db.PointsOfInterest.Include(p => p.Local);
+            var pointsOfInterest = db.PointsOfInterest.Include(p => p.Local).Include(p => p.Criador);
             return View(await pointsOfInterest.ToListAsync());
         }
 
@@ -30,7 +31,7 @@ namespace Lugares.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfInterest pointOfInterest = await db.PointsOfInterest.FindAsync(id);
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include(p => p.Local).Include(p => p.Criador).FirstAsync(i => i.PointOfInterestID == id);
             if (pointOfInterest == null)
             {
                 return HttpNotFound();
@@ -52,6 +53,8 @@ namespace Lugares.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "PointOfInterestID,Nome,Descricao,LocalID")] PointOfInterest pointOfInterest)
         {
+            pointOfInterest.CriadorID = User.Identity.GetUserId();
+
             if (ModelState.IsValid)
             {
                 db.PointsOfInterest.Add(pointOfInterest);
@@ -70,10 +73,14 @@ namespace Lugares.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfInterest pointOfInterest = await db.PointsOfInterest.FindAsync(id);
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include(p => p.Local).Include(p => p.Criador).FirstAsync(i => i.PointOfInterestID == id);
             if (pointOfInterest == null)
             {
                 return HttpNotFound();
+            }
+            if (!pointOfInterest.Criador.Id.Equals(User.Identity.GetUserId()))
+            {
+                return new HttpUnauthorizedResult("You do not have permission to perform this action.");
             }
             ViewBag.LocalID = new SelectList(db.Locals, "LocalID", "Nome", pointOfInterest.LocalID);
             return View(pointOfInterest);
@@ -103,10 +110,14 @@ namespace Lugares.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PointOfInterest pointOfInterest = await db.PointsOfInterest.FindAsync(id);
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include(p => p.Local).Include(p => p.Criador).FirstAsync(i => i.PointOfInterestID == id);
             if (pointOfInterest == null)
             {
                 return HttpNotFound();
+            }
+            if (!pointOfInterest.Criador.Id.Equals(User.Identity.GetUserId()))
+            {
+                return new HttpUnauthorizedResult("You do not have permission to perform this action.");
             }
             return View(pointOfInterest);
         }

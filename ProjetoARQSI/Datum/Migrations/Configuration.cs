@@ -19,14 +19,15 @@ namespace Datum.Migrations
         protected override void Seed(Datum.DAL.DatumContext context)
         {
 
-            ApplicationUser editor = AddUserAndRole(context);            
+            ApplicationUser editor = AddUserAndRole(context, "editor@lugares.com");
             if (editor == null)
             {
                 var um = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
                 editor = um.Find("editor", "password");
 
             }
-                 
+
+            AddUserAndRole(context, "editor2@lugares.com");
 
             context.Locals.AddOrUpdate(l => l.Nome,   // Nome nao pode ser repetido
                     new Local { Nome = "Porto", GPS_Lat = 41.1628634M, GPS_Long = -8.6568726M },
@@ -63,12 +64,12 @@ namespace Datum.Migrations
 
                 );
 
-            
+
 
             context.SaveChanges();
         }
 
-        ApplicationUser AddUserAndRole(Datum.DAL.DatumContext context)
+        ApplicationUser AddUserAndRole(Datum.DAL.DatumContext context, string userName)
         {
             IdentityResult ir;
             var rm = new RoleManager<IdentityRole>
@@ -78,8 +79,8 @@ namespace Datum.Migrations
                 new UserStore<ApplicationUser>(context));
             var user = new ApplicationUser()
             {
-                UserName = "editor",
-                Email = "editor@lugares.com"
+                UserName = userName,
+                Email = userName
             };
             ir = um.Create(user, "password");
             if (ir.Succeeded == false)
