@@ -4,6 +4,11 @@
 /* DEEBUG: 1 = ON */
 var DEBUG = 0;
 
+var CANCELA_TOKEN_URI = "https://localhost:44317/Token";
+var USER_NAME = "editor@lugares.com";
+var EDITOR_PASS = "password";
+
+
 var CANCELA_SENSORS = "https://localhost:44317/api/sensores";
 var CANCELA_DISCRETE_FACET_VALUES = CANCELA_SENSORS + "/DiscreteValues?";
 var CANCELA_FACET_MIN_VALUE = CANCELA_SENSORS + "/MinValue?";
@@ -81,9 +86,15 @@ function smartCity() {
 	widget.appendChild(leftBar);
 	widget.appendChild(rightbar);
 
+    // GET TOKEN FROM Cancela
+	requestTokenAJAX(CANCELA_TOKEN_URI, USER_NAME, EDITOR_PASS, addToken);
+
 	listSensors();
 }
 
+function addToken(token) {
+    bearerToken = token;
+}
 
 function listSensors() {
 	requestAJAX(sensorsAPI, createTabs, RESPONSE_XML, null);

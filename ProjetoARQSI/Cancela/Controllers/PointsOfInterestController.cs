@@ -11,6 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Datum.DAL;
 using Datum.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Cancela.Controllers
 {
@@ -22,7 +23,7 @@ namespace Cancela.Controllers
         // GET: api/PointsOfInterest
         public IQueryable<PointOfInterest> GetPointsOfInterest()
         {
-            return db.PointsOfInterest.Include(p=>p.Local);
+            return db.PointsOfInterest.Include(p => p.Local);
         }
 
         // GET: api/PointsOfInterest/5
@@ -52,6 +53,11 @@ namespace Cancela.Controllers
                 return BadRequest();
             }
 
+            if (!pointOfInterest.Criador.Id.Equals(User.Identity.GetUserId()))
+            {
+                return Unauthorized();
+            }
+
             db.Entry(pointOfInterest).State = EntityState.Modified;
 
             try
@@ -74,6 +80,7 @@ namespace Cancela.Controllers
         }
 
         // POST: api/PointsOfInterest
+        [Authorize(Roles = "Editor")]
         [ResponseType(typeof(PointOfInterest))]
         public async Task<IHttpActionResult> PostPointOfInterest(PointOfInterest pointOfInterest)
         {
@@ -96,6 +103,11 @@ namespace Cancela.Controllers
             if (pointOfInterest == null)
             {
                 return NotFound();
+            }
+
+            if (!pointOfInterest.Criador.Id.Equals(User.Identity.GetUserId()))
+            {
+                return Unauthorized();
             }
 
             db.PointsOfInterest.Remove(pointOfInterest);

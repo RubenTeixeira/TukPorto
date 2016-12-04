@@ -23,7 +23,6 @@ namespace Cancela.Controllers
         private DatumContext db = new DatumContext();
 
         // GET api/sensores
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public HttpResponseMessage Get()
         {
             var sensores = new List<Sensor>();
@@ -33,7 +32,6 @@ namespace Cancela.Controllers
 
 
         // GET api/sensores/100
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public HttpResponseMessage Get(int id)
         {
             if (id == 100)
@@ -61,7 +59,6 @@ namespace Cancela.Controllers
         // GET api/sensores/DiscreteValues?sensorId=100&facetaId=1
         [Route("DiscreteValues")]
         [HttpGet]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public async Task<HttpResponseMessage> DiscreteValues(int sensorId, int facetaId)
         {
             var list = new List<Object>();
@@ -80,7 +77,6 @@ namespace Cancela.Controllers
         // GET api/sensores/MinValue?sensorId=100&facetaId=1
         [Route("MinValue")]
         [HttpGet]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public HttpResponseMessage MinValue(int sensorId, int facetaId)
         {
 
@@ -119,7 +115,6 @@ namespace Cancela.Controllers
         // GET api/sensores/MaxValue?sensorId=100&facetaId=1
         [Route("MaxValue")]
         [HttpGet]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public HttpResponseMessage MaxValue(int sensorId, int facetaId)
         {
 
@@ -159,7 +154,6 @@ namespace Cancela.Controllers
         // GET api/sensores/SensorValues?sensorId=100&facetaName=Porto...&facetaNameN=[2016-11-10]
         [Route("SensorValues")]
         [HttpGet]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public async Task<HttpResponseMessage> SensorValues(int sensorId, [FromUri]SearchCriteria filters)
         {
             List<Meteorologia> results;

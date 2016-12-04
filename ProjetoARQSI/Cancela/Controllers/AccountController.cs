@@ -16,6 +16,7 @@ using Cancela.Models;
 using Cancela.Providers;
 using Cancela.Results;
 using Datum.UserManagement;
+using System.Web.Http.Cors;
 
 namespace Cancela.Controllers
 {
@@ -67,6 +68,7 @@ namespace Cancela.Controllers
         }
 
         // POST api/Account/Logout
+        
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
