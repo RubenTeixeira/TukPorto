@@ -17,7 +17,6 @@ $this->headTitle($title);
 	<tr>
 		<th>Name</th>
 		<th>Email</th>
-		<th>Password</th>
 		<th>Nacionality</th>
 		<th>&nbsp;</th>
 	</tr>
@@ -25,6 +24,7 @@ $this->headTitle($title);
 <tr>
 		<td><?php echo $this->escapeHtml($user->name);?></td>
 		<td><?php echo $this->escapeHtml($user->email);?></td>
+		<td><?php echo $this->escapeHtml($user->nacionality);?></td>
 	</tr>
 <?php endforeach; ?>
 </table>
