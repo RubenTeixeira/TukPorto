@@ -2,6 +2,7 @@
 namespace User\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use User\Hash\Hash;
 
 class UserTable
 {
@@ -25,11 +26,13 @@ class UserTable
         return $row;
     }
     public function saveUser(User $user) {
+        $hasher = new Hash();
+        $pw_hash = $hasher->hashPassword($user->password);
         $data = array (
             'name' => $user -> name,
             'email' => $user -> email,
             'nacionality' => $user -> nacionality,
-            'password' => $user -> password,
+            'password' => $pw_hash,
         );
     
         $id = (int) $user->id;
