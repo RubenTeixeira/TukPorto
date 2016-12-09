@@ -468,4 +468,6 @@ return array(
     'SebastianBergmann\\Version' => $vendorDir . '/sebastian/version/src/Version.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
     'Zend\\I18n\\Translator\\Resources' => $vendorDir . '/zendframework/zend-i18n-resources/src/Resources.php',
+    'ZfcBase\\Module' => $vendorDir . '/zf-commons/zfc-base/Module.php',
+    'ZfcUser\\Module' => $vendorDir . '/zf-commons/zfc-user/Module.php',
 );

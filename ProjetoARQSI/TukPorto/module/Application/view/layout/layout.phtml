@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headTitle('TukPorto '. $this->translate(''))->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?php echo $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -13,6 +13,7 @@
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
                         ->prependStylesheet($this->basePath('css/style.css'))
+                        ->prependStylesheet($this->basePath('img/flags.css'))
                         ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
                         ->prependStylesheet($this->basePath('css/bootstrap.min.css')) ?>
 
@@ -34,13 +35,31 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo $this->url('home') ?>"><img src="<?php echo $this->basePath('img/zf2-logo.png') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('Skeleton Application') ?></a>
+                    <a class="navbar-brand" href="<?php echo $this->url('home') ?>"><img src="<?php echo $this->basePath('img/zf2-logo.png') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('Defina o seu Percurso!') ?></a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
-                    </ul>
+                        <li class="session">
+                        	<?php if(!$this->zfcUserIdentity()): ?>
+                        		<ul>
+                        			<li><a href="<?php echo $this->url('zfcuser/login') ?> "><?php echo $this->translate('Login') ?></a></li>
+                        			<li><a href="<?php echo $this->url('zfcuser/register') ?> "><?php echo $this->translate('Register') ?></a></li>
+                        		</ul>
+                        	<?php else: ?>
+                        		<a href="<?php echo $this->url('zfcuser') ?>"><?php echo $this->zfcUserIdentity()->getUsername(); ?></a>
+                        		<?php
+                        		  $nationality = $this->getNationality($this->zfcUserIdentity()->getNationality());
+                        		  $countryCode = strtolower($nationality['country__code']);
+                        		  $countryName = $nationality['country__name'];
+                        		  ?>
+                        		<img src="<?php echo $this->basePath('img/blank.gif') ?>" class="flag flag-<?php echo $countryCode?>" alt="<?php echo $countryName?>>" />
+                        	<?php endif?>
+                    	</li><!--/.navbar-user -->
+                	</ul>
+                    
                 </div><!--/.nav-collapse -->
+
             </div>
         </nav>
         <div class="container">

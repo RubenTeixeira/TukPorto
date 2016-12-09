@@ -342,6 +342,14 @@ class ComposerStaticInit21ab68b0425d74fb0326f23f1f3e5093
     public static $prefixesPsr0 = array (
         'Z' => 
         array (
+            'ZfcUser' => 
+            array (
+                0 => __DIR__ . '/..' . '/zf-commons/zfc-user/src',
+            ),
+            'ZfcBase' => 
+            array (
+                0 => __DIR__ . '/..' . '/zf-commons/zfc-base/src',
+            ),
             'ZendXml\\' => 
             array (
                 0 => __DIR__ . '/..' . '/zendframework/zendxml/library',
@@ -819,6 +827,8 @@ class ComposerStaticInit21ab68b0425d74fb0326f23f1f3e5093
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
         'Zend\\I18n\\Translator\\Resources' => __DIR__ . '/..' . '/zendframework/zend-i18n-resources/src/Resources.php',
+        'ZfcBase\\Module' => __DIR__ . '/..' . '/zf-commons/zfc-base/Module.php',
+        'ZfcUser\\Module' => __DIR__ . '/..' . '/zf-commons/zfc-user/Module.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
