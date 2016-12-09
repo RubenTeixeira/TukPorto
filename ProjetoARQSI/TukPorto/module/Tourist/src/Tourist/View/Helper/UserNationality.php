@@ -21,8 +21,8 @@ class UserNationality extends AbstractHelper
      */
     public function __invoke($id)
     {
-        $sm = $this->getServiceLocator();
-        $table = $sm->get('NationalityTable');
+        $sm = $this->getView()->getHelperPluginManager()->getServiceLocator(); 
+        $table = $sm->get('Tourist\DAL\NationalityTable');
         return $table->getNationality($id);
     }
     

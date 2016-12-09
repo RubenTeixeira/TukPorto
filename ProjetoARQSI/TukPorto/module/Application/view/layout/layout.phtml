@@ -47,13 +47,14 @@
                         			<li><a href="<?php echo $this->url('zfcuser/register') ?> "><?php echo $this->translate('Register') ?></a></li>
                         		</ul>
                         	<?php else: ?>
-                        		<a href="<?php echo $this->url('zfcuser') ?>"><?php echo $this->zfcUserIdentity()->getUsername(); ?></a>
+                        		<a href="<?php echo $this->url('zfcuser') ?>"><?php echo $this->zfcUserIdentity()->getUsername(); ?>
                         		<?php
                         		  $nationality = $this->getNationality($this->zfcUserIdentity()->getNationality());
-                        		  $countryCode = strtolower($nationality['country__code']);
-                        		  $countryName = $nationality['country__name'];
+                        		  $countryCode = strtolower($nationality->country_code);
+                        		  $countryName = $nationality->country_name;
                         		  ?>
                         		<img src="<?php echo $this->basePath('img/blank.gif') ?>" class="flag flag-<?php echo $countryCode?>" alt="<?php echo $countryName?>>" />
+                        		</a>
                         	<?php endif?>
                     	</li><!--/.navbar-user -->
                 	</ul>
