@@ -16,7 +16,7 @@ class CourseControllerFactory implements FactoryInterface
         $parentLocator = $serviceLocator->getServiceLocator();
         $courseTable = $parentLocator->get('Course\DAL\CourseTable');
         $wayPointTable = $parentLocator->get('WayPoint\DAL\WayPointTable');
-        $controller = new CourseController();
+        $controller = new CourseController($parentLocator);
         $controller->setCourseTable($courseTable);
         $controller->setWayPointTable($wayPointTable);
         return $controller;

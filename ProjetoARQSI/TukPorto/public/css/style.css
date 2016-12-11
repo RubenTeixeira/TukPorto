@@ -41,3 +41,32 @@ div.container a.brand {
     right: 40px;
 }
 
+#pois {
+	display:table;
+}
+input, label {
+	margin: 3px;
+}
+
+input {
+	margin-right: 6px;
+}
+
+#weatherinfo {
+	display: table-cell;
+}
+
+input[type="checkbox"] {
+    margin: 13px 8px 0;
+}
+
+
+#multicheckbox {
+	width:50%;
+	display: table-cell;
+	/*float:left;*/
+}
+
+#multicheckbox label {
+	display:table;
+}

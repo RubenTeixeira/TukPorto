@@ -15,18 +15,15 @@ class CourseForm extends Form
             'name' => 'course_id',
             'type' => 'Hidden'
         ));
+        
         $this->add(array(
             'name' => 'description',
             'type' => 'Text',
-            'options' => array(
-                'label' => 'Description'
-            )
         ));
         $this->add(array(
             'type' => 'Zend\Form\Element\Date',
             'name' => 'date',
             'options' => array(
-                'label' => 'Travel course date',
                 'format' => 'Y-m-d'
             ),
             'attributes' => array(

@@ -37,11 +37,13 @@ class CourseTable
             'description' => $course->description,
             'date' => $course->date,
             'user_id' => $course->user_id,
+            'course_id' => null,
         );
     
         $id = (int) $course->course_id;
         if ($id == 0) {
             $this->tableGateway->insert($data);
+            $course->setCourseId($this->tableGateway->getLastInsertValue());
         } else {
             if ($this->getCourse($id)) {
                 $this->tableGateway->update($data, array('course_id' => $id));

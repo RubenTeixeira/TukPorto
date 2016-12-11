@@ -2,7 +2,7 @@
 /// <reference path="Util.js" />
 
 /* DEEBUG: 1 = ON */
-var DEBUG = 0;
+var DEBUG = 1;
 
 var CANCELA_TOKEN_URI = "https://localhost:44317/Token";
 var USER_NAME = "editor@lugares.com";

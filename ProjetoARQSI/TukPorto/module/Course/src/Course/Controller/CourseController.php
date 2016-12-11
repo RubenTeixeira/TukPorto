@@ -10,8 +10,11 @@ namespace Course\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Form\Element\MultiCheckbox;
 use Course\Form\CourseForm;
 use Course\Model\Course;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Course\Service\CancelaService;
 
 class CourseController extends AbstractActionController
 {
@@ -19,6 +22,13 @@ class CourseController extends AbstractActionController
     protected $courseTable;
 
     protected $wayPointTable;
+
+    protected $sm;
+
+    public function __construct($serviceLocator)
+    {
+        $this->sm = $serviceLocator;
+    }
     
     // public function configAction()
     // {
@@ -90,33 +100,96 @@ class CourseController extends AbstractActionController
             'courses' => $this->getCourseTable()->fetchAll()
         ));
     }
-    
-    // public function addAction()
-    // {
-    // $form = new CourseForm();
-    // $form->get('submit')->setValue('Add');
-    
-    // $request = $this->getRequest();
-    // if ($request->isPost()) {
-    // $course = new Course();
-    // $form->setInputFilter($course->getInputFilter());
-    // $form->setData($request->getPost());
-    
-    // if ($form->isValid()) {
-    // $aluno->exchangeArray($form->getData());
-    // $this->getAlunoTable()->saveAluno($aluno);
-    
-    // // Redirect to list of alunos
-    // return $this->redirect()->toRoute('escola');
-    // }
-    // }
-    // return array('form' => $form);
-    // }
+
+    public function addAction()
+    {
+        $form = new CourseForm();
+        
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $course = new Course();
+            // $form->setInputFilter($course->getInputFilter());
+            $userid = $this->zfcUserAuthentication()
+                ->getIdentity()
+                ->getId();
+            $request->getPost()['user_id'] = $userid;
+            $form->setData($request->getPost());
+            
+            if ($form->isValid()) {
+                $course->exchangeArray($form->getData());
+                $this->getCourseTable()->saveCourse($course);
+                saveWayPoints($course, $form);
+                // Redirect to list of courses
+                return $this->redirect()->toRoute('course');
+            }
+        }
+        if (! CancelaService::Login()) {
+            // alert service down
+            return $this->redirect()->toRoute('course');
+        }
+        
+        $pois = CancelaService::getPois();
+        
+        $poisArray = array();
+        foreach ($pois as $poi) {
+            
+            $readings = CancelaService::getReadingsFromPoi($poi->Local->Nome);
+            // Sort by date, descending
+            $date = array();
+            foreach ($readings as $key => $row) {
+                $date[$key] = $row['Data'];
+            }
+            array_multisort($date, SORT_DESC, $readings);
+            $poisArray[] = array(
+                'name' => $poi->Nome,
+                'description' => $poi->Descricao,
+                'gps_lat' => $poi->Local->GPS_Lat,
+                'gps_long' => $poi->Local->GPS_Long,
+                'local' => $poi->Local->Nome,
+                'readings' => array(
+                    'id' => $poi->Nome,
+                    'first' => array(
+                        'date' => $readings[0]['Data'],
+                        'temp' => $readings[0]['Temp'],
+                        'wind' => $readings[0]['Vento'],
+                        'hum' => $readings[0]['Humidade']
+                    ),
+                    'second' => array(
+                        'date' => $readings[1]['Data'],
+                        'temp' => $readings[1]['Temp'],
+                        'wind' => $readings[1]['Vento'],
+                        'hum' => $readings[1]['Humidade']
+                    )
+                )
+            );
+        }
+        
+        $multiOptions = array();
+        foreach ($poisArray as $poi)
+        {
+            $multiOptions[] = array(
+                'value' => $poi['local'],
+                'label' => $poi['name'],
+                'attributes' => array(
+                    'id' => 'checkbox_'.$poi['readings']['id'],
+                    'onclick' => 'showWeather(\'' . json_encode($poi['readings'],JSON_HEX_TAG) . '\')',
+                )
+            );
+        }
+        $checkOptions = array_column($poisArray, 'name');
+        $multiCheck = new MultiCheckbox('poi_select');
+        $multiCheck->setLabel('Check the places you would like to visit');
+        $multiCheck->setValueOptions($multiOptions);
+        $form->add($multiCheck);
+        return array(
+            'form' => $form
+        );
+    }
     
     // public function editAction()
     // {
     // $id = (int) $this->params()->fromRoute('id', 0);
-    // if (!$id) {
+    // if (! $id) {
     // return $this->redirect()->toRoute('escola', array(
     // 'action' => 'add'
     // ));
@@ -126,8 +199,7 @@ class CourseController extends AbstractActionController
     // // if it cannot be found, in which case go to the index page.
     // try {
     // $aluno = $this->getAlunoTable()->getAluno($id);
-    // }
-    // catch (\Exception $ex) {
+    // } catch (\Exception $ex) {
     // return $this->redirect()->toRoute('escola', array(
     // 'action' => 'index'
     // ));
@@ -152,7 +224,7 @@ class CourseController extends AbstractActionController
     
     // return array(
     // 'id' => $id,
-    // 'form' => $form,
+    // 'form' => $form
     // );
     // }
     public function deleteAction()
@@ -181,6 +253,9 @@ class CourseController extends AbstractActionController
         );
     }
 
+    private function saveWayPoints($course, $form)
+    {}
+
     public function getCourseTable()
     {
         return $this->courseTable;
@@ -199,5 +274,15 @@ class CourseController extends AbstractActionController
     public function setWayPointTable($wayPointTable)
     {
         $this->wayPointTable = $wayPointTable;
+    }
+
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->sm = $serviceLocator;
+    }
+
+    public function getServiceLocator()
+    {
+        return $this->sm;
     }
 }

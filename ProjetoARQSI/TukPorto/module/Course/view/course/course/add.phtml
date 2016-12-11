@@ -1,0 +1,63 @@
+<?php
+use Zend\Form\Element;
+?>
+<script type="text/javascript">
+function showWeather(jsonReadings)
+{
+	var readings = JSON.parse(jsonReadings);
+	var cb = document.getElementById("checkbox_"+readings.id);
+	if (!cb.checked)
+		return;
+	var strHtml = "";
+
+	strHtml += "<p><b>"+readings.first.date+"</b><p>Temperature: "+readings.first.temp+
+	"&#8451 - Wind: "+readings.first.wind+"Km/h - Humidity: "+readings.first.hum+"&#37; <p>";
+	
+	strHtml += "<p><b>"+readings.second.date+"</b><p>Temperature: "+readings.second.temp+
+	"&#8451 - Wind: "+readings.second.wind+"Km/h - Humidity: "+readings.second.hum+"&#37; <p>";
+
+    var weather = document.getElementById("weatherinfo");
+    weather.style.display = "block";
+    weather.innerHTML = strHtml;
+}
+</script>
+
+<?php
+$title = 'Create a new Travel Course';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+$form->setAttribute('action', $this->url('course', array(
+    'action' => 'add'
+)));
+$form->prepare();
+
+$desc = new Element\Text('description');
+$desc->setLabel('Description');
+$desc2 = new Element\Text('date');
+$desc2->setLabel('Date');
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('course_id'));
+echo $this->formlabel($desc);
+echo $this->formRow($form->get('description'));
+echo $this->formlabel($desc2);
+echo $this->formdate($form->get('date'));
+echo $this->formHidden($form->get('user_id'));
+echo $this->formSubmit($form->get('submit'));
+?>
+ 
+<p>
+<div id=pois>
+	
+	<div id="multicheckbox">
+ 		<?php echo $this->formmulticheckbox($form->get('poi_select'));?>
+ 	</div>
+ 	
+ 	<div id="weatherinfo" style="display: none"></div>
+ 	
+</div>
+
+ <?php echo $this->form()->closeTag();?>
+ 
