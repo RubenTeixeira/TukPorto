@@ -15,7 +15,6 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Tourist\DAL\NationalityTable;
 use Tourist\Model\Nationality;
-use PDO;
 
 class Module implements AutoloaderProviderInterface
 {

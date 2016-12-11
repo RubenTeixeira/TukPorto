@@ -4,8 +4,8 @@ return array(
     'modules' => array(
         'Application',
         'ZfcUser',
-        'Course',
         'Tourist',
+        'Course',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
@@ -17,7 +17,6 @@ return array(
         'module_paths' => array(
             './module',
             './vendor',
-            './module',
         ),
 
         // An array of paths from which to glob configuration files after

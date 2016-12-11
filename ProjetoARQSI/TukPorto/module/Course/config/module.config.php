@@ -1,24 +1,28 @@
 <?php
 return array(
     'controllers' => array(
-        'invokables' => array(
-            'Course\Controller\Course' => 'Course\Controller\CourseController',
-        ),
-    ),
+        'factories' => array(
+            'Course\Controller\Course' => 'Course\Factory\CourseControllerFactory'
+        )
+    )
+    // 'invokables' => array(
+    // 'Course\Controller\Course' => 'Course\Controller\CourseController'
+    // )
+    ,
     'router' => array(
         'routes' => array(
             'course' => array(
-                'type'    => 'Literal',
+                'type' => 'Literal',
                 'options' => array(
                     // Change this to something specific to your module
-                    'route'    => '/course',
+                    'route' => '/course',
                     'defaults' => array(
                         // Change this value to reflect the namespace in which
                         // the controllers for your module are found
                         '__NAMESPACE__' => 'Course\Controller',
-                        'controller'    => 'Course',
-                        'action'        => 'index',
-                    ),
+                        'controller' => 'Course',
+                        'action' => 'index'
+                    )
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -27,24 +31,30 @@ return array(
                     // you may want to remove it and replace it with more
                     // specific routes.
                     'default' => array(
-                        'type'    => 'Segment',
+                        'type' => 'Segment',
                         'options' => array(
-                            'route'    => '/[:controller[/:action]]',
+                            'route' => '/[:controller[/:action]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                             ),
-                            'defaults' => array(
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
+                            'defaults' => array()
+                        )
+                    )
+                )
+            )
+        )
     ),
     'view_manager' => array(
         'template_path_stack' => array(
-            'Course' => __DIR__ . '/../view',
-        ),
+            'Course' => __DIR__ . '/../view'
+        )
     ),
-);
+    'view_helpers' => array(
+        'invokables' => array(
+            'getCourseWayPoints' => 'Course\View\Helper\GetCourseWayPoints',
+            'userNameById' => 'Course\View\Helper\UserNameById',
+        )
+    )
+)
+;
