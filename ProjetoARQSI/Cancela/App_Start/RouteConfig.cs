@@ -13,11 +13,26 @@ namespace Cancela
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //routes.MapRoute(
+            //    "LocalByName",
+            //    "Locals/{name}",
+            //    new { controller = "Locals", action = "LocalByName" },
+            //    new { name = @"\w+" }
+            //);
+
+            //routes.MapRoute(
+            //    "LocalByName",
+            //    "Locals/{name}",
+            //    new { controller = "Locals", action = "LocalByName" },
+            //    new { name = @"\w+" }
+            //);
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+            
         }
     }
 }

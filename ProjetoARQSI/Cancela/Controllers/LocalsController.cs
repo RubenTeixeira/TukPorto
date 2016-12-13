@@ -15,6 +15,7 @@ using Datum.Models;
 namespace Cancela.Controllers
 {
     [Authorize]
+    [RoutePrefix("api/Locals")]
     public class LocalsController : ApiController
     {
         private DatumContext db = new DatumContext();
@@ -30,6 +31,21 @@ namespace Cancela.Controllers
         public async Task<IHttpActionResult> GetLocal(int id)
         {
             Local local = await db.Locals.FindAsync(id);
+            if (local == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(local);
+        }
+
+        // GET: api/Locals/Porto
+        [ResponseType(typeof(Local))]
+        [Route("LocalByName")]
+        [HttpGet]
+        public async Task<IHttpActionResult> LocalByName(string name)
+        {
+            Local local = await db.Locals.SingleOrDefaultAsync(x => x.Nome.Equals(name));
             if (local == null)
             {
                 return NotFound();

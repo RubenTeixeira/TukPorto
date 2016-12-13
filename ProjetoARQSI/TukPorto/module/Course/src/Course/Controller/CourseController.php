@@ -10,11 +10,11 @@ namespace Course\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Form\Element\MultiCheckbox;
 use Course\Form\CourseForm;
 use Course\Model\Course;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Course\Service\CancelaService;
+use Course\Model\WayPoint;
 
 class CourseController extends AbstractActionController
 {
@@ -29,71 +29,7 @@ class CourseController extends AbstractActionController
     {
         $this->sm = $serviceLocator;
     }
-    
-    // public function configAction()
-    // {
-    // $form = new ConfigForm();
-    // $form->get('submit')->setValue('Set');
-    
-    // session_start();
-    
-    // $request = $this->getRequest();
-    // if ($request->isPost()) {
-    // $_SESSION['server'] = $request->getPost()['server'];
-    
-    // return $this->redirect()->toRoute('escola', array('controller'=>'escola', 'action' => 'login'));
-    // }
-    // else
-    // {
-    // if(!empty($_SESSION['server']))
-    // $form->setAttribute("Server", $_SESSION['server']);
-    
-    // return array('form' => $form);
-    // }
-    // }
-    
-    // public function loginAction()
-    // {
-    // $form = new LoginForm();
-    // $form->get('submit')->setValue('Login');
-    
-    // $request = $this->getRequest();
-    // if ($request->isPost()) {
-    
-    // session_start();
-    // ImoServices::Logout();
-    
-    // $credenciais = new Credenciais();
-    // $form->setInputFilter($credenciais->getInputFilter());
-    // $form->setData($request->getPost());
-    
-    // if ($form->isValid()) {
-    // $credenciais->exchangeArray($form->getData());
-    
-    // if( ImoServices::Login($credenciais) )
-    
-    // // Redirect to values
-    // return $this->redirect()->toRoute('escola', array('controller'=>'escola', 'action' => 'values'));
-    // }
-    // }
-    // return array('form' => $form);
-    // }
-    
-    // public function logoutAction()
-    // {
-    // ImoServices::Logout();
-    
-    // return $this->redirect()->toRoute('escola', array('controller'=>'escola', 'action' => 'login'));
-    // }
-    
-    // public function valuesAction()
-    // {
-    // $body = ImoServices::getValues();
-    
-    // return new ViewModel(array(
-    // 'values' => Json::decode($body)
-    // ));
-    // }
+   
     public function indexAction()
     {
         return new ViewModel(array(
@@ -103,31 +39,29 @@ class CourseController extends AbstractActionController
 
     public function addAction()
     {
+        session_start();
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        if (!$user) {
+            return $this->redirect()->toRoute('course');
+        }
+        $userid = $user->getId();
         $form = new CourseForm();
-        
         $request = $this->getRequest();
         if ($request->isPost()) {
             $course = new Course();
-            // $form->setInputFilter($course->getInputFilter());
-            $userid = $this->zfcUserAuthentication()
-                ->getIdentity()
-                ->getId();
+            $form->setInputFilter($course->getInputFilter());
+            
             $request->getPost()['user_id'] = $userid;
             $form->setData($request->getPost());
-            
             if ($form->isValid()) {
                 $course->exchangeArray($form->getData());
                 $this->getCourseTable()->saveCourse($course);
-                saveWayPoints($course, $form);
+                $this->saveWayPoints($course, $form);
                 // Redirect to list of courses
                 return $this->redirect()->toRoute('course');
-            }
-        }
-        if (! CancelaService::Login()) {
-            // alert service down
-            return $this->redirect()->toRoute('course');
-        }
-        
+            } else
+                echo "$form->getMessages";
+        } 
         $pois = CancelaService::getPois();
         
         $poisArray = array();
@@ -140,6 +74,8 @@ class CourseController extends AbstractActionController
                 $date[$key] = $row['Data'];
             }
             array_multisort($date, SORT_DESC, $readings);
+            // This is temporary, a single foreach is enough
+            // instead of traversing the same data twice.
             $poisArray[] = array(
                 'name' => $poi->Nome,
                 'description' => $poi->Descricao,
@@ -165,96 +101,139 @@ class CourseController extends AbstractActionController
         }
         
         $multiOptions = array();
-        foreach ($poisArray as $poi)
-        {
+        foreach ($poisArray as $poi) {
             $multiOptions[] = array(
-                'value' => $poi['local'],
-                'label' => $poi['name'],
+                'value' => $poi['name'],
+                'label' => $poi['name']." - ".$poi['description'],
                 'attributes' => array(
-                    'id' => 'checkbox_'.$poi['readings']['id'],
-                    'onclick' => 'showWeather(\'' . json_encode($poi['readings'],JSON_HEX_TAG) . '\')',
+                    'id' => 'checkbox_' . $poi['readings']['id'],
+                    'description' => $poi['description'],
+                    'gps_lat' => $poi['gps_lat'],
+                    'gps_long' => $poi['gps_long'],
+                    'onclick' => 'showWeather(\'' . json_encode($poi['readings'], JSON_HEX_TAG) . '\')'
                 )
             );
         }
+        // end of redundancy :)
         $checkOptions = array_column($poisArray, 'name');
-        $multiCheck = new MultiCheckbox('poi_select');
-        $multiCheck->setLabel('Check the places you would like to visit');
+        $multiCheck = $form->get('poi_select');
         $multiCheck->setValueOptions($multiOptions);
-        $form->add($multiCheck);
+        
         return array(
             'form' => $form
         );
     }
-    
-    // public function editAction()
-    // {
-    // $id = (int) $this->params()->fromRoute('id', 0);
-    // if (! $id) {
-    // return $this->redirect()->toRoute('escola', array(
-    // 'action' => 'add'
-    // ));
-    // }
-    
-    // // Get the Alno with the specified id. An exception is thrown
-    // // if it cannot be found, in which case go to the index page.
-    // try {
-    // $aluno = $this->getAlunoTable()->getAluno($id);
-    // } catch (\Exception $ex) {
-    // return $this->redirect()->toRoute('escola', array(
-    // 'action' => 'index'
-    // ));
-    // }
-    
-    // $form = new AlunoForm();
-    // $form->bind($aluno);
-    // $form->get('submit')->setAttribute('value', 'Edit');
-    
-    // $request = $this->getRequest();
-    // if ($request->isPost()) {
-    // $form->setInputFilter($aluno->getInputFilter());
-    // $form->setData($request->getPost());
-    
-    // if ($form->isValid()) {
-    // $this->getAlunoTable()->saveAluno($aluno);
-    
-    // // Redirect to list of alunos
-    // return $this->redirect()->toRoute('escola');
-    // }
-    // }
-    
-    // return array(
-    // 'id' => $id,
-    // 'form' => $form
-    // );
-    // }
-    public function deleteAction()
+
+    public function editAction()
     {
-        $id = (int) $this->params()->fromRoute('id', 0);
-        if (! $id) {
-            return $this->redirect()->toRoute('escola');
+        $user = $this->zfcUserAuthentication()
+        ->getIdentity();
+        if (!$user)
+        {
+            return $this->redirect()->toRoute('course');
         }
         
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if (! $id) {
+            return $this->redirect()->toRoute('course', array(
+                'action' => 'add'
+            ));
+        }
+        
+        try {
+            $course = $this->getCourseTable()->getCourse($id);
+        } catch (\Exception $ex) {
+            return $this->redirect()->toRoute('course', array(
+                'action' => 'index'
+            ));
+        }
+        // Only creator can edit
+        if ($user->getId() != $course->user_id)
+        {
+            return $this->redirect()->toRoute('course', array(
+                'action' => 'index'
+            ));
+        }
+        $form = new CourseForm();
+        $form->bind($course);
+        $form->get('submit')->setAttribute('value', 'Edit');
+        
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setInputFilter($course->getInputFilter());
+            $form->setData($request->getPost());
+            
+            if ($form->isValid()) {
+                $this->getCourseTable()->saveCourse($course);
+                return $this->redirect()->toRoute('course');
+            }
+        }
+        return new ViewModel(array(
+            'id' => $id,
+            'form' => $form
+        ));
+    }
+
+    public function deleteAction()
+    {
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        if (!$user) {
+            return $this->redirect()->toRoute('course');
+        }
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            print "No id!";
+            return $this->redirect()->toRoute('course');
+        }
+        try {
+            $course = $this->getCourseTable()->getCourse($id);
+        } catch (\Exception $ex) {
+            print "Not found!";
+            return $this->redirect()->toRoute('course', array(
+                'action' => 'index'
+            ));
+        }
+        // Only creator can delete
+        if ($user->getId() != $course->getUserId())
+        {
+            return $this->redirect()->toRoute('course', array(
+                'action' => 'index'
+            ));
+        }
         $request = $this->getRequest();
         if ($request->isPost()) {
             $del = $request->getPost('del', 'No');
             
             if ($del == 'Yes') {
                 $id = (int) $request->getPost('id');
-                $this->getAlunoTable()->deleteAluno($id);
+                $this->getCourseTable()->deleteCourse($id);
             }
             
-            // Redirect to list of alunos
-            return $this->redirect()->toRoute('escola');
+            return $this->redirect()->toRoute('course');
         }
         
-        return array(
+        return new ViewModel(array(
             'id' => $id,
-            'aluno' => $this->getAlunoTable()->getAluno($id)
-        );
+            'course' => $course
+        ));
     }
 
     private function saveWayPoints($course, $form)
-    {}
+    {
+        $multiCheck = $form->get('poi_select');
+        $selectedPois = $multiCheck->getValue();
+        foreach ($selectedPois as $poi) {
+            $poi = CancelaService::getPoiByName($poi);
+            print_r($poi);
+            $newWayPoint = new WayPoint();
+            $newWayPoint->setCourseId($course->getCourseId());
+            $newWayPoint->setName($poi->Nome);
+            $newWayPoint->setDescription($poi->Descricao);
+            $newWayPoint->setGpsLatitude($poi->Local->GPS_Lat);
+            $newWayPoint->setGpsLongitude($poi->Local->GPS_Long);
+            $this->wayPointTable->saveWayPoint($newWayPoint);
+        }
+    }
 
     public function getCourseTable()
     {

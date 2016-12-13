@@ -2,6 +2,7 @@
 namespace Course\Form;
 
 use Zend\Form\Form;
+use Zend\Form\Element\MultiCheckbox;
 
 class CourseForm extends Form
 {
@@ -33,6 +34,12 @@ class CourseForm extends Form
             ) // days; default step interval is 1 day
 
         ));
+        
+        $multiCheck = new MultiCheckbox('poi_select');
+        $multiCheck->setLabel('Check the places you would like to visit');
+        $multiCheck->setDisableInArrayValidator(true);
+        $this->add($multiCheck);
+        
         $this->add(array(
             'name' => 'user_id',
             'type' => 'Hidden'

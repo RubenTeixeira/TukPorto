@@ -16,6 +16,7 @@ using Microsoft.AspNet.Identity;
 namespace Cancela.Controllers
 {
     [Authorize]
+    [RoutePrefix("api/PointsOfInterest")]
     public class PointsOfInterestController : ApiController
     {
         private DatumContext db = new DatumContext();
@@ -30,13 +31,27 @@ namespace Cancela.Controllers
         [ResponseType(typeof(PointOfInterest))]
         public async Task<IHttpActionResult> GetPointOfInterest(int id)
         {
-            PointOfInterest pointOfInterest = await db.PointsOfInterest.FindAsync(id);
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include(p => p.Local).SingleOrDefaultAsync(x => x.PointOfInterestID == id);
             if (pointOfInterest == null)
             {
                 return NotFound();
             }
 
             return Ok(pointOfInterest);
+        }
+
+        // GET: api/PointsOfInterest/ISEP
+        [ResponseType(typeof(PointOfInterest))]
+        [Route("POIByName")]
+        [HttpGet]
+        public async Task<HttpResponseMessage> POIByName(string name)
+        {
+            PointOfInterest pointOfInterest = await db.PointsOfInterest.Include(p => p.Local).SingleOrDefaultAsync(x => x.Nome.Equals(name));
+            if (pointOfInterest == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, pointOfInterest, Request.GetConfiguration());
         }
 
         // PUT: api/PointsOfInterest/5

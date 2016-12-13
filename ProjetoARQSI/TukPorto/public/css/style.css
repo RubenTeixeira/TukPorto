@@ -54,6 +54,7 @@ input {
 
 #weatherinfo {
 	display: table-cell;
+	padding-left: 10%;
 }
 
 input[type="checkbox"] {
@@ -69,4 +70,8 @@ input[type="checkbox"] {
 
 #multicheckbox label {
 	display:table;
+}
+
+#waypoints {
+	text-align:center;
 }

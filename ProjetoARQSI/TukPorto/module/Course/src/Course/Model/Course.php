@@ -1,6 +1,9 @@
 <?php
 namespace Course\Model;
 
+use Zend\InputFilter\InputFilterInterface;
+use Zend\InputFilter\InputFilter;
+
 class Course
 {
     
@@ -8,6 +11,7 @@ class Course
     public $description;
     public $date;
     public $user_id;
+    protected $inputFilter;
     
     public function exchangeArray($data)
     {
@@ -70,6 +74,40 @@ class Course
         $this->user_id = $user_id;
     }
     
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
+        throw new \Exception("Not used");
+    }
+    
+    public function getInputFilter()
+    {
+        if (!$this->inputFilter) {
+            $inputFilter = new InputFilter();
+    
+            $inputFilter->add(array(
+                'name'     => 'description',
+                'required' => true,
+                'filters'  => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name'    => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 255,
+                        ),
+                    ),
+                ),
+            ));
+    
+            $this->inputFilter = $inputFilter;
+        }
+    
+        return $this->inputFilter;
+    }
     
 }
 

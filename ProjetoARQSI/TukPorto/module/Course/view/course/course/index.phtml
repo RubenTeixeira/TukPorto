@@ -11,8 +11,9 @@ $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <p>
-	<a href="<?php echo $this->url('course', array('action'=>'add'));?>">Create
-		new travel course</a>
+	<?php if($this->zfcUserIdentity()): ?>
+	<a href="<?php echo $this->url('course', array('action'=>'add'));?>">Create new travel course</a>
+	<?php endif?>
 </p>
 
 <table class="table">
@@ -28,15 +29,23 @@ $this->headTitle($title);
 		<td><?php echo $this->escapeHtml($course->date);?></td>
 		<?php $creator = $this->userNameById($course->user_id);?>
 		<td><?php echo $this->escapeHtml($creator);?></td>
+		<td>
+         <a href="<?php echo $this->url('course',
+             array('action'=>'edit', 'id' => $course->course_id));?>">Edit</a>
+         <a href="<?php echo $this->url('course',
+             array('action'=>'delete', 'id' => $course->course_id));?>">Delete</a>
+     	</td>
 	</tr>
 	<tr>
 		<td>
+		<div id="waypoints">
 			<?php
     $waypoints = $this->getCourseWayPoints($course->course_id);
     foreach ($waypoints as $waypoint) {
-        echo $waypoint->name . " - ";
+        echo "<font color=\"grey\">".$waypoint->name . "<font> - ";
     }
     ?>
+    </div>
 	</td>
 	</tr>
 <?php endforeach; ?>
