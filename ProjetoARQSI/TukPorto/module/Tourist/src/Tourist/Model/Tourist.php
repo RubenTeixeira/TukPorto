@@ -23,10 +23,10 @@ class Tourist extends User
         $this->nationality = (! empty($data['nationality'])) ? $data['nationality'] : null;
     }
 
-    public function getArrayCopy()
-    {
-        return get_object_vars($this);
-    }
+//     public function getArrayCopy()
+//     {
+//         return get_object_vars($this);
+//     }
 
     /**
      * Get nationality.

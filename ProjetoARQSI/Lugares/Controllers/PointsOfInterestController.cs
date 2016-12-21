@@ -91,7 +91,7 @@ namespace Lugares.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "PointOfInterestID,Nome,Descricao,LocalID")] PointOfInterest pointOfInterest)
+        public async Task<ActionResult> Edit([Bind(Include = "PointOfInterestID,Nome,Descricao,LocalID,Criador")] PointOfInterest pointOfInterest)
         {
             if (ModelState.IsValid)
             {
